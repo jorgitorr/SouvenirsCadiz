@@ -14,9 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -26,15 +23,10 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,21 +34,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
-import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
-import java.time.format.TextStyle
 
 
 /**
@@ -111,6 +97,7 @@ fun Cuadrado(souvenir: Souvenir){
     }
 
 }
+
 
 
 
@@ -192,35 +179,7 @@ fun Header(){
     }
 }
 
-@Preview
-@Composable
-fun PaginaPrincipal(){
-    Scaffold(
-        topBar = {
-            Header()
-        },
-        bottomBar = {
-            Footer()
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            //Search(souvenirsViewModel = souvenirsViewModel)
-            val souvenir = Souvenir()
-            souvenir.nombre = "Llavero"
-            souvenir.tipo = Tipo.LLAVERO
-            souvenir.precio = 3
-            souvenir.url = R.drawable.img4
-            LazyColumn{
-                item { Cuadrado(souvenir) }
-                item { Cuadrado(souvenir) }
-            }
-        }
-    }
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -264,3 +223,4 @@ fun Search(souvenirsViewModel: SouvenirsViewModel){
     }
 
 }
+
