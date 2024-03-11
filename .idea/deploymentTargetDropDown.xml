@@ -2,10 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="Cuadrado">
-        <State />
-      </entry>
-      <entry key="Footer">
+      <entry key="PaginaPrincipal">
         <State />
       </entry>
       <entry key="app">
