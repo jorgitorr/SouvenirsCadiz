@@ -1,6 +1,8 @@
 package com.example.souvenirscadiz.data.model
 
 data class Souvenir(
-    val nombre:String = "",
-    val precio:Int = 0
+    var nombre:String = "",
+    var url:Int = 0,
+    var tipo:Tipo = Tipo.PREDETERMINADO,
+    var precio:Int = 0
 )

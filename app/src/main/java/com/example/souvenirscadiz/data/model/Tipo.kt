@@ -1,0 +1,6 @@
+package com.example.souvenirscadiz.data.model
+
+enum class Tipo {
+    PREDETERMINADO, LLAVERO, IMAN, PIN, CUCHARILLA, CORTAUNIAS, ADHESIVO, ESPEJO, PASTILLERO, PLATO, BOLA, FIGURA,
+    MASCARILLA, ABANICO, ESTUCHE
+}
