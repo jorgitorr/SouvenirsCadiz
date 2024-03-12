@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavManager(souvenirsViewModel)
+                    NavManager(souvenirsViewModel, loginViewModel)
                 }
             }
         }

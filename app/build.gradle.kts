@@ -74,6 +74,9 @@ dependencies {
     // DCS - Base de datos Firestore
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
     //
+    implementation ("androidx.compose.material:material-icons-core:1.6.3")
+    implementation ("androidx.compose.material:material-icons-extended:1.6.3")
+    //
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
