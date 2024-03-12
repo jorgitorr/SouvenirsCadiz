@@ -10,16 +10,28 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
-import com.example.souvenirscadiz.ui.view.PaginaPrincipal
+import com.example.souvenirscadiz.ui.view.Favoritos
+import com.example.souvenirscadiz.ui.view.Perfil
+import com.example.souvenirscadiz.ui.view.Principal
+import com.example.souvenirscadiz.ui.view.Tienda
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavManager(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel){
+fun NavManager(souvenirsViewModel: SouvenirsViewModel){
     val navController = rememberNavController();
     
     NavHost(navController = navController, startDestination = "Principal"){
-        composable("PantallaPrincipal"){
-            //PaginaPrincipal(souvenirsViewModel, navController)
+        composable("Principal"){
+            Principal(souvenirsViewModel, navController)
+        }
+        composable("Favoritos"){
+            Favoritos(souvenirsViewModel, navController)
+        }
+        composable("Perfil"){
+            Perfil(souvenirsViewModel, navController)
+        }
+        composable("Tienda"){
+            Tienda(souvenirsViewModel, navController)
         }
     }
 }

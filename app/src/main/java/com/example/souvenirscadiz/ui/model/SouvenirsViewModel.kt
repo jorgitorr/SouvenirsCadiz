@@ -11,10 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class SouvenirsViewModel :ViewModel(){
-
-    private val auth: FirebaseAuth by lazy { Firebase.auth }
-    private val firestore = Firebase.firestore
-
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
 

@@ -30,6 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -50,6 +54,8 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Cuadrado(souvenir: Souvenir){
+    var isFavorite by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier
         .size(150.dp)
         .background(Silver, shape = RoundedCornerShape(5.dp))
@@ -65,7 +71,7 @@ fun Cuadrado(souvenir: Souvenir){
                     .fillMaxWidth()
 
             )
-            Spacer(modifier = Modifier.height(4.dp)) // Espacio entre la imagen y el texto
+            Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -80,10 +86,11 @@ fun Cuadrado(souvenir: Souvenir){
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp)
                 )
                 Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
+                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite Icon",
                     tint = RaisanBlack,
                     modifier = Modifier.padding(vertical = 2.dp)
+                        .clickable { isFavorite = !isFavorite }
                 )
                 Text(
                     text = "${souvenir.precio}€",
@@ -99,11 +106,8 @@ fun Cuadrado(souvenir: Souvenir){
 }
 
 
-
-
-
 @Composable
-fun Footer(){
+fun Footer(navController: NavController){
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -123,7 +127,7 @@ fun Footer(){
                     tint = RaisanBlack,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
-                        .clickable { }
+                        .clickable { navController.navigate("Principal")}
                 )
                 Text("Home")
             }
@@ -136,7 +140,7 @@ fun Footer(){
                     contentDescription = "Favorite Icon",
                     tint = RaisanBlack,
                     modifier = Modifier.padding(vertical = 2.dp)
-                        .clickable {  }
+                        .clickable { navController.navigate("Favoritos") }
                 )
                 Text("Favorites")
             }
@@ -149,7 +153,7 @@ fun Footer(){
                     contentDescription = "Person Icon",
                     tint = RaisanBlack,
                     modifier = Modifier.padding(vertical = 2.dp)
-                        .clickable {  }
+                        .clickable { navController.navigate("Perfil") }
                 )
                 Text("Profile")
             }
@@ -159,7 +163,7 @@ fun Footer(){
 
 
 @Composable
-fun Header(){
+fun Header(navController: NavController){
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -174,7 +178,7 @@ fun Header(){
             Icon(
                 imageVector = Icons.Default.ShoppingCart,
                 contentDescription = "Shop",
-                modifier = Modifier.clickable {  })
+                modifier = Modifier.clickable { navController.navigate("Tienda") })
         }
     }
 }
