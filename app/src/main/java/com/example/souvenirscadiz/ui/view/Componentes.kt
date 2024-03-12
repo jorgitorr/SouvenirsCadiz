@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -45,7 +46,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
+import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.KiwiMaru
+import com.example.souvenirscadiz.ui.theme.KleeOne
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
@@ -246,5 +250,20 @@ fun Search(souvenirsViewModel: SouvenirsViewModel){
         }*/
     }
 
+}
+
+@Composable
+fun NombresSouvenirs(){
+    LazyRow {
+        items(Tipo.entries.toTypedArray()) { tipo ->
+            Text(
+                text = tipo.valor,
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                color = RaisanBlack,
+                fontSize = 16.sp,
+                fontFamily = KleeOne
+            )
+        }
+    }
 }
 

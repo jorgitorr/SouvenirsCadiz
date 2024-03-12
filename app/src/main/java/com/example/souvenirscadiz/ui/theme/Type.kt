@@ -48,3 +48,8 @@ val KiwiMaru = FontFamily(
 val KneWave = FontFamily(
     Font(R.font.knewaveregular, FontWeight.Normal)
 )
+
+val KleeOne = FontFamily(
+    Font(R.font.kleeoneregular, FontWeight.Normal),
+    Font(R.font.kleeonesemibold, FontWeight.Bold)
+)
