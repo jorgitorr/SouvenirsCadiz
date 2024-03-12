@@ -9,9 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.souvenirscadiz.R
-import com.example.souvenirscadiz.data.model.Souvenir
-import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 
 @Composable

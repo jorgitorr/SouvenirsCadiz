@@ -47,14 +47,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
-import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.White
-import java.time.format.TextStyle
 
 @Composable
 fun Perfil(loginViewModel: LoginViewModel, navController: NavController){

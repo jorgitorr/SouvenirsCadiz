@@ -8,15 +8,11 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.SouvenirsCadizTheme
-import com.example.souvenirscadiz.ui.view.Search
 
 class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel = LoginViewModel()
