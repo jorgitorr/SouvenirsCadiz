@@ -29,16 +29,8 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                 .padding(innerPadding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            //Search(souvenirsViewModel = souvenirsViewModel)
-            val souvenir = Souvenir()
-            souvenir.nombre = "Llavero"
-            souvenir.tipo = Tipo.LLAVERO
-            souvenir.precio = 3
-            souvenir.url = R.drawable.img6
-            LazyColumn{
-                item { Cuadrado(souvenir) }
-                item { Cuadrado(souvenir) }
-            }
+            Search(souvenirsViewModel)
+            SouvenirsList(souvenirsViewModel)
         }
     }
 }

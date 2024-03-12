@@ -1,5 +1,9 @@
 package com.example.souvenirscadiz.ui.model
 
+import android.annotation.SuppressLint
+import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Souvenir
@@ -34,10 +38,11 @@ class SouvenirsViewModel :ViewModel(){
     fun getSouvenirs(){
         viewModelScope.launch {
             val list: MutableList<Souvenir> = mutableListOf()
-            for(i in 4..18){
+            for(i in 6..10){
                 val souvenir = Souvenir()
                 souvenir.url = i
                 souvenir.tipo = Tipo.LLAVERO
+                souvenir.precio = 2.99
                 list.add(souvenir)
             }
             _souvenirs.value = list
@@ -61,6 +66,13 @@ class SouvenirsViewModel :ViewModel(){
      */
     fun setActive(newActive: Boolean) {
         active.value = newActive
+    }
+
+    @SuppressLint("DiscouragedApi")
+    @Composable
+    fun getResourceIdByName(url: String): Int {
+        val context = LocalContext.current
+        return context.resources.getIdentifier(url, "drawable", context.packageName)
     }
 
 

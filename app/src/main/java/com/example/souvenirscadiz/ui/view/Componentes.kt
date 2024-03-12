@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -53,7 +55,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * Cuadrado que contiene cada imagen
  */
 @Composable
-fun Cuadrado(souvenir: Souvenir){
+fun Cuadrado(souvenir: Souvenir, url:Int){
     var isFavorite by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier
@@ -64,7 +66,7 @@ fun Cuadrado(souvenir: Souvenir){
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()) {
             Image(
-                painter = painterResource(id = souvenir.url),
+                painter = painterResource(id = url),
                 contentDescription = souvenir.nombre,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -89,7 +91,8 @@ fun Cuadrado(souvenir: Souvenir){
                     imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite Icon",
                     tint = RaisanBlack,
-                    modifier = Modifier.padding(vertical = 2.dp)
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
                         .clickable { isFavorite = !isFavorite }
                 )
                 Text(
@@ -103,6 +106,21 @@ fun Cuadrado(souvenir: Souvenir){
         }
     }
 
+}
+
+
+@Composable
+fun SouvenirsList(souvenirsViewModel: SouvenirsViewModel){
+    val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
+
+    LazyColumn{
+        items(souvenirs){ souvenir->
+            val url = "img${souvenir.url}"
+            val resourceId = souvenirsViewModel.getResourceIdByName(url)
+            Cuadrado(souvenir, resourceId)
+            Spacer(modifier = Modifier.height(20.dp))
+        }
+    }
 }
 
 
@@ -127,7 +145,7 @@ fun Footer(navController: NavController){
                     tint = RaisanBlack,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
-                        .clickable { navController.navigate("Principal")}
+                        .clickable { navController.navigate("Principal") }
                 )
                 Text("Home")
             }
@@ -139,7 +157,8 @@ fun Footer(navController: NavController){
                     imageVector = Icons.Default.Favorite,
                     contentDescription = "Favorite Icon",
                     tint = RaisanBlack,
-                    modifier = Modifier.padding(vertical = 2.dp)
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
                         .clickable { navController.navigate("Favoritos") }
                 )
                 Text("Favorites")
@@ -152,7 +171,8 @@ fun Footer(navController: NavController){
                     imageVector = Icons.Default.Person,
                     contentDescription = "Person Icon",
                     tint = RaisanBlack,
-                    modifier = Modifier.padding(vertical = 2.dp)
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
                         .clickable { navController.navigate("Perfil") }
                 )
                 Text("Profile")
