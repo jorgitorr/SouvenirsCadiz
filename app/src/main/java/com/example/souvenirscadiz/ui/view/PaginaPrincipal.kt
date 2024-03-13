@@ -28,7 +28,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Search(souvenirsViewModel)
-            NombresSouvenirs()
+            NombresSouvenirs(souvenirsViewModel)
             SouvenirsList(souvenirsViewModel)
         }
     }

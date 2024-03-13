@@ -274,12 +274,14 @@ fun Search(souvenirsViewModel: SouvenirsViewModel){
 }
 
 @Composable
-fun NombresSouvenirs(){
+fun NombresSouvenirs(souvenirsViewModel: SouvenirsViewModel){
     LazyRow {
         items(Tipo.entries.toTypedArray()) { tipo ->
             Text(
                 text = tipo.valor,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .clickable { souvenirsViewModel.getByTipo(tipo) },
                 color = RaisanBlack,
                 fontSize = 16.sp,
                 fontFamily = KleeOne

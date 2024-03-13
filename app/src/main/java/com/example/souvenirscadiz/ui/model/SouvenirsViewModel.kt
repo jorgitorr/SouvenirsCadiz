@@ -92,6 +92,16 @@ class SouvenirsViewModel :ViewModel(){
         }
     }
 
+    fun getByTipo(tipo: Tipo){
+        val list: MutableList<Souvenir> = mutableListOf()
+        for(souvenir in souvenirs.value){
+            if(souvenir.tipo == tipo){
+                list.add(souvenir)
+            }
+        }
+        _souvenirs.value = list
+    }
+
     /**
      * Actualiza la consulta de búsqueda actual.
      * @param newQuery La nueva cadena de texto de consulta para la búsqueda.
