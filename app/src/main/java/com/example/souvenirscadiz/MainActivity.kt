@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.Tipo
+import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.SouvenirsCadizTheme
@@ -43,9 +44,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //NavManager(souvenirsViewModel, loginViewModel)
-                    readCSV()
+                    readCSV(souvenirsViewModel)
                     SouvenirsAddImages(souvenirsViewModel)
+                    NavManager(souvenirsViewModel, loginViewModel)
                 }
             }
         }
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
      * y el nombre
      */
     @Composable
-    private fun readCSV() :MutableList<Souvenir>{
+    private fun readCSV(souvenirsViewModel: SouvenirsViewModel) :MutableList<Souvenir>{
         val souvenirList = mutableListOf<Souvenir>()
         var line :String?
         try{
@@ -72,7 +73,7 @@ class MainActivity : ComponentActivity() {
                 val souvenir = Souvenir()
                 souvenir.referencia = palabra[0]
                 souvenir.nombre = palabra[1]
-                setTipo(souvenir,souvenir.nombre)
+                souvenirsViewModel.setTipo(souvenir,souvenir.nombre)
                 souvenirList.add(souvenir)
             }
         }catch (_: IOException){
@@ -85,7 +86,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("StateFlowValueCalledInComposition")
     @Composable
     fun SouvenirsAddImages(souvenirsViewModel: SouvenirsViewModel) {
-        val souvenirList = readCSV()
+        val souvenirList = readCSV(souvenirsViewModel)
         val souvenirImg = souvenirsViewModel.souvenirs.collectAsState().value
 
         souvenirImg.mapIndexed { index, souvenir ->
@@ -95,40 +96,6 @@ class MainActivity : ComponentActivity() {
                     souvenir.nombre = it.nombre
                     souvenir.referencia = it.referencia
                 }
-            }
-        }
-    }
-
-
-    /**
-     * le da el tipo del enumerado
-     * @param souvenir souvenir al cual le añadimos el tipo
-     * @param palabra contiene el tipo
-     */
-    fun setTipo(souvenir: Souvenir, palabra:String){
-        when {
-            palabra.contains("Llavero") -> souvenir.tipo = Tipo.LLAVERO
-            palabra.contains("Iman") -> souvenir.tipo = Tipo.IMAN
-            palabra.contains("Abridor") -> souvenir.tipo = Tipo.ABRIDOR
-            palabra.contains("Pins") -> souvenir.tipo = Tipo.PINS
-            palabra.contains("Cortauñas") -> souvenir.tipo = Tipo.CORTAUNIAS
-            palabra.contains("Cucharilla") -> souvenir.tipo = Tipo.CUCHARILLA
-            palabra.contains("Campana") -> souvenir.tipo = Tipo.CAMPANA
-            palabra.contains("Salvamanteles") -> souvenir.tipo = Tipo.SALVAMANTELES
-            palabra.contains("Posa") -> souvenir.tipo = Tipo.POSA
-            palabra.contains("Set") -> souvenir.tipo = Tipo.SET
-            palabra.contains("Parche") -> souvenir.tipo = Tipo.PARCHE
-            palabra.contains("Adhes.") -> souvenir.tipo = Tipo.ADHESIVO
-            palabra.contains("Pastillero") -> souvenir.tipo = Tipo.PASTILLERO
-            palabra.contains("Espejo") -> souvenir.tipo = Tipo.ESPEJO
-            palabra.contains("Cubremascarilla") -> souvenir.tipo = Tipo.CUBRE_MASCARILLA
-            palabra.contains("Dedal") -> souvenir.tipo = Tipo.DEDAL
-            palabra.contains("Pisapapeles") -> souvenir.tipo = Tipo.PISAPAPELES
-            palabra.contains("Abanico") -> souvenir.tipo = Tipo.ABANICO
-            palabra.contains("Estuche") -> souvenir.tipo = Tipo.ESTUCHE
-            palabra.contains("Bola") -> souvenir.tipo = Tipo.BOLA
-            else -> {
-                souvenir.tipo = Tipo.LLAVERO
             }
         }
     }

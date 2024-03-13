@@ -37,7 +37,6 @@ class SouvenirsViewModel :ViewModel(){
         getSouvenirs()
     }
 
-
     /**
      * obtiene todos los souvenirs
      */
@@ -52,6 +51,40 @@ class SouvenirsViewModel :ViewModel(){
                 list.add(souvenir)
             }
             _souvenirs.value = list
+        }
+    }
+
+
+    /**
+     * le da el tipo del enumerado
+     * @param souvenir souvenir al cual le añadimos el tipo
+     * @param palabra contiene el tipo
+     */
+    fun setTipo(souvenir: Souvenir, palabra:String){
+        when {
+            palabra.contains("Llavero") -> souvenir.tipo = Tipo.LLAVERO
+            palabra.contains("Iman") -> souvenir.tipo = Tipo.IMAN
+            palabra.contains("Abridor") -> souvenir.tipo = Tipo.ABRIDOR
+            palabra.contains("Pins") -> souvenir.tipo = Tipo.PINS
+            palabra.contains("Cortauñas") -> souvenir.tipo = Tipo.CORTAUNIAS
+            palabra.contains("Cucharilla") -> souvenir.tipo = Tipo.CUCHARILLA
+            palabra.contains("Campana") -> souvenir.tipo = Tipo.CAMPANA
+            palabra.contains("Salvamanteles") -> souvenir.tipo = Tipo.SALVAMANTELES
+            palabra.contains("Posa") -> souvenir.tipo = Tipo.POSA
+            palabra.contains("Set") -> souvenir.tipo = Tipo.SET
+            palabra.contains("Parche") -> souvenir.tipo = Tipo.PARCHE
+            palabra.contains("Adhes.") -> souvenir.tipo = Tipo.ADHESIVO
+            palabra.contains("Pastillero") -> souvenir.tipo = Tipo.PASTILLERO
+            palabra.contains("Espejo") -> souvenir.tipo = Tipo.ESPEJO
+            palabra.contains("Cubremascarilla") -> souvenir.tipo = Tipo.CUBRE_MASCARILLA
+            palabra.contains("Dedal") -> souvenir.tipo = Tipo.DEDAL
+            palabra.contains("Pisapapeles") -> souvenir.tipo = Tipo.PISAPAPELES
+            palabra.contains("Abanico") -> souvenir.tipo = Tipo.ABANICO
+            palabra.contains("Estuche") -> souvenir.tipo = Tipo.ESTUCHE
+            palabra.contains("Bola") -> souvenir.tipo = Tipo.BOLA
+            else -> {
+                souvenir.tipo = Tipo.LLAVERO
+            }
         }
     }
 
