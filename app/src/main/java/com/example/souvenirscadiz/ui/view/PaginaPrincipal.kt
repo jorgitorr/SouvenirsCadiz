@@ -19,7 +19,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             Header(navController)
         },
         bottomBar = {
-            Footer(navController)
+            Footer(navController,souvenirsViewModel)
         }
     ) { innerPadding ->
         Column(

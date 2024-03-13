@@ -1,5 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.content.res.Resources.Theme
+import android.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,6 +50,7 @@ import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.Cerulean
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.KleeOne
 import com.example.souvenirscadiz.ui.theme.KneWave
@@ -129,7 +132,8 @@ fun SouvenirsList(souvenirsViewModel: SouvenirsViewModel){
 
 
 @Composable
-fun Footer(navController: NavController){
+fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -146,10 +150,13 @@ fun Footer(navController: NavController){
                 Icon(
                     imageVector = Icons.Default.Home,
                     contentDescription = "Home Icon",
-                    tint = RaisanBlack,
+                    tint = if(selectedItem=="Principal") Cerulean else RaisanBlack,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
-                        .clickable { navController.navigate("Principal") }
+                        .clickable {
+                            souvenirsViewModel.setSelectedItem("Principal")
+                            navController.navigate("Principal")
+                        }
                 )
                 Text("Home")
             }
@@ -160,10 +167,13 @@ fun Footer(navController: NavController){
                 Icon(
                     imageVector = Icons.Default.Favorite,
                     contentDescription = "Favorite Icon",
-                    tint = RaisanBlack,
+                    tint = if(selectedItem=="Favoritos") Cerulean else RaisanBlack,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
-                        .clickable { navController.navigate("Favoritos") }
+                        .clickable {
+                            souvenirsViewModel.setSelectedItem("Favoritos")
+                            navController.navigate("Favoritos")
+                        }
                 )
                 Text("Favorites")
             }
@@ -174,10 +184,13 @@ fun Footer(navController: NavController){
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = "Person Icon",
-                    tint = RaisanBlack,
+                    tint = if(selectedItem=="Perfil") Cerulean else RaisanBlack,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
-                        .clickable { navController.navigate("Perfil") }
+                        .clickable {
+                            souvenirsViewModel.setSelectedItem("Perfil")
+                            navController.navigate("Perfil")
+                        }
                 )
                 Text("Profile")
             }

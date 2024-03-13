@@ -26,6 +26,7 @@ class SouvenirsViewModel :ViewModel(){
      */
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
+    val selectedItem = MutableStateFlow("Principal")
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
     init {
@@ -66,6 +67,15 @@ class SouvenirsViewModel :ViewModel(){
      */
     fun setActive(newActive: Boolean) {
         active.value = newActive
+    }
+
+
+    /**
+     * cambia el texto del selectedItem al nuevo que haya seleccionado
+     * @param elementoSeleccionado texto del elemento seleccionado del footer o header
+     */
+    fun setSelectedItem(elementoSeleccionado:String){
+        selectedItem.value = elementoSeleccionado
     }
 
     @SuppressLint("DiscouragedApi")
