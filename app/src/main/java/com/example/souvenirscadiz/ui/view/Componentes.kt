@@ -55,6 +55,7 @@ import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.KleeOne
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
+import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 
 
@@ -66,7 +67,7 @@ fun Cuadrado(souvenir: Souvenir, url:Int){
     var isFavorite by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier
-        .size(150.dp)
+        .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
         .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))){
         Column(horizontalAlignment = Alignment.CenterHorizontally,
@@ -89,7 +90,14 @@ fun Cuadrado(souvenir: Souvenir, url:Int){
 
                 Text(
                     text = souvenir.nombre,
-                    style = androidx.compose.ui.text.TextStyle(fontSize = 12.sp),
+                    style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(start = 4.dp, end = 8.dp)
+                )
+                Text(
+                    text = souvenir.referencia,
+                    style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp)
@@ -97,14 +105,14 @@ fun Cuadrado(souvenir: Souvenir, url:Int){
                 Icon(
                     imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite Icon",
-                    tint = RaisanBlack,
+                    tint = if (!isFavorite)RaisanBlack else Redwood,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable { isFavorite = !isFavorite }
                 )
                 Text(
                     text = "${souvenir.precio}€",
-                    style = androidx.compose.ui.text.TextStyle(fontSize = 12.sp),
+                    style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 3.dp, end = 4.dp)
