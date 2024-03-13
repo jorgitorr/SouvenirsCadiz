@@ -43,13 +43,14 @@ class SouvenirsViewModel :ViewModel(){
     fun getSouvenirs(){
         viewModelScope.launch {
             val list: MutableList<Souvenir> = mutableListOf()
-            for(i in 6..18){
+            for(a in 6..115){
                 val souvenir = Souvenir()
-                souvenir.url = i
+                souvenir.url = a
                 souvenir.tipo = Tipo.LLAVERO
                 souvenir.precio = 2.99
                 list.add(souvenir)
             }
+
             _souvenirs.value = list
         }
     }
