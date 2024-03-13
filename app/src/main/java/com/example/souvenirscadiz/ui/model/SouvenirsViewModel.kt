@@ -2,19 +2,22 @@ package com.example.souvenirscadiz.ui.model
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.AssetManager
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.Tipo
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+
 
 class SouvenirsViewModel :ViewModel(){
     /**
@@ -29,9 +32,11 @@ class SouvenirsViewModel :ViewModel(){
     val selectedItem = MutableStateFlow("Principal")
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
+
     init {
         getSouvenirs()
     }
+
 
     /**
      * obtiene todos los souvenirs
@@ -39,7 +44,7 @@ class SouvenirsViewModel :ViewModel(){
     fun getSouvenirs(){
         viewModelScope.launch {
             val list: MutableList<Souvenir> = mutableListOf()
-            for(i in 6..10){
+            for(i in 6..18){
                 val souvenir = Souvenir()
                 souvenir.url = i
                 souvenir.tipo = Tipo.LLAVERO
@@ -49,6 +54,7 @@ class SouvenirsViewModel :ViewModel(){
             _souvenirs.value = list
         }
     }
+
 
 
     /**
@@ -84,6 +90,9 @@ class SouvenirsViewModel :ViewModel(){
         val context = LocalContext.current
         return context.resources.getIdentifier(url, "drawable", context.packageName)
     }
+
+
+
 
 
 }
