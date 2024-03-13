@@ -1,5 +1,6 @@
 package com.example.souvenirscadiz
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.souvenirscadiz.data.model.Souvenir
@@ -42,6 +45,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     //NavManager(souvenirsViewModel, loginViewModel)
                     readCSV()
+                    SouvenirsAddImages(souvenirsViewModel)
                 }
             }
         }
@@ -51,7 +55,8 @@ class MainActivity : ComponentActivity() {
      * Se encarga de leer el CSV que contiene la referencia de los souvenirs
      * y el nombre
      */
-    private fun readCSV() {
+    @Composable
+    private fun readCSV() :MutableList<Souvenir>{
         val souvenirList = mutableListOf<Souvenir>()
         var line :String?
         try{
@@ -70,9 +75,27 @@ class MainActivity : ComponentActivity() {
                 setTipo(souvenir,souvenir.nombre)
                 souvenirList.add(souvenir)
             }
-            Log.d("size",souvenirList.size.toString())
         }catch (_: IOException){
             Log.d("Error de lectura","Error")
+        }
+        return souvenirList
+    }
+
+
+    @SuppressLint("StateFlowValueCalledInComposition")
+    @Composable
+    fun SouvenirsAddImages(souvenirsViewModel: SouvenirsViewModel) {
+        val souvenirList = readCSV()
+        val souvenirImg = souvenirsViewModel.souvenirs.collectAsState().value
+
+        souvenirImg.mapIndexed { index, souvenir ->
+            souvenir.apply {
+                val additionalInfo = souvenirList.getOrNull(index)
+                additionalInfo?.let {
+                    souvenir.nombre = it.nombre
+                    souvenir.referencia = it.referencia
+                }
+            }
         }
     }
 

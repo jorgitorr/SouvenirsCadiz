@@ -55,11 +55,8 @@ class SouvenirsViewModel :ViewModel(){
         }
     }
 
-
-
     /**
      * Actualiza la consulta de búsqueda actual.
-     *
      * @param newQuery La nueva cadena de texto de consulta para la búsqueda.
      */
     fun setQuery(newQuery: String) {
