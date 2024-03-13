@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                 val souvenir = Souvenir()
                 souvenir.referencia = palabra[0]
                 souvenir.nombre = palabra[1]
-                souvenirsViewModel.setTipo(souvenir,souvenir.nombre)
+                souvenirsViewModel.SetTipo(souvenir,souvenir.nombre)
                 souvenirList.add(souvenir)
             }
         }catch (_: IOException){

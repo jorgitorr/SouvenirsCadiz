@@ -61,7 +61,7 @@ class SouvenirsViewModel :ViewModel(){
      * @param souvenir souvenir al cual le añadimos el tipo
      * @param palabra contiene el tipo
      */
-    fun setTipo(souvenir: Souvenir, palabra:String){
+    fun SetTipo(souvenir: Souvenir, palabra:String){
         when {
             palabra.contains("Llavero") -> souvenir.tipo = Tipo.LLAVERO
             palabra.contains("Iman") -> souvenir.tipo = Tipo.IMAN
@@ -83,6 +83,9 @@ class SouvenirsViewModel :ViewModel(){
             palabra.contains("Abanico") -> souvenir.tipo = Tipo.ABANICO
             palabra.contains("Estuche") -> souvenir.tipo = Tipo.ESTUCHE
             palabra.contains("Bola") -> souvenir.tipo = Tipo.BOLA
+            palabra.contains("Plato") -> souvenir.tipo = Tipo.PLATO
+            palabra.contains("Figura") -> souvenir.tipo = Tipo.FIGURA
+
             else -> {
                 souvenir.tipo = Tipo.LLAVERO
             }
