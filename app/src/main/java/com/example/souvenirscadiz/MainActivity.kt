@@ -56,19 +56,18 @@ class MainActivity : ComponentActivity() {
         var line :String?
         try{
             val input = resources.openRawResource(R.raw.souvenirs) //lee el archivo csv
-            var br = BufferedReader(InputStreamReader(input,
+            val br = BufferedReader(InputStreamReader(input,
                 Charset.forName("UTF-8")
             ))
 
             while (true) {
                 line = br.readLine()
                 if (line.isNullOrEmpty()) break
-                var palabra = line.split(",")
-                var souvenir = Souvenir()
+                val palabra = line.split(",")
+                val souvenir = Souvenir()
                 souvenir.referencia = palabra[0]
                 souvenir.nombre = palabra[1]
-                //setTipo(souvenir,souvenir.nombre)
-
+                setTipo(souvenir,souvenir.nombre)
                 souvenirList.add(souvenir)
             }
             Log.d("size",souvenirList.size.toString())
@@ -78,6 +77,11 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    /**
+     * le da el tipo del enumerado
+     * @param souvenir souvenir al cual le añadimos el tipo
+     * @param palabra contiene el tipo
+     */
     fun setTipo(souvenir: Souvenir, palabra:String){
         when {
             palabra.contains("Llavero") -> souvenir.tipo = Tipo.LLAVERO
