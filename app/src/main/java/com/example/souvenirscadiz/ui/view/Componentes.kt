@@ -265,6 +265,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
                 Text(text = it.nombre,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
+                    fontFamily = KiwiMaru,
                     modifier = Modifier
                         .padding(bottom = 10.dp, start = 10.dp)
                         .clickable { navController.navigate("SouvenirDetail/${it.referencia}") }

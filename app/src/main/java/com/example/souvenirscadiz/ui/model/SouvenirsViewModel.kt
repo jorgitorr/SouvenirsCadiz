@@ -6,6 +6,9 @@ import android.content.res.AssetManager
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,6 +35,8 @@ class SouvenirsViewModel :ViewModel(){
     val selectedItem = MutableStateFlow("Principal")
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
+
+    var actualSouvenir by mutableStateOf(Souvenir())
 
     init {
         getSouvenirs()
@@ -100,6 +105,17 @@ class SouvenirsViewModel :ViewModel(){
             }
         }
         _souvenirs.value = list
+    }
+
+
+    fun getByReference(referencia:String):Souvenir{
+        for(souvenir in _souvenirs.value){
+            if(souvenir.referencia==referencia){
+                actualSouvenir = souvenir
+                break
+            }
+        }
+        return actualSouvenir
     }
 
     /**
