@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -232,9 +233,10 @@ fun Header(navController: NavController){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Search(souvenirsViewModel: SouvenirsViewModel){
+fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController){
     val active by souvenirsViewModel.active.collectAsState()
     val query by souvenirsViewModel.query.collectAsState()
+    val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
 
     SearchBar(
         modifier = Modifier
@@ -256,19 +258,19 @@ fun Search(souvenirsViewModel: SouvenirsViewModel){
             )
         }
     ) {
-        /*if(query.isNotEmpty()){ //si la busqueda no está vacía
-            val filterName = superHero.filter { it.name.contains(query,ignoreCase = true) }
+        if(query.isNotEmpty()){
+            val filterName = souvenirs.filter { it.nombre.contains(query,ignoreCase = true) }
 
             filterName.forEach{
-                Text(text = it.name,
+                Text(text = it.nombre,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(bottom = 10.dp, start = 10.dp)
-                        .clickable { navController.navigate("HeroDetail/${it.id}") }
+                        .clickable { navController.navigate("SouvenirDetail/${it.referencia}") }
                 )
             }
-        }*/
+        }
     }
 
 }
