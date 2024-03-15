@@ -27,6 +27,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.KiwiMaru
+import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
@@ -60,12 +62,17 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding),
+                .padding(innerPadding).background(Silver),
             verticalArrangement = Arrangement.Bottom
         ) {
             val souvenir = souvenirsViewModel.getByReference(nombre)
+            val url = "img${souvenir.url}"
+            val resourceId = souvenirsViewModel.getResourceIdByName(url)
+            Image(painter = painterResource(id = resourceId),
+                contentDescription = "")
+            Text(text = souvenir.nombre, fontFamily = KiwiMaru)
 
-            Text(text = souvenir.nombre)
+
         }
     }
 }

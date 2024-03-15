@@ -144,6 +144,10 @@ class SouvenirsViewModel :ViewModel(){
         selectedItem.value = elementoSeleccionado
     }
 
+
+    /**
+     * Permite coger la imagen ya que lo convierte a un formato admitido
+     */
     @SuppressLint("DiscouragedApi")
     @Composable
     fun getResourceIdByName(url: String): Int {
