@@ -71,7 +71,7 @@ class SouvenirsViewModel :ViewModel(){
      */
     fun SetTipo(souvenir: Souvenir, palabra:String){
         when {
-            palabra.contains("Llavero") -> souvenir.tipo = Tipo.LLAVERO
+            palabra.contains("Llav") -> souvenir.tipo = Tipo.LLAVERO
             palabra.contains("Iman") -> souvenir.tipo = Tipo.IMAN
             palabra.contains("Abridor") -> souvenir.tipo = Tipo.ABRIDOR
             palabra.contains("Pins") -> souvenir.tipo = Tipo.PINS
@@ -100,8 +100,15 @@ class SouvenirsViewModel :ViewModel(){
         }
     }
 
+
+    /**
+     * devuelve los souvenirs de un tipo
+     * @param tipo tipo de souvenir
+     * @return _souvenirTipo
+     */
     fun getByTipo(tipo: Tipo){
         val list: MutableList<Souvenir> = mutableListOf()
+        _souvenirsTipo.value = emptyList()//limpiamos los valores que pueda tener
         for(souvenir in souvenirs.value){
             if(souvenir.tipo == tipo){
                 list.add(souvenir)
@@ -111,6 +118,11 @@ class SouvenirsViewModel :ViewModel(){
     }
 
 
+    /**
+     * obtiene el souvenir por el valor referencia
+     * @param referencia referencia del souvenir
+     * @return actualSouvenir devuelve el souvenir actual
+     */
     fun getByReference(referencia:String):Souvenir{
         for(souvenir in _souvenirs.value){
             if(souvenir.referencia==referencia){
@@ -150,6 +162,8 @@ class SouvenirsViewModel :ViewModel(){
 
     /**
      * Permite coger la imagen ya que lo convierte a un formato admitido
+     * @param url de la imagen
+     * @return la imagen para que pueda ser mostrada
      */
     @SuppressLint("DiscouragedApi")
     @Composable
