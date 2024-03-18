@@ -269,7 +269,9 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
         },
         trailingIcon = {
             Icon(imageVector = Icons.Default.Close, contentDescription = "",
-                modifier = Modifier.clickable { /*navController.popBackStack()*/ }
+                modifier = Modifier.clickable {
+                    souvenirsViewModel.setActive(false)
+                    souvenirsViewModel.setQuery("") }
             )
         }
     ) {
