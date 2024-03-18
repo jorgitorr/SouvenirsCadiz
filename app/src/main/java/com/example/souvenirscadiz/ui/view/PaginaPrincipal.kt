@@ -71,6 +71,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
     ) { innerPadding ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
                 .background(Silver),
             verticalArrangement = Arrangement.Bottom
@@ -79,7 +80,10 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
             val url = "img${souvenir.url}"
             val resourceId = souvenirsViewModel.getResourceIdByName(url)
             Image(painter = painterResource(id = resourceId),
-                contentDescription = "")
+                contentDescription = "",
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
             Text(text = souvenir.nombre, fontFamily = KiwiMaru)
             Text(text = souvenir.referencia, fontFamily = KiwiMaru)
             Text(text = souvenir.precio.toString()+"€", fontFamily = KiwiMaru)
