@@ -47,9 +47,9 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Search(souvenirsViewModel, navController)
-            NombresSouvenirs(souvenirsViewModel)
-            SouvenirsList(souvenirsViewModel)
+            Search(souvenirsViewModel, navController)//buscador
+            NombresSouvenirs(souvenirsViewModel)//todos los enumerados
+            SouvenirsList(navController, souvenirsViewModel)//lista de souvenirs
         }
     }
 }
@@ -71,8 +71,6 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
             Image(painter = painterResource(id = resourceId),
                 contentDescription = "")
             Text(text = souvenir.nombre, fontFamily = KiwiMaru)
-
-
         }
     }
 }

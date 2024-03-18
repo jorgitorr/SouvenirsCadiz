@@ -62,9 +62,11 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 /**
  * Cuadrado que contiene cada imagen
+ * @param souvenir
+ * @param url de la imagen que queremos mostrar
  */
 @Composable
-fun Cuadrado(souvenir: Souvenir, url:Int){
+fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int){
     var isFavorite by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier
@@ -80,6 +82,7 @@ fun Cuadrado(souvenir: Souvenir, url:Int){
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
+                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
 
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -124,22 +127,29 @@ fun Cuadrado(souvenir: Souvenir, url:Int){
 
 }
 
-
+/**
+ * lista de souvenirs
+ * @param souvenirsViewModel viewmodel de souvenirs
+ */
 @Composable
-fun SouvenirsList(souvenirsViewModel: SouvenirsViewModel){
+fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsViewModel){
     val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
 
     LazyColumn{
         items(souvenirs){ souvenir->
             val url = "img${souvenir.url}"
             val resourceId = souvenirsViewModel.getResourceIdByName(url)
-            Cuadrado(souvenir, resourceId)
+            Cuadrado(navController,souvenir, resourceId)
             Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }
 
-
+/**
+ * Pie
+ * @param navController navegacion entre páginas
+ * @param souvenirsViewModel viewmodel de souvenirs
+ */
 @Composable
 fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
@@ -207,7 +217,10 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
     }
 }
 
-
+/**
+ * Header
+ * @param navController navegacion entre páginas
+ */
 @Composable
 fun Header(navController: NavController){
     Box(modifier = Modifier
@@ -229,8 +242,11 @@ fun Header(navController: NavController){
     }
 }
 
-
-
+/**
+ * Buscador
+ * @param souvenirsViewModel viewModel de souvenirs
+ * @param navController navegacion entre páginas
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController){
@@ -252,7 +268,6 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
             Icon(imageVector = Icons.Default.Search, contentDescription = "")
         },
         trailingIcon = {
-            // DCS - Icono para cerrar la vista de búsqueda o limpiar el texto de búsqueda.
             Icon(imageVector = Icons.Default.Close, contentDescription = "",
                 modifier = Modifier.clickable { /*navController.popBackStack()*/ }
             )
@@ -276,6 +291,10 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
 
 }
 
+/**
+ * nombre de todos los tipos de souvenirs
+ * @param souvenirsViewModel viewmodel de souvenirs
+ */
 @Composable
 fun NombresSouvenirs(souvenirsViewModel: SouvenirsViewModel){
     LazyRow {

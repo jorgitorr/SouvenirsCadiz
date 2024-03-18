@@ -36,6 +36,9 @@ class SouvenirsViewModel :ViewModel(){
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
 
+    private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
+    val souvenirsTipo = _souvenirsTipo
+
     var actualSouvenir by mutableStateOf(Souvenir())
 
     init {
@@ -104,7 +107,7 @@ class SouvenirsViewModel :ViewModel(){
                 list.add(souvenir)
             }
         }
-        _souvenirs.value = list
+        _souvenirsTipo.value = list
     }
 
 
