@@ -33,17 +33,19 @@ class LoginViewModel : ViewModel(){
 
     var showAlert by mutableStateOf(false)
         private set
-    var email by mutableStateOf("")
+    var email by mutableStateOf("email@gmail.com")//este valor tiene que ser eliminado
         private set
     var password by mutableStateOf("")
         private set
-    var userName by mutableStateOf("")
+    var userName by mutableStateOf("Gaditano")//este valor tiene que ser eliminado
         private set
 
 
     fun signOut(){
         auth.signOut()
     }
+
+
     fun getCurrentUser(): FirebaseUser?{
         return auth.currentUser
     }

@@ -26,19 +26,19 @@ class SouvenirsViewModel :ViewModel(){
     /**
      * @param query es una variable que se usa en el buscador para saber que estamos buscando
      * @param active es una variable para saber si el buscador está activo
-     * @param _souvenirs es una variable privada  que contiene una lista de souvenirs
-     * @param souvenir es la variable que se comparte en el resto de páginas
-     * @param list lista que agrega cada souvenir
+     * @param _souvenirs variable privada  que contiene una lista de souvenirs
+     * @param souvenir variable que se comparte en el resto de páginas
+     * @param _souvenirsTipo variable privada que tiene los souvenirs de ese tipo
+     * @param souvenirsTipo variable que comparte con las paginas
+     * @param actualSouvenir variable que convierte el souvenir pulsado
      */
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
     val selectedItem = MutableStateFlow("Principal")
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
-
     private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirsTipo = _souvenirsTipo
-
     private var actualSouvenir by mutableStateOf(Souvenir())
 
     init {

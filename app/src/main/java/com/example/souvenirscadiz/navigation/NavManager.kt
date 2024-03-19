@@ -33,7 +33,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             Favoritos(souvenirsViewModel, navController, loginViewModel)
         }
         composable("Perfil"){
-            Perfil(loginViewModel, navController)
+            Perfil(loginViewModel, navController, souvenirsViewModel)
         }
         composable("Tienda"){
             Tienda(souvenirsViewModel, navController, loginViewModel)

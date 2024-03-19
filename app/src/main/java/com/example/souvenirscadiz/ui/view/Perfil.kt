@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -37,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -47,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
+import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
@@ -64,8 +68,41 @@ import com.example.souvenirscadiz.ui.theme.White
  * @param navController navegacion
  */
 @Composable
-fun Perfil(loginViewModel: LoginViewModel, navController: NavController){
+fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    Scaffold(
+        topBar = { Header(navController) },
+        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(Silver),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = loginViewModel.userName)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = loginViewModel.email)
 
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(RaisanBlack)) {
+                Text(text = "Modificar",
+                    style = TextStyle(color = Silver))
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(Redwood)) {
+                Text(text = "Suprimir",
+                    style = TextStyle(color = Silver))
+            }
+
+        }
+    }
 }
 
 
@@ -85,7 +122,9 @@ fun InicioSesion(loginViewModel: LoginViewModel, navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().background(Silver),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Silver),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -130,7 +169,8 @@ fun Registro(loginViewModel: LoginViewModel, navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .background(Silver),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
