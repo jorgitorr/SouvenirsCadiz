@@ -133,7 +133,7 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int){
  */
 @Composable
 fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsViewModel){
-    val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
+    val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState()
 
     LazyColumn{
         items(souvenirs){ souvenir->
@@ -299,6 +299,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
  */
 @Composable
 fun NombresSouvenirs(souvenirsViewModel: SouvenirsViewModel){
+    souvenirsViewModel.SetTipo()//poner el tipo de souvenir
     LazyRow {
         items(Tipo.entries.toTypedArray()) { tipo ->
             Text(

@@ -54,8 +54,6 @@ class SouvenirsViewModel :ViewModel(){
             for(a in 6..115){
                 val souvenir = Souvenir()
                 souvenir.url = a
-                souvenir.tipo = Tipo.LLAVERO
-                souvenir.precio = 2.99
                 list.add(souvenir)
             }
 
@@ -69,33 +67,31 @@ class SouvenirsViewModel :ViewModel(){
      * @param souvenir souvenir al cual le añadimos el tipo
      * @param palabra contiene el tipo
      */
-    fun SetTipo(souvenir: Souvenir, palabra:String){
-        when {
-            palabra.contains("Llav") -> souvenir.tipo = Tipo.LLAVERO
-            palabra.contains("Iman") -> souvenir.tipo = Tipo.IMAN
-            palabra.contains("Abridor") -> souvenir.tipo = Tipo.ABRIDOR
-            palabra.contains("Pins") -> souvenir.tipo = Tipo.PINS
-            palabra.contains("Cortauñas") -> souvenir.tipo = Tipo.CORTAUNIAS
-            palabra.contains("Cucharilla") -> souvenir.tipo = Tipo.CUCHARILLA
-            palabra.contains("Campana") -> souvenir.tipo = Tipo.CAMPANA
-            palabra.contains("Salvamanteles") -> souvenir.tipo = Tipo.SALVAMANTELES
-            palabra.contains("Posa") -> souvenir.tipo = Tipo.POSA
-            palabra.contains("Set") -> souvenir.tipo = Tipo.SET
-            palabra.contains("Parche") -> souvenir.tipo = Tipo.PARCHE
-            palabra.contains("Adhes.") -> souvenir.tipo = Tipo.ADHESIVO
-            palabra.contains("Pastillero") -> souvenir.tipo = Tipo.PASTILLERO
-            palabra.contains("Espejo") -> souvenir.tipo = Tipo.ESPEJO
-            palabra.contains("Cubremascarilla") -> souvenir.tipo = Tipo.CUBRE_MASCARILLA
-            palabra.contains("Dedal") -> souvenir.tipo = Tipo.DEDAL
-            palabra.contains("Pisapapeles") -> souvenir.tipo = Tipo.PISAPAPELES
-            palabra.contains("Abanico") -> souvenir.tipo = Tipo.ABANICO
-            palabra.contains("Estuche") -> souvenir.tipo = Tipo.ESTUCHE
-            palabra.contains("Bola") -> souvenir.tipo = Tipo.BOLA
-            palabra.contains("Plato") -> souvenir.tipo = Tipo.PLATO
-            palabra.contains("Figura") -> souvenir.tipo = Tipo.FIGURA
-
-            else -> {
-                souvenir.tipo = Tipo.LLAVERO
+    fun SetTipo(){
+        for(souvenir in _souvenirs.value){
+            when {
+                souvenir.nombre.contains("Llav") -> souvenir.tipo = Tipo.LLAVERO
+                souvenir.nombre.contains("Iman") -> souvenir.tipo = Tipo.IMAN
+                souvenir.nombre.contains("Abridor") -> souvenir.tipo = Tipo.ABRIDOR
+                souvenir.nombre.contains("Pins") -> souvenir.tipo = Tipo.PINS
+                souvenir.nombre.contains("Cortauñas") -> souvenir.tipo = Tipo.CORTAUNIAS
+                souvenir.nombre.contains("Cucharilla") -> souvenir.tipo = Tipo.CUCHARILLA
+                souvenir.nombre.contains("Campana") -> souvenir.tipo = Tipo.CAMPANA
+                souvenir.nombre.contains("Salvamanteles") -> souvenir.tipo = Tipo.SALVAMANTELES
+                souvenir.nombre.contains("Posa") -> souvenir.tipo = Tipo.POSA
+                souvenir.nombre.contains("Set") -> souvenir.tipo = Tipo.SET
+                souvenir.nombre.contains("Parche") -> souvenir.tipo = Tipo.PARCHE
+                souvenir.nombre.contains("Adhes.") -> souvenir.tipo = Tipo.ADHESIVO
+                souvenir.nombre.contains("Pastillero") -> souvenir.tipo = Tipo.PASTILLERO
+                souvenir.nombre.contains("Espejo") -> souvenir.tipo = Tipo.ESPEJO
+                souvenir.nombre.contains("Cubremascarilla") -> souvenir.tipo = Tipo.CUBRE_MASCARILLA
+                souvenir.nombre.contains("Dedal") -> souvenir.tipo = Tipo.DEDAL
+                souvenir.nombre.contains("Pisapapeles") -> souvenir.tipo = Tipo.PISAPAPELES
+                souvenir.nombre.contains("Abanico") -> souvenir.tipo = Tipo.ABANICO
+                souvenir.nombre.contains("Estuche") -> souvenir.tipo = Tipo.ESTUCHE
+                souvenir.nombre.contains("Bola") -> souvenir.tipo = Tipo.BOLA
+                souvenir.nombre.contains("Plato") -> souvenir.tipo = Tipo.PLATO
+                souvenir.nombre.contains("Figura") -> souvenir.tipo = Tipo.FIGURA
             }
         }
     }
