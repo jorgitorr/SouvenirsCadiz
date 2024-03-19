@@ -27,16 +27,16 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
     
     NavHost(navController = navController, startDestination = "Principal"){
         composable("Principal"){
-            Principal(souvenirsViewModel, navController)
+            Principal(souvenirsViewModel, navController, loginViewModel)
         }
         composable("Favoritos"){
-            Favoritos(souvenirsViewModel, navController)
+            Favoritos(souvenirsViewModel, navController, loginViewModel)
         }
         composable("Perfil"){
             Perfil(loginViewModel, navController)
         }
         composable("Tienda"){
-            Tienda(souvenirsViewModel, navController)
+            Tienda(souvenirsViewModel, navController, loginViewModel)
         }
         composable("Registro"){
             Registro(loginViewModel, navController)
@@ -48,7 +48,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             navArgument("referencia") { type = NavType.StringType }
         )  ){
             val referencia = it.arguments?.getString("referencia") ?: 0
-            SouvenirDetail(navController, souvenirsViewModel, referencia.toString())
+            SouvenirDetail(navController, souvenirsViewModel, loginViewModel, referencia.toString())
         }
 
     }

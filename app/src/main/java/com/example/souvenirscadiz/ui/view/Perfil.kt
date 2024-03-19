@@ -54,6 +54,10 @@ import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.White
 
+
+
+
+
 /**
  * Página de perfil
  * @param loginViewModel viewmodel del login
@@ -61,7 +65,7 @@ import com.example.souvenirscadiz.ui.theme.White
  */
 @Composable
 fun Perfil(loginViewModel: LoginViewModel, navController: NavController){
-    InicioSesion(loginViewModel, navController)
+
 }
 
 

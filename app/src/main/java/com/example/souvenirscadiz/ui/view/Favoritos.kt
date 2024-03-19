@@ -10,17 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
-fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController){
+fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(
         topBar = {
             Header(navController)
         },
         bottomBar = {
-            Footer(navController, souvenirsViewModel)
+            Footer(navController, souvenirsViewModel, loginViewModel)
         }
     ) { innerPadding ->
         Column(

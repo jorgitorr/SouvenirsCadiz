@@ -50,6 +50,7 @@ import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.Tipo
+import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Cerulean
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -151,7 +152,7 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
  * @param souvenirsViewModel viewmodel de souvenirs
  */
 @Composable
-fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -208,7 +209,11 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
                         .padding(vertical = 2.dp)
                         .clickable {
                             souvenirsViewModel.setSelectedItem("Perfil")
-                            navController.navigate("Perfil")
+                            if(loginViewModel.userName.isNotEmpty()){
+                                navController.navigate("Perfil")
+                            }else{
+                                navController.navigate("InicioSesion")
+                            }
                         }
                 )
                 Text("Profile")
@@ -299,7 +304,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
  */
 @Composable
 fun NombresSouvenirs(souvenirsViewModel: SouvenirsViewModel){
-    souvenirsViewModel.SetTipo()//poner el tipo de souvenir
+    souvenirsViewModel.setTipo()//poner el tipo de souvenir
     LazyRow {
         items(Tipo.entries.toTypedArray()) { tipo ->
             Text(

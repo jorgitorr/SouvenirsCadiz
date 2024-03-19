@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.KneWave
@@ -46,13 +47,13 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param navController navegacion
  */
 @Composable
-fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController){
+fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(
         topBar = {
             Header(navController)
         },
         bottomBar = {
-            Footer(navController,souvenirsViewModel)
+            Footer(navController,souvenirsViewModel, loginViewModel)
         }
     ) { innerPadding ->
         Column(
@@ -76,11 +77,11 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  * @param referencia referencia del souvenir
  */
 @Composable
-fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsViewModel, referencia:String) {
+fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, referencia:String) {
     var isFavorite by remember { mutableStateOf(false) }
     Scaffold(
         topBar = { Header(navController) },
-        bottomBar = { Footer(navController, souvenirsViewModel) },
+        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
     ) { innerPadding ->
         Column(
             modifier = Modifier

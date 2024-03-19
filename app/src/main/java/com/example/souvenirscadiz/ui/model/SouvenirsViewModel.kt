@@ -39,7 +39,7 @@ class SouvenirsViewModel :ViewModel(){
     private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirsTipo = _souvenirsTipo
 
-    var actualSouvenir by mutableStateOf(Souvenir())
+    private var actualSouvenir by mutableStateOf(Souvenir())
 
     init {
         getSouvenirs()
@@ -48,7 +48,7 @@ class SouvenirsViewModel :ViewModel(){
     /**
      * obtiene todos los souvenirs
      */
-    fun getSouvenirs(){
+    private fun getSouvenirs(){
         viewModelScope.launch {
             val list: MutableList<Souvenir> = mutableListOf()
             for(a in 6..115){
@@ -67,7 +67,7 @@ class SouvenirsViewModel :ViewModel(){
      * @param souvenir souvenir al cual le añadimos el tipo
      * @param palabra contiene el tipo
      */
-    fun SetTipo(){
+    fun setTipo(){
         for(souvenir in _souvenirs.value){
             when {
                 souvenir.nombre.contains("Llav") -> souvenir.tipo = Tipo.LLAVERO
@@ -167,9 +167,5 @@ class SouvenirsViewModel :ViewModel(){
         val context = LocalContext.current
         return context.resources.getIdentifier(url, "drawable", context.packageName)
     }
-
-
-
-
 
 }
