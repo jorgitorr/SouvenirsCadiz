@@ -298,6 +298,7 @@ fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavContr
             fontFamily = KiwiMaru,
             color = White
         )
+
     }
 }
 
