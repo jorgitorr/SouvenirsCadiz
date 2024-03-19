@@ -39,6 +39,12 @@ import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 
+
+/**
+ * Página prinicipal de los souvenirs
+ * @param souvenirsViewModel viewModel de los souvenirs
+ * @param navController navegacion
+ */
 @Composable
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController){
     Scaffold(
@@ -62,8 +68,15 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     }
 }
 
+/**
+ * Detalles de los souvenirs
+ * Página que detalla información del souvenir
+ * @param navController navegacion
+ * @param souvenirsViewModel viewmodel de los souvenirs
+ * @param referencia referencia del souvenir
+ */
 @Composable
-fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsViewModel, nombre:String) {
+fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsViewModel, referencia:String) {
     var isFavorite by remember { mutableStateOf(false) }
     Scaffold(
         topBar = { Header(navController) },
@@ -76,7 +89,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 .background(Silver),
             verticalArrangement = Arrangement.Bottom
         ) {
-            val souvenir = souvenirsViewModel.getByReference(nombre)
+            val souvenir = souvenirsViewModel.getByReference(referencia)
             val url = "img${souvenir.url}"
             val resourceId = souvenirsViewModel.getResourceIdByName(url)
             Image(painter = painterResource(id = resourceId),

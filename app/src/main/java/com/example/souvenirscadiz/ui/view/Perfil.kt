@@ -54,11 +54,22 @@ import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.White
 
+/**
+ * Página de perfil
+ * @param loginViewModel viewmodel del login
+ * @param navController navegacion
+ */
 @Composable
 fun Perfil(loginViewModel: LoginViewModel, navController: NavController){
     InicioSesion(loginViewModel, navController)
 }
 
+
+/**
+ * Inicio de sesion
+ * @param loginViewModel viewmodel del login
+ * @param navController navegacion
+ */
 @Composable
 fun InicioSesion(loginViewModel: LoginViewModel, navController: NavController) {
     Column(
@@ -99,6 +110,11 @@ fun InicioSesion(loginViewModel: LoginViewModel, navController: NavController) {
     }
 }
 
+/**
+ * Registro
+ * @param loginViewModel viewModel del login
+ * @param navController navegacion
+ */
 @Composable
 fun Registro(loginViewModel: LoginViewModel, navController: NavController) {
     Column(
