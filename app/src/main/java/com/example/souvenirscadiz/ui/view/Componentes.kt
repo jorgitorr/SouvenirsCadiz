@@ -135,13 +135,24 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int){
 @Composable
 fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsViewModel){
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState()
-
-    LazyColumn{
-        items(souvenirs){ souvenir->
-            val url = "img${souvenir.url}"
-            val resourceId = souvenirsViewModel.getResourceIdByName(url)
-            Cuadrado(navController,souvenir, resourceId)
-            Spacer(modifier = Modifier.height(20.dp))
+    val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState()
+    if(souvenirs.isEmpty()){
+        LazyColumn{
+            items(souvenirsPre){ souvenirP->
+                val url = "img${souvenirP.url}"
+                val resourceId = souvenirsViewModel.getResourceIdByName(url)
+                Cuadrado(navController,souvenirP, resourceId)
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+        }
+    }else{
+        LazyColumn{
+            items(souvenirs){ souvenir->
+                val url = "img${souvenir.url}"
+                val resourceId = souvenirsViewModel.getResourceIdByName(url)
+                Cuadrado(navController,souvenir, resourceId)
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
     }
 }
@@ -209,9 +220,9 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                         .padding(vertical = 2.dp)
                         .clickable {
                             souvenirsViewModel.setSelectedItem("Perfil")
-                            if(loginViewModel.userName.isNotEmpty()){
+                            if (loginViewModel.userName.isNotEmpty()) {
                                 navController.navigate("Perfil")
-                            }else{
+                            } else {
                                 navController.navigate("InicioSesion")
                             }
                         }

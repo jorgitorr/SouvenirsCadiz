@@ -33,11 +33,11 @@ class LoginViewModel : ViewModel(){
 
     var showAlert by mutableStateOf(false)
         private set
-    var email by mutableStateOf("email@gmail.com")//este valor tiene que ser eliminado
+    var email by mutableStateOf("")
         private set
     var password by mutableStateOf("")
         private set
-    var userName by mutableStateOf("Gaditano")//este valor tiene que ser eliminado
+    var userName by mutableStateOf("")
         private set
 
 
