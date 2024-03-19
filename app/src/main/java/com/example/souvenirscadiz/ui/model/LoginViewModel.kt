@@ -29,7 +29,7 @@ class LoginViewModel : ViewModel(){
      */
 
     private val auth: FirebaseAuth by lazy { Firebase.auth } // es mejor está forma de inicializar ya que es de manera diferida
-    private val firestore = com.google.firebase.ktx.Firebase.firestore
+    private val firestore = Firebase.firestore
 
     var showAlert by mutableStateOf(false)
         private set
