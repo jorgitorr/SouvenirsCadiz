@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -81,7 +82,9 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = loginViewModel.userName)
+            Text(text = loginViewModel.userName,
+                color = RaisanBlack,
+                style = TextStyle(fontWeight = FontWeight.Bold))
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = loginViewModel.email)
 
