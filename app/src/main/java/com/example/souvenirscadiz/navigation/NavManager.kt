@@ -50,6 +50,9 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             val referencia = it.arguments?.getString("referencia") ?: 0
             SouvenirDetail(navController, souvenirsViewModel, loginViewModel, referencia.toString())
         }
+        composable("ModificarPerfil"){
+
+        }
 
     }
 }

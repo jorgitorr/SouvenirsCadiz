@@ -1,12 +1,24 @@
 package com.example.souvenirscadiz.ui.model
 
+import android.content.Context
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.User
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -103,6 +115,7 @@ class LoginViewModel : ViewModel(){
     }
 
     /**
+     * Funcion privada que guarda los usuarios
      * @param username se le pasa el nombre de usuario que queremos guardar
      * Dentro realiza una corrutina que guarda el usuario actual con el usuario que tenemos
      */
@@ -166,8 +179,24 @@ class LoginViewModel : ViewModel(){
         auth.signOut()
     }
 
+    fun singInWithGoogleCredential(credential: AuthCredential, home:()->Unit)
+    = viewModelScope.launch{
+        try {
+            auth.signInWithCredential(credential)
+                .addOnCompleteListener{ task ->
+                    if(task.isSuccessful){
+                        Log.d("Login Google","Logueado con éxito")
+                        home()
+                    }
+                }.addOnFailureListener{
+                    Log.d("Login Google Error","Error al loguear con google")
+                }
+        }catch (e:Exception){
+            Log.d("Login Google Error","Error de google " +
+                    "+ ${e.localizedMessage}")
+        }
 
-
-
-
+    }
 }
+
+

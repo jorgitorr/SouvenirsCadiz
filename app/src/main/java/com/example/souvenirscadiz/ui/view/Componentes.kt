@@ -62,13 +62,14 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 
 /**
- * Cuadrado que contiene cada imagen
+ * Cuadrado que contiene cada imagen del souvenir y su nombre, referencia y precio
+ * @param navController navegacion
  * @param souvenir
  * @param url de la imagen que queremos mostrar
  */
 @Composable
 fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int){
-    var isFavorite by remember { mutableStateOf(false) }
+    var isFavorite by remember { mutableStateOf(false) }//variable fav
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -113,7 +114,10 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int){
                     tint = if (!isFavorite)RaisanBlack else Redwood,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
-                        .clickable { isFavorite = !isFavorite }
+                        .clickable {
+                            isFavorite = !isFavorite
+
+                        }
                 )
                 Text(
                     text = "${souvenir.precio}€",
@@ -130,12 +134,14 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int){
 
 /**
  * lista de souvenirs
+ * @param navController navegacion
  * @param souvenirsViewModel viewmodel de souvenirs
  */
 @Composable
 fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsViewModel){
-    val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState()
-    val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState()
+    val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState()//souvenirs de un tipo
+    val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState()//todos los souvenirs
+
     if(souvenirs.isEmpty()){
         LazyColumn{
             items(souvenirsPre){ souvenirP->
@@ -158,9 +164,10 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
 }
 
 /**
- * Pie
+ * Footer
  * @param navController navegacion entre páginas
  * @param souvenirsViewModel viewmodel de souvenirs
+ * @param loginViewModel viewmodel de login
  */
 @Composable
 fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
@@ -315,7 +322,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
  */
 @Composable
 fun NombresSouvenirs(souvenirsViewModel: SouvenirsViewModel){
-    souvenirsViewModel.setTipo()//poner el tipo de souvenir
+    souvenirsViewModel.setTipo()//poner el tipo de souvenir para cada souvenir
     LazyRow {
         items(Tipo.entries.toTypedArray()) { tipo ->
             Text(
