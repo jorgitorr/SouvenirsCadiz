@@ -150,7 +150,7 @@ fun InicioSesion(loginViewModel: LoginViewModel, navController: NavController) {
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        IntroducirUsuario(loginViewModel)
+        IntroducirEmail(loginViewModel)
         Spacer(modifier = Modifier.height(16.dp))
         IntroducirContrasenia(loginViewModel)
         Spacer(modifier = Modifier.height(16.dp))

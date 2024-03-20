@@ -14,6 +14,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.Tipo
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
@@ -40,6 +45,9 @@ class SouvenirsViewModel :ViewModel(){
     private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsTipo = _souvenirsTipo
     private var actualSouvenir by mutableStateOf(Souvenir())
+
+    private val auth: FirebaseAuth by lazy { Firebase.auth }
+    private val firestore = Firebase.firestore
 
     init {
         getSouvenirs()
@@ -166,6 +174,39 @@ class SouvenirsViewModel :ViewModel(){
     fun getResourceIdByName(url: String): Int {
         val context = LocalContext.current
         return context.resources.getIdentifier(url, "drawable", context.packageName)
+    }
+
+
+    /**
+     * @param onSuccess en el caso de lograr guardar en superHeroe
+     * Guarda el superHeroe en la base de datos
+     */
+    fun saveSouvenir(onSuccess:() -> Unit){
+        val email = auth.currentUser?.email
+        val userName = auth.currentUser?.displayName
+        viewModelScope.launch (Dispatchers.IO){
+            try {
+                val newSouvenir = hashMapOf(
+                    "referencia" to actualSouvenir.referencia,
+                    "nombre" to actualSouvenir.nombre,
+                    "url" to actualSouvenir.url,
+                    "tipo" to actualSouvenir.tipo,
+                    "precio" to actualSouvenir.precio,
+                    "emailUser" to email.toString(),
+                    "nameUser" to userName.toString()
+                )
+                firestore.collection("Souvenirs Favoritos")
+                    .add(newSouvenir)
+                    .addOnSuccessListener {
+                        onSuccess()
+                        Log.d("Error save","Se guardó el souvenir")
+                    }.addOnFailureListener{
+                        Log.d("Save error","Error al guardar")
+                    }
+            }catch (e:Exception){
+                Log.d("Error al guardar superHeroe","Error al guardar Souvenir")
+            }
+        }
     }
 
 }

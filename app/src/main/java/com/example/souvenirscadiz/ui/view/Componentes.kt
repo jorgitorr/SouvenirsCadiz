@@ -2,6 +2,7 @@ package com.example.souvenirscadiz.ui.view
 
 import android.content.res.Resources.Theme
 import android.graphics.Color
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -68,8 +70,9 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param url de la imagen que queremos mostrar
  */
 @Composable
-fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int){
+fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
     var isFavorite by remember { mutableStateOf(false) }//variable fav
+    val context = LocalContext.current
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -116,7 +119,10 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int){
                         .padding(vertical = 2.dp)
                         .clickable {
                             isFavorite = !isFavorite
-
+                            souvenirsViewModel.saveSouvenir {
+                                Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                 )
                 Text(
@@ -147,7 +153,7 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
             items(souvenirsPre){ souvenirP->
                 val url = "img${souvenirP.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                Cuadrado(navController,souvenirP, resourceId)
+                Cuadrado(navController,souvenirP, resourceId, souvenirsViewModel)
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }
@@ -156,7 +162,7 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
             items(souvenirs){ souvenir->
                 val url = "img${souvenir.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                Cuadrado(navController,souvenir, resourceId)
+                Cuadrado(navController,souvenir, resourceId, souvenirsViewModel)
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }
