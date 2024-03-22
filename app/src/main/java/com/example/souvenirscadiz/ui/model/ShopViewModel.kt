@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Souvenir
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 
 class ShopViewModel : ViewModel(){
@@ -19,5 +20,9 @@ class ShopViewModel : ViewModel(){
             list.add(souvenir)
             _souvenirsAniadidos.value = list
         }
+    }
+
+    fun getNumberSouvenirs():Int{
+        return souvenirsAniadidos.value.size
     }
 }

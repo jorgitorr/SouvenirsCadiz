@@ -1,10 +1,7 @@
 package com.example.souvenirscadiz.ui.model
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.AssetManager
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +11,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.Tipo
+import com.example.souvenirscadiz.data.util.Constant.Companion.MAX_SOUVENIRS
+import com.example.souvenirscadiz.data.util.Constant.Companion.MIN_SOUVENIRS
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -22,11 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-
 
 class SouvenirsViewModel :ViewModel(){
 
@@ -55,6 +49,7 @@ class SouvenirsViewModel :ViewModel(){
     private var actualSouvenir by mutableStateOf(Souvenir())
     private val _souvenirSaved = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirSaved: StateFlow<List<Souvenir>> =  _souvenirSaved
+
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
 
@@ -68,7 +63,7 @@ class SouvenirsViewModel :ViewModel(){
     private fun getSouvenirs(){
         viewModelScope.launch {
             val list: MutableList<Souvenir> = mutableListOf()
-            for(a in 6..115){
+            for(a in MIN_SOUVENIRS..MAX_SOUVENIRS){
                 val souvenir = Souvenir()
                 souvenir.url = a
                 list.add(souvenir)
