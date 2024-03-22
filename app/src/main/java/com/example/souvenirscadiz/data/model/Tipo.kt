@@ -1,5 +1,8 @@
 package com.example.souvenirscadiz.data.model
 
+
+//esto podria ser una lista de souvenirs y que así se agrege a la base de datos y pueda actualizarla
+//meter nuevos tipos de souvenirs o eliminar algunos
 enum class Tipo (val valor:String){
     LLAVERO("Llaveros"),
     IMAN("Imánes"),

@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    readCSV(souvenirsViewModel)
+                    readCSV()
                     SouvenirsAddImages(souvenirsViewModel)
                     NavManager(souvenirsViewModel, loginViewModel)
                 }
@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
      * y el nombre
      */
     @Composable
-    private fun readCSV(souvenirsViewModel: SouvenirsViewModel) :MutableList<Souvenir>{
+    private fun readCSV() :MutableList<Souvenir>{
         val souvenirList = mutableListOf<Souvenir>()
         var line :String?
         try{
@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("StateFlowValueCalledInComposition")
     @Composable
     fun SouvenirsAddImages(souvenirsViewModel: SouvenirsViewModel) {
-        val souvenirList = readCSV(souvenirsViewModel)
+        val souvenirList = readCSV()
         val souvenirImg = souvenirsViewModel.souvenirs.collectAsState().value
 
         souvenirImg.mapIndexed { index, souvenir ->

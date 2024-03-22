@@ -227,7 +227,7 @@ fun Registro(loginViewModel: LoginViewModel, navController: NavController) {
  */
 @Composable
 fun IntroducirContrasenia(loginViewModel: LoginViewModel){
-    var hidden by remember { mutableStateOf(true) } //1
+    var hidden by remember { mutableStateOf(true) }
     Text(text = "Contraseña", color = RaisanBlack,
         fontFamily = KiwiMaru
     )

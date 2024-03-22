@@ -29,6 +29,9 @@ import java.io.InputStreamReader
 
 
 class SouvenirsViewModel :ViewModel(){
+
+    //poner un contador de productos que tiene en el carrito el usuario
+    //para poder añadirla al icono shop
     /**
      * @param query es una variable que se usa en el buscador para saber que estamos buscando
      * @param active es una variable para saber si el buscador está activo
@@ -50,10 +53,8 @@ class SouvenirsViewModel :ViewModel(){
     private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsTipo = _souvenirsTipo
     private var actualSouvenir by mutableStateOf(Souvenir())
-
     private val _souvenirSaved = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirSaved: StateFlow<List<Souvenir>> =  _souvenirSaved
-
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
 
