@@ -209,4 +209,33 @@ class SouvenirsViewModel :ViewModel(){
         }
     }
 
+
+    fun saveSouvenir(onSuccess:() -> Unit, souvenir: Souvenir){
+        val email = auth.currentUser?.email
+        val userName = auth.currentUser?.displayName
+        viewModelScope.launch (Dispatchers.IO){
+            try {
+                val newSouvenir = hashMapOf(
+                    "referencia" to souvenir.referencia,
+                    "nombre" to souvenir.nombre,
+                    "url" to souvenir.url,
+                    "tipo" to souvenir.tipo,
+                    "precio" to souvenir.precio,
+                    "emailUser" to email.toString(),
+                    "nameUser" to userName.toString()
+                )
+                firestore.collection("Souvenirs Favoritos")
+                    .add(newSouvenir)
+                    .addOnSuccessListener {
+                        onSuccess()
+                        Log.d("Error save","Se guardó el souvenir")
+                    }.addOnFailureListener{
+                        Log.d("Save error","Error al guardar")
+                    }
+            }catch (e:Exception){
+                Log.d("Error al guardar superHeroe","Error al guardar Souvenir")
+            }
+        }
+    }
+
 }

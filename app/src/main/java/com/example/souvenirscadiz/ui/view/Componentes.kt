@@ -119,10 +119,9 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
                         .padding(vertical = 2.dp)
                         .clickable {
                             isFavorite = !isFavorite
-                            souvenirsViewModel.saveSouvenir {
-                                Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
+                            souvenirsViewModel.saveSouvenir (
+                                { Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
+                                    .show()}, souvenir)
                         }
                 )
                 Text(
