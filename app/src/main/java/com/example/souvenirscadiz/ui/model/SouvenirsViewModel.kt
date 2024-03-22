@@ -20,6 +20,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.IOException
@@ -36,6 +37,10 @@ class SouvenirsViewModel :ViewModel(){
      * @param _souvenirsTipo variable privada que tiene los souvenirs de ese tipo
      * @param souvenirsTipo variable que comparte con las paginas
      * @param actualSouvenir variable que convierte el souvenir pulsado
+     * @param _souvenirsSaved souvenirs guardados
+     * @param souvenirSaved variable publica que muestra los souvenirs guardados
+     * @param auth autorizacion de firebase
+     * @param firestore permite guardar en la base de datos
      */
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
@@ -45,6 +50,9 @@ class SouvenirsViewModel :ViewModel(){
     private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsTipo = _souvenirsTipo
     private var actualSouvenir by mutableStateOf(Souvenir())
+
+    private val _souvenirSaved = MutableStateFlow<List<Souvenir>>(emptyList())
+    val souvenirSaved: StateFlow<List<Souvenir>> =  _souvenirSaved
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
@@ -210,6 +218,12 @@ class SouvenirsViewModel :ViewModel(){
     }
 
 
+    /**
+     * Guardar souvenir desde la pantalla principal, para ello le paso el souvenir
+     * en vez de recuperarlo en el viewModel
+     * @param onSuccess lambda para que hace el método el caso de lograrlo
+     * @param souvenir souvenir
+     */
     fun saveSouvenir(onSuccess:() -> Unit, souvenir: Souvenir){
         val email = auth.currentUser?.email
         val userName = auth.currentUser?.displayName
@@ -236,6 +250,29 @@ class SouvenirsViewModel :ViewModel(){
                 Log.d("Error al guardar superHeroe","Error al guardar Souvenir")
             }
         }
+    }
+
+    /**
+     * devuelve todos los souvenirs guardados en la base de datos
+     */
+    fun fetchSouvenirs(){
+        val email = auth.currentUser?.email
+
+        firestore.collection("SuperHeroes")
+            .whereEqualTo("emailUser",email.toString())
+            .addSnapshotListener{querySnapshot, error->
+                if(error != null){
+                    return@addSnapshotListener
+                }
+                val souvenirs = mutableListOf<Souvenir>()
+                if(querySnapshot != null){
+                    for(superHero in querySnapshot){
+                        val cardSuperHero = superHero.toObject(Souvenir::class.java).copy()
+                        souvenirs.add(cardSuperHero)
+                    }
+                }
+                _souvenirSaved.value = souvenirs//guarda los souvenirs del jugador en la variable correspondiente
+            }
     }
 
 }

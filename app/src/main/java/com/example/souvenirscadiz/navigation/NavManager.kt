@@ -14,6 +14,7 @@ import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.view.Favoritos
 import com.example.souvenirscadiz.ui.view.InicioSesion
+import com.example.souvenirscadiz.ui.view.ModificarPerfil
 import com.example.souvenirscadiz.ui.view.Perfil
 import com.example.souvenirscadiz.ui.view.Principal
 import com.example.souvenirscadiz.ui.view.Registro
@@ -51,7 +52,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             SouvenirDetail(navController, souvenirsViewModel, loginViewModel, referencia.toString())
         }
         composable("ModificarPerfil"){
-
+            ModificarPerfil(loginViewModel, navController, souvenirsViewModel)
         }
 
     }

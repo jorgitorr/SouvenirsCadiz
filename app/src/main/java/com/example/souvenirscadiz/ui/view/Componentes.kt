@@ -139,6 +139,9 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
 
 /**
  * lista de souvenirs
+ * Si la lista de souvenirs está vacía ya que no se a pulsado ninguno de los tipos de souvenirs
+ * me coge la lista completa de souvenirs y me la muesra
+ * si la lista (que contiene los souvenirs de un tipo) está vacía me la hace con todos los souvenirs
  * @param navController navegacion
  * @param souvenirsViewModel viewmodel de souvenirs
  */
@@ -232,7 +235,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                         .padding(vertical = 2.dp)
                         .clickable {
                             souvenirsViewModel.setSelectedItem("Perfil")
-                            if (loginViewModel.userName.isNotEmpty()) {
+                            if (loginViewModel.email.isNotEmpty()) {
                                 navController.navigate("Perfil")
                             } else {
                                 navController.navigate("InicioSesion")
@@ -258,7 +261,7 @@ fun Header(navController: NavController){
         Row (modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
-            Image(painter = painterResource(id = R.drawable.logo), contentDescription = "")
+            Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO")
             Text(text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave)
 
@@ -274,6 +277,9 @@ fun Header(navController: NavController){
  * Buscador
  * @param souvenirsViewModel viewModel de souvenirs
  * @param navController navegacion entre páginas
+ * active -> si se ha pulsado en el buscador quedará activa
+ * query -> la información que se recoge del buscador
+ * souvenirs -> todos los souvenirs para que con ello me pueda generar la lista de los souvenirs
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -293,10 +299,10 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
         onActiveChange = { souvenirsViewModel.setActive(it) }, // DCS - Actualiza el estado de activación de la búsqueda.
         placeholder = { Text(text = "Search") }, // DCS - Muestra un texto placeholder en la barra de búsqueda.
         leadingIcon = {
-            Icon(imageVector = Icons.Default.Search, contentDescription = "")
+            Icon(imageVector = Icons.Default.Search, contentDescription = "BUSCADOR")
         },
         trailingIcon = {
-            Icon(imageVector = Icons.Default.Close, contentDescription = "",
+            Icon(imageVector = Icons.Default.Close, contentDescription = "CERRAR",
                 modifier = Modifier.clickable {
                     souvenirsViewModel.setActive(false)
                     souvenirsViewModel.setQuery("") }

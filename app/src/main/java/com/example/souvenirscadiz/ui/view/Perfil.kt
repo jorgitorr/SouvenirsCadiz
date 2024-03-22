@@ -33,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -366,19 +367,15 @@ fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(onClick = { navController.navigate("ModificarPerfil") },
-                colors = ButtonDefaults.buttonColors(RaisanBlack)) {
-                Text(text = "Modificar",
-                    style = TextStyle(color = Silver))
+
+            Text(text = "Introduce la nueva contraseña: ", fontFamily = KiwiMaru)
+            val password = loginViewModel.password //tengo que cambiarlo para que me la introduzca
+            Text(text = "Introduce la nueva contraseña: ", fontFamily = KiwiMaru)
+            if(loginViewModel.password == password){
+
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
 
-            Button(onClick = { },
-                colors = ButtonDefaults.buttonColors(Redwood)) {
-                Text(text = "Suprimir",
-                    style = TextStyle(color = Silver))
-            }
 
         }
     }

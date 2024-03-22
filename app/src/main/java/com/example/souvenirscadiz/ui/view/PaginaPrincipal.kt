@@ -107,11 +107,9 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
             Text(text = souvenir.nombre, fontFamily = KiwiMaru)
             Text(text = souvenir.referencia, fontFamily = KiwiMaru)
             Text(text = souvenir.precio.toString()+"€", fontFamily = KiwiMaru)
-            
-            Text(text = "COMPRAR", fontFamily = KiwiMaru,
-                modifier = Modifier.clickable { })
 
-            Icon(imageVector = Icons.Default.ShoppingBasket, contentDescription = "Cesta de la compra")
+            Icon(imageVector = Icons.Default.ShoppingBasket, contentDescription = "Cesta de la compra",
+                modifier = Modifier.clickable {  })
 
             Icon(
                 imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
