@@ -261,7 +261,8 @@ fun Header(navController: NavController){
         Row (modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
-            Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO")
+            Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO",
+                modifier = Modifier.clickable { navController.navigate("Detalles") })
             Text(text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave)
 

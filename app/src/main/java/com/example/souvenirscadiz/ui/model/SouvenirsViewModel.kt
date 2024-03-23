@@ -49,7 +49,6 @@ class SouvenirsViewModel :ViewModel(){
     private var actualSouvenir by mutableStateOf(Souvenir())
     private val _souvenirSaved = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirSaved: StateFlow<List<Souvenir>> =  _souvenirSaved
-
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
 

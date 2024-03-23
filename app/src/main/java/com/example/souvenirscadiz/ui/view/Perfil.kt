@@ -1,11 +1,18 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,10 +24,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -42,6 +51,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -71,11 +82,13 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 /**
  * Página de perfil
+ * muestra el nombre y el correo
  * @param loginViewModel viewmodel del login
  * @param navController navegacion
  */
 @Composable
 fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+
     Scaffold(
         topBar = { Header(navController) },
         bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
@@ -88,14 +101,22 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+
+            //user
             Text(text = loginViewModel.userName,
                 color = RaisanBlack,
                 style = TextStyle(fontWeight = FontWeight.Bold))
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = loginViewModel.email)
 
+            //email
+            Text(text = loginViewModel.email,
+                color = RaisanBlack,
+                style = TextStyle(fontWeight = FontWeight.Bold))
             Spacer(modifier = Modifier.height(8.dp))
 
+
+            //boton para modificar el perfil
             Button(onClick = { navController.navigate("ModificarPerfil") },
                 colors = ButtonDefaults.buttonColors(RaisanBlack)) {
                 Text(text = "Modificar",
@@ -103,7 +124,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-
+            //boton para suprimir el perfil
             Button(onClick = { },
                 colors = ButtonDefaults.buttonColors(Redwood)) {
                 Text(text = "Suprimir",

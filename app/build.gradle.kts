@@ -2,6 +2,11 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("org.jetbrains.dokka")
+}
+
+subprojects {
+    apply(plugin = "org.jetbrains.dokka")
 }
 
 
@@ -57,13 +62,16 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.maps.android:maps-compose:1.0.0")
+    //dokka
+    implementation("org.jetbrains.dokka:android-documentation-plugin:1.9.20")
     //CSV
     implementation("com.opencsv:opencsv:4.6")
     //NavHost
     implementation("androidx.navigation:navigation-compose:2.7.7")
     // DCS - Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
-
     implementation("com.google.firebase:firebase-analytics")
 
     //authentication con google
@@ -78,10 +86,10 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.0.0")
     // DCS - Base de datos Firestore
     implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
-    //
+    //iconos
     implementation ("androidx.compose.material:material-icons-core:1.6.3")
     implementation ("androidx.compose.material:material-icons-extended:1.6.3")
-    //
+    //dependencias antiguas
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
