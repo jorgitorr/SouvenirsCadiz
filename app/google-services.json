@@ -12,7 +12,12 @@
           "package_name": "com.example.souvenirscadiz"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "802100001314-0168qhbg5joqhv56bgjpf7ib4qbdotv0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyANp_eFcViuCZ57JSdD1LltX4kEp3q9458"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802100001314-0168qhbg5joqhv56bgjpf7ib4qbdotv0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

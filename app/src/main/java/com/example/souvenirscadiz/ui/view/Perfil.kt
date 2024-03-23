@@ -4,11 +4,13 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -65,7 +67,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.souvenirscadiz.R
+import com.example.souvenirscadiz.data.util.Storage
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -78,6 +82,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
+import org.jetbrains.annotations.Async
 
 
 /**
@@ -102,6 +107,8 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+            //imagen de perfil
+            SinglePhotoPicker()
 
             //user
             Text(text = loginViewModel.userName,
@@ -403,7 +410,11 @@ fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController
 }
 
 
-
+/**
+ * Inicio de sesion con google
+ * @param loginViewModel viewmodel del login
+ * @param navController navegacion
+ */
 @Composable
 fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavController){
     val token = "802100001314-0168qhbg5joqhv56bgjpf7ib4qbdotv0.apps.googleusercontent.com"
@@ -445,6 +456,50 @@ fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavControl
                 .padding(10.dp)
                 .size(40.dp))
         Text(text = "Login Google", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+    }
+}
+
+
+/**
+ * Escoge una imagen como foto de perfil
+ */
+@Composable
+fun SinglePhotoPicker(){
+    var uri by remember{
+        mutableStateOf<Uri?>(null)
+    }
+
+    val singlePhotoPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            uri = it
+        }
+    )
+
+    val context = LocalContext.current
+
+
+    Column{
+        Button(onClick = {
+            singlePhotoPicker.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
+
+        }){
+            Text("Pick Single Image")
+        }
+
+        AsyncImage(model = uri, contentDescription = null, modifier = Modifier.size(248.dp))
+
+        Button(onClick = {
+            uri?.let{
+                Storage.uploadToStorage(uri=it, context=context, type="image")
+            }
+
+        }){
+            Text("Upload")
+        }
+
     }
 }
 
