@@ -47,7 +47,6 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
     val souvenirSaved by souvenirsViewModel.souvenirCarrito.collectAsState()//parametro que contiene los metodos guardados
     LazyRow{
         items(souvenirSaved){ souvenir ->
-            //llama al método cuadrado que se encarga en mostrar cada souvenir
             Cuadrado(navController = navController,
                 souvenir = souvenir,
                 url = souvenir.url,

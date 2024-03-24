@@ -48,8 +48,9 @@ class SouvenirsViewModel :ViewModel(){
     private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsTipo = _souvenirsTipo
     private var actualSouvenir by mutableStateOf(Souvenir())
-    private val _souvenirSaved = MutableStateFlow<List<Souvenir>>(emptyList())
-    val souvenirSaved: StateFlow<List<Souvenir>> =  _souvenirSaved
+
+    private val _souvenirSaved = MutableStateFlow<List<SouvenirState>>(emptyList())
+    val souvenirSaved: StateFlow<List<SouvenirState>> =  _souvenirSaved
 
     private val _souvenirCarrito = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirCarrito: StateFlow<List<Souvenir>> =  _souvenirCarrito
@@ -287,16 +288,16 @@ class SouvenirsViewModel :ViewModel(){
      */
     fun fetchSouvenirsFav(){
         val email = auth.currentUser?.email
-        val souvenirsList = mutableListOf<Souvenir>()
         firestore.collection("Souvenirs Favoritos")
             .whereEqualTo("emailUser",email.toString())
             .addSnapshotListener{querySnapshot, error->
                 if(error != null){
                     return@addSnapshotListener
                 }
+                val souvenirsList = mutableListOf<SouvenirState>()
                 if(querySnapshot != null){
                     for(souvenir in querySnapshot){
-                        val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
+                        val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
                         souvenirsList.add(souvenirObj)
                     }
                 }

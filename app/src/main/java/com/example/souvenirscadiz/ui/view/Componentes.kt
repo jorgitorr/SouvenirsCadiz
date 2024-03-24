@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
+import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -133,6 +134,63 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
     }
 
 }
+
+
+@Composable
+fun CuadradoState(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
+    var isFavorite by remember { mutableStateOf(false) }//variable fav
+    val context = LocalContext.current
+
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .background(Silver, shape = RoundedCornerShape(5.dp))
+        .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))){
+        Column(horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = url),
+                contentDescription = souvenir.nombre,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
+                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                Text(
+                    text = souvenir.nombre,
+                    style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(start = 4.dp, end = 8.dp)
+                )
+                Text(
+                    text = souvenir.referencia,
+                    style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(start = 4.dp, end = 8.dp)
+                )
+                Text(
+                    text = "${souvenir.precio}€",
+                    style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(start = 3.dp, end = 4.dp)
+                )
+            }
+        }
+    }
+
+}
+
 
 
 
