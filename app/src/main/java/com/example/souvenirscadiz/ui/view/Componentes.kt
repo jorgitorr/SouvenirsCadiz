@@ -134,6 +134,9 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
 
 }
 
+
+
+
 /**
  * lista de souvenirs
  * Si la lista de souvenirs está vacía ya que no se a pulsado ninguno de los tipos de souvenirs

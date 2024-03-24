@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -19,7 +20,9 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
 fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
-    souvenirsViewModel.fetchSouvenirs()
+    LaunchedEffect(Unit){
+        souvenirsViewModel.fetchSouvenirsFav()
+    }
     Scaffold(
         topBar = {
             Header(navController)
@@ -46,12 +49,14 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  */
 @Composable
 fun SouvenirsSaved(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-    val souvenirSaved by souvenirsViewModel.souvenirSaved.collectAsState()
+    val souvenirSaved by souvenirsViewModel.souvenirSaved.collectAsState()//parametro que contiene los metodos guardados
     LazyRow{
         items(souvenirSaved){ souvenir ->
+            val url = "img${souvenir.url}"
+            val resourceId = souvenirsViewModel.getResourceIdByName(url)
             Cuadrado(navController = navController,
                 souvenir = souvenir,
-                url = souvenir.url,
+                url = resourceId,
                 souvenirsViewModel = souvenirsViewModel)
         }
     }

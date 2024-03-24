@@ -85,6 +85,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 .background(Silver),
             verticalArrangement = Arrangement.Bottom
         ) {
+            //imagen del souvenir
             val souvenir = souvenirsViewModel.getByReference(referencia)
             val url = "img${souvenir.url}"
             val resourceId = souvenirsViewModel.getResourceIdByName(url)
@@ -93,8 +94,11 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 modifier = Modifier
                     .fillMaxWidth()
             )
+            //nombre
             Text(text = souvenir.nombre, fontFamily = KiwiMaru)
+            //referencia
             Text(text = souvenir.referencia, fontFamily = KiwiMaru)
+            //precio
             Text(text = souvenir.precio.toString()+"€", fontFamily = KiwiMaru)
 
 

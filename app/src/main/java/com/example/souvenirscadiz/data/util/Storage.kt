@@ -8,6 +8,10 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import java.util.UUID
 
+/**
+ * Se encarga de guardar la foto
+ *
+ */
 class Storage{
     companion object {
 

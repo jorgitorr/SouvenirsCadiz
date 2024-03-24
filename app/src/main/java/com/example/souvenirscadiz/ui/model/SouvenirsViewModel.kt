@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Souvenir
+import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.Constant.Companion.MAX_SOUVENIRS
 import com.example.souvenirscadiz.data.util.Constant.Companion.MIN_SOUVENIRS
@@ -49,6 +50,10 @@ class SouvenirsViewModel :ViewModel(){
     private var actualSouvenir by mutableStateOf(Souvenir())
     private val _souvenirSaved = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirSaved: StateFlow<List<Souvenir>> =  _souvenirSaved
+
+    private val _souvenirCarrito = MutableStateFlow<List<Souvenir>>(emptyList())
+    val souvenirCarrito: StateFlow<List<Souvenir>> =  _souvenirCarrito
+
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
 
@@ -243,6 +248,9 @@ class SouvenirsViewModel :ViewModel(){
         }
     }
 
+    /**
+     * Guarda souvenir en carrito
+     */
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit){
         val email = auth.currentUser?.email
@@ -275,25 +283,47 @@ class SouvenirsViewModel :ViewModel(){
 
 
     /**
-     * devuelve todos los souvenirs guardados en la base de datos
+     * devuelve todos los souvenirs guardados en la lista de favoritos
      */
-    fun fetchSouvenirs(){
+    fun fetchSouvenirsFav(){
         val email = auth.currentUser?.email
-
-        firestore.collection("SuperHeroes")
+        val souvenirsList = mutableListOf<Souvenir>()
+        firestore.collection("Souvenirs Favoritos")
             .whereEqualTo("emailUser",email.toString())
             .addSnapshotListener{querySnapshot, error->
                 if(error != null){
                     return@addSnapshotListener
                 }
-                val souvenirs = mutableListOf<Souvenir>()
                 if(querySnapshot != null){
-                    for(superHero in querySnapshot){
-                        val cardSuperHero = superHero.toObject(Souvenir::class.java).copy()
-                        souvenirs.add(cardSuperHero)
+                    for(souvenir in querySnapshot){
+                        val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
+                        souvenirsList.add(souvenirObj)
                     }
                 }
-                _souvenirSaved.value = souvenirs//guarda los souvenirs del jugador en la variable correspondiente
+                _souvenirSaved.value = souvenirsList
+            }
+    }
+
+
+    /**
+     * Devuelve los souvenirs guardados en la lista de carrito
+     */
+    fun fetchSouvenirsCarrito(){
+        val email = auth.currentUser?.email
+        val souvenirsList = mutableListOf<Souvenir>()
+        firestore.collection("Carrito")
+            .whereEqualTo("emailUser",email.toString())
+            .addSnapshotListener{querySnapshot, error->
+                if(error != null){
+                    return@addSnapshotListener
+                }
+                if(querySnapshot != null){
+                    for(souvenir in querySnapshot){
+                        val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
+                        souvenirsList.add(souvenirObj)
+                    }
+                }
+                _souvenirCarrito.value = souvenirsList
             }
     }
 
