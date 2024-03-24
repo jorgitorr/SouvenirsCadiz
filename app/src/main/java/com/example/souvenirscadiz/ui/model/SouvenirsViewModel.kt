@@ -52,8 +52,8 @@ class SouvenirsViewModel :ViewModel(){
     private val _souvenirSaved = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirSaved: StateFlow<List<SouvenirState>> =  _souvenirSaved
 
-    private val _souvenirCarrito = MutableStateFlow<List<Souvenir>>(emptyList())
-    val souvenirCarrito: StateFlow<List<Souvenir>> =  _souvenirCarrito
+    private val _souvenirCarrito = MutableStateFlow<List<SouvenirState>>(emptyList())
+    val souvenirCarrito: StateFlow<List<SouvenirState>> =  _souvenirCarrito
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
@@ -265,7 +265,6 @@ class SouvenirsViewModel :ViewModel(){
                     "tipo" to actualSouvenir.tipo,
                     "precio" to actualSouvenir.precio,
                     "emailUser" to email.toString(),
-                    "nameUser" to userName.toString()
                 )
 
                 firestore.collection("Carrito")
@@ -292,12 +291,14 @@ class SouvenirsViewModel :ViewModel(){
             .whereEqualTo("emailUser",email.toString())
             .addSnapshotListener{querySnapshot, error->
                 if(error != null){
+                    Log.d("Error SL","Error SS")
                     return@addSnapshotListener
                 }
                 val souvenirsList = mutableListOf<SouvenirState>()
                 if(querySnapshot != null){
                     for(souvenir in querySnapshot){
                         val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
+                        Log.d("Souvenir",souvenirObj.url.toString())
                         souvenirsList.add(souvenirObj)
                     }
                 }
@@ -311,7 +312,7 @@ class SouvenirsViewModel :ViewModel(){
      */
     fun fetchSouvenirsCarrito(){
         val email = auth.currentUser?.email
-        val souvenirsList = mutableListOf<Souvenir>()
+        val souvenirsList = mutableListOf<SouvenirState>()
         firestore.collection("Carrito")
             .whereEqualTo("emailUser",email.toString())
             .addSnapshotListener{querySnapshot, error->
@@ -320,7 +321,7 @@ class SouvenirsViewModel :ViewModel(){
                 }
                 if(querySnapshot != null){
                     for(souvenir in querySnapshot){
-                        val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
+                        val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
                         souvenirsList.add(souvenirObj)
                     }
                 }

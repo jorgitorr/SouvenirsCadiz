@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
@@ -35,6 +38,9 @@ fun Tienda(souvenirsViewModel: SouvenirsViewModel, navController: NavController,
         ) {
             souvenirsViewModel.fetchSouvenirsCarrito()
             SouvenirsCarrito(navController, souvenirsViewModel)
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = "PEDIR", fontFamily = KiwiMaru)
+            }
         }
     }
 }

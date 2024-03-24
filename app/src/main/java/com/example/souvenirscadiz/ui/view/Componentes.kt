@@ -46,6 +46,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
@@ -135,9 +137,16 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
 
 }
 
-
+/**
+ * Sobreescritura del componente cuadrado
+ * para que me permita introducir un State
+ * @param navController navegacion
+ * @param souvenir contiene souvenirState que es el objeto de la base de datos
+ * @param url contiene el numero de la url
+ * @param souvenirsViewModel contiene el viewmodel de souvenir
+ */
 @Composable
-fun CuadradoState(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
+fun Cuadrado(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
     var isFavorite by remember { mutableStateOf(false) }//variable fav
     val context = LocalContext.current
 
@@ -148,8 +157,10 @@ fun CuadradoState(navController: NavController, souvenir: SouvenirState, url:Int
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = url),
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(url)
+                    .build(),
                 contentDescription = souvenir.nombre,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

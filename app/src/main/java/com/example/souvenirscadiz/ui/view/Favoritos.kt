@@ -22,7 +22,8 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
 fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
-    //souvenirsViewModel.fetchSouvenirsFav()
+    souvenirsViewModel.fetchSouvenirsFav()
+
     Scaffold(
         topBar = {
             Header(navController)
@@ -57,7 +58,7 @@ fun SouvenirsSaved(navController: NavController, souvenirsViewModel: SouvenirsVi
             items(souvenirSaved){ souvenir ->
                 val url = "img${souvenir.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                CuadradoState(navController = navController,
+                Cuadrado(navController = navController,
                     souvenir = souvenir,
                     url = resourceId,
                     souvenirsViewModel = souvenirsViewModel)
