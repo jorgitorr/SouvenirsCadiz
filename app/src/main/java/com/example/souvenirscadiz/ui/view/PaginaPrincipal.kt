@@ -97,9 +97,16 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
             Text(text = souvenir.referencia, fontFamily = KiwiMaru)
             Text(text = souvenir.precio.toString()+"€", fontFamily = KiwiMaru)
 
-            Icon(imageVector = Icons.Default.ShoppingBasket, contentDescription = "Cesta de la compra",
-                modifier = Modifier.clickable {  })
 
+            //icono de carrito
+            Icon(imageVector = Icons.Default.ShoppingBasket, contentDescription = "Cesta de la compra",
+                modifier = Modifier.clickable { souvenirsViewModel.saveSouvenirInCarrito {
+                    Toast.makeText(context,"Souvenir guardado en carrito",Toast.LENGTH_SHORT)
+                        .show()
+                } })
+
+
+            //icono de fav
             Icon(
                 imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                 contentDescription = "Favorite Icon",

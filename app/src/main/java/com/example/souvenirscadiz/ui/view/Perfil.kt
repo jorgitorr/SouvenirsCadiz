@@ -237,9 +237,7 @@ fun Registro(loginViewModel: LoginViewModel, navController: NavController) {
 @Composable
 fun IntroducirContrasenia(loginViewModel: LoginViewModel){
     var hidden by remember { mutableStateOf(true) }
-    Text(text = "Contraseña", color = RaisanBlack,
-        fontFamily = KiwiMaru
-    )
+    Text(text = "Contraseña", color = RaisanBlack, fontFamily = KiwiMaru)
     OutlinedTextField(
         value = loginViewModel.password,
         onValueChange = { loginViewModel.changePassword(it) },

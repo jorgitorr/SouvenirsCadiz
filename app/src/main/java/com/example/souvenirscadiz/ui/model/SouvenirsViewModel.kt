@@ -186,6 +186,66 @@ class SouvenirsViewModel :ViewModel(){
      */
     fun saveSouvenir(onSuccess:() -> Unit){
         val email = auth.currentUser?.email
+        viewModelScope.launch (Dispatchers.IO){
+            try {
+                val newSouvenir = hashMapOf(
+                    "referencia" to actualSouvenir.referencia,
+                    "nombre" to actualSouvenir.nombre,
+                    "url" to actualSouvenir.url,
+                    "tipo" to actualSouvenir.tipo,
+                    "precio" to actualSouvenir.precio,
+                    "emailUser" to email.toString()
+                )
+                firestore.collection("Souvenirs Favoritos")
+                    .add(newSouvenir)
+                    .addOnSuccessListener {
+                        onSuccess()
+                        Log.d("Error save","Se guardó el souvenir")
+                    }.addOnFailureListener{
+                        Log.d("Save error","Error al guardar")
+                    }
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
+            }
+        }
+    }
+
+
+    /**
+     * Guardar souvenir desde la pantalla principal, para ello le paso el souvenir
+     * en vez de recuperarlo en el viewModel
+     * @param onSuccess lambda para que hace el método el caso de lograrlo
+     * @param souvenir souvenir
+     */
+    fun saveSouvenir(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
+        val email = auth.currentUser?.email
+        viewModelScope.launch (Dispatchers.IO){
+            try {
+                val newSouvenir = hashMapOf(
+                    "referencia" to souvenir.referencia,
+                    "nombre" to souvenir.nombre,
+                    "url" to souvenir.url,
+                    "tipo" to souvenir.tipo,
+                    "precio" to souvenir.precio,
+                    "emailUser" to email.toString()
+                )
+                firestore.collection("Souvenirs Favoritos")
+                    .add(newSouvenir)
+                    .addOnSuccessListener {
+                        onSuccess()
+                        Log.d("Error save","Se guardó el souvenir")
+                    }.addOnFailureListener{
+                        Log.d("Save error","Error al guardar")
+                    }
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
+            }
+        }
+    }
+
+
+    fun saveSouvenirInCarrito(onSuccess:() -> Unit){
+        val email = auth.currentUser?.email
         val userName = auth.currentUser?.displayName
         viewModelScope.launch (Dispatchers.IO){
             try {
@@ -198,7 +258,8 @@ class SouvenirsViewModel :ViewModel(){
                     "emailUser" to email.toString(),
                     "nameUser" to userName.toString()
                 )
-                firestore.collection("Souvenirs Favoritos")
+
+                firestore.collection("Carrito")
                     .add(newSouvenir)
                     .addOnSuccessListener {
                         onSuccess()
@@ -207,45 +268,11 @@ class SouvenirsViewModel :ViewModel(){
                         Log.d("Save error","Error al guardar")
                     }
             }catch (e:Exception){
-                Log.d("Error al guardar superHeroe","Error al guardar Souvenir")
+                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
             }
         }
     }
 
-
-    /**
-     * Guardar souvenir desde la pantalla principal, para ello le paso el souvenir
-     * en vez de recuperarlo en el viewModel
-     * @param onSuccess lambda para que hace el método el caso de lograrlo
-     * @param souvenir souvenir
-     */
-    fun saveSouvenir(onSuccess:() -> Unit, souvenir: Souvenir){
-        val email = auth.currentUser?.email
-        val userName = auth.currentUser?.displayName
-        viewModelScope.launch (Dispatchers.IO){
-            try {
-                val newSouvenir = hashMapOf(
-                    "referencia" to souvenir.referencia,
-                    "nombre" to souvenir.nombre,
-                    "url" to souvenir.url,
-                    "tipo" to souvenir.tipo,
-                    "precio" to souvenir.precio,
-                    "emailUser" to email.toString(),
-                    "nameUser" to userName.toString()
-                )
-                firestore.collection("Souvenirs Favoritos")
-                    .add(newSouvenir)
-                    .addOnSuccessListener {
-                        onSuccess()
-                        Log.d("Error save","Se guardó el souvenir")
-                    }.addOnFailureListener{
-                        Log.d("Save error","Error al guardar")
-                    }
-            }catch (e:Exception){
-                Log.d("Error al guardar superHeroe","Error al guardar Souvenir")
-            }
-        }
-    }
 
     /**
      * devuelve todos los souvenirs guardados en la base de datos

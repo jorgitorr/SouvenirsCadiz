@@ -29,6 +29,8 @@ fun Tienda(souvenirsViewModel: SouvenirsViewModel, navController: NavController,
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
 
+
+
         }
     }
 }
