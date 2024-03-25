@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
@@ -76,7 +77,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
 @Composable
 fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val souvenirSaved by souvenirsViewModel.souvenirCarrito.collectAsState()//parametro que contiene los metodos guardados
-    LazyRow{
+    LazyColumn{
         items(souvenirSaved){ souvenir ->
             Cuadrado(navController = navController,
                 souvenir = souvenir,

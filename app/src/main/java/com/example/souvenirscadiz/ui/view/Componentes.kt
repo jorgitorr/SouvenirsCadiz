@@ -276,6 +276,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                //favoritos
                 Icon(
                     imageVector = Icons.Default.Favorite,
                     contentDescription = "Favorite Icon",
@@ -293,6 +294,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                //perfil
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = "Person Icon",

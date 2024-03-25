@@ -41,7 +41,6 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
 fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
-    val context = LocalContext.current
     Scaffold(
         topBar = {
             HeaderAdmin(navController)
@@ -67,7 +66,7 @@ fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController
  */
 @Composable
 fun SouvenirsPedido(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-    val souvenirSaved by souvenirsViewModel.souvenirCarrito.collectAsState()//parametro que contiene los metodos guardados
+    val souvenirSaved by souvenirsViewModel.souvenirPedidos.collectAsState()//parametro que contiene los metodos guardados
     LazyRow{
         items(souvenirSaved){ souvenir ->
             CuadradoPedido(navController = navController,

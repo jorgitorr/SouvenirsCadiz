@@ -43,7 +43,11 @@ import com.example.souvenirscadiz.ui.theme.Silver
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(
         topBar = {
-            Header(navController)
+            if(loginViewModel.checkAdmin()){
+                HeaderAdmin(navController)
+            }else{
+                Header(navController)
+            }
         },
         bottomBar = {
             Footer(navController,souvenirsViewModel, loginViewModel)
