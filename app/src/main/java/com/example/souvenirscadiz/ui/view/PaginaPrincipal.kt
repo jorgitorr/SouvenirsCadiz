@@ -76,6 +76,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
     var isFavorite by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+
     Scaffold(
         topBar = { Header(navController) },
         bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
