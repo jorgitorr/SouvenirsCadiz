@@ -192,6 +192,10 @@ class LoginViewModel : ViewModel(){
     }
 
 
+    /**
+     * Comprueba si eres admin
+     * @return esAdmin variable que devuelve true si eres admin o false si no
+     */
     fun checkAdmin():Boolean{
         if(password==CONTRASENIA_ADMIN && email == EMAIL_ADMIN){
             esAdmin = true

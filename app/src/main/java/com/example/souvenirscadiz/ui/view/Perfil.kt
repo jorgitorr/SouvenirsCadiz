@@ -113,8 +113,8 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             }
 
 
-            Button(onClick = { loginViewModel.signOut()
-                             navController.navigate("Perfil")},
+            Button(onClick = { loginViewModel.signOut() //cierra sesion
+                             navController.navigate("Principal")},
                 colors = ButtonDefaults.buttonColors(White)) {
                 Text(text = "Cerrar Sesion",
                     style = TextStyle(RaisanBlack)

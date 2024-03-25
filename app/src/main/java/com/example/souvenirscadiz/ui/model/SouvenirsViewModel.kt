@@ -56,6 +56,11 @@ class SouvenirsViewModel :ViewModel(){
     private val _souvenirCarrito = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirCarrito: StateFlow<List<SouvenirState>> =  _souvenirCarrito
 
+    private val _souvenirPedidos = MutableStateFlow<List<SouvenirState>>(emptyList())
+    val souvenirPedidos: StateFlow<List<SouvenirState>> =  _souvenirPedidos
+
+
+
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
 
@@ -352,6 +357,27 @@ class SouvenirsViewModel :ViewModel(){
                     }
                 }
                 _souvenirCarrito.value = souvenirsList
+            }
+    }
+
+
+    /**
+     * muestra todos los souvenirs que se han pedido
+     */
+    fun fetchSouvenirsPedido(){
+        val souvenirsList = mutableListOf<SouvenirState>()
+        firestore.collection("Pedido")
+            .addSnapshotListener{querySnapshot, error->
+                if(error != null){
+                    return@addSnapshotListener
+                }
+                if(querySnapshot != null){
+                    for(souvenir in querySnapshot){
+                        val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
+                        souvenirsList.add(souvenirObj)
+                    }
+                }
+                _souvenirPedidos.value = souvenirsList
             }
     }
 
