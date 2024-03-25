@@ -2,6 +2,7 @@ package com.example.souvenirscadiz.ui.model
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,8 +50,8 @@ class SouvenirsViewModel :ViewModel(){
     var souvenirsTipo = _souvenirsTipo
     private var actualSouvenir by mutableStateOf(Souvenir())
 
-    private val _souvenirSaved = MutableStateFlow<List<SouvenirState>>(emptyList())
-    val souvenirSaved: StateFlow<List<SouvenirState>> =  _souvenirSaved
+    private val _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
+    val souvenirFav: StateFlow<List<SouvenirState>> =  _souvenirFav
 
     private val _souvenirCarrito = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirCarrito: StateFlow<List<SouvenirState>> =  _souvenirCarrito
@@ -192,6 +193,7 @@ class SouvenirsViewModel :ViewModel(){
      */
     fun saveSouvenir(onSuccess:() -> Unit){
         val email = auth.currentUser?.email
+        var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             try {
                 val newSouvenir = hashMapOf(
@@ -202,14 +204,24 @@ class SouvenirsViewModel :ViewModel(){
                     "precio" to actualSouvenir.precio,
                     "emailUser" to email.toString()
                 )
-                firestore.collection("Souvenirs Favoritos")
-                    .add(newSouvenir)
-                    .addOnSuccessListener {
-                        onSuccess()
-                        Log.d("Error save","Se guardó el souvenir")
-                    }.addOnFailureListener{
-                        Log.d("Save error","Error al guardar")
+                for(souvenirF in _souvenirFav.value){ //recorre la lista de souvenirs Fav
+                    if(souvenirF.referencia==actualSouvenir.referencia){
+                        esIgual = true
                     }
+                }
+
+                if(!esIgual){
+                    firestore.collection("Souvenirs Favoritos")
+                        .add(newSouvenir)
+                        .addOnSuccessListener {
+                            onSuccess()
+                            Log.d("Error save","Se guardó el souvenir")
+                        }.addOnFailureListener{
+                            Log.d("Save error","Error al guardar")
+                        }
+                }else{
+                    Log.d("No se guardo","Está repetido")
+                }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
             }
@@ -224,8 +236,11 @@ class SouvenirsViewModel :ViewModel(){
      * @param souvenir souvenir
      */
     fun saveSouvenir(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
+        fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         val email = auth.currentUser?.email
+        var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
+
             try {
                 val newSouvenir = hashMapOf(
                     "referencia" to souvenir.referencia,
@@ -235,14 +250,25 @@ class SouvenirsViewModel :ViewModel(){
                     "precio" to souvenir.precio,
                     "emailUser" to email.toString()
                 )
-                firestore.collection("Souvenirs Favoritos")
-                    .add(newSouvenir)
-                    .addOnSuccessListener {
-                        onSuccess()
-                        Log.d("Error save","Se guardó el souvenir")
-                    }.addOnFailureListener{
-                        Log.d("Save error","Error al guardar")
+
+                for(souvenirF in _souvenirFav.value){ //recorre la lista de souvenirs favoritos
+                    if(souvenirF.referencia==souvenir.referencia){
+                        esIgual = true
                     }
+                }
+
+                if(!esIgual){ // si el souvenir no es igual a uno que ya esté
+                    firestore.collection("Souvenirs Favoritos")
+                        .add(newSouvenir)
+                        .addOnSuccessListener {
+                            onSuccess()
+                            Log.d("Error save","Se guardó el souvenir")
+                        }.addOnFailureListener{
+                            Log.d("Save error","Error al guardar")
+                        }
+                }else{
+                    Log.d("No se guardo","Está repetido")
+                }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
             }
@@ -255,6 +281,7 @@ class SouvenirsViewModel :ViewModel(){
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit){
         val email = auth.currentUser?.email
+
         viewModelScope.launch (Dispatchers.IO){
             try {
                 val newSouvenir = hashMapOf(
@@ -301,7 +328,7 @@ class SouvenirsViewModel :ViewModel(){
                         souvenirsList.add(souvenirObj)
                     }
                 }
-                _souvenirSaved.value = souvenirsList
+                _souvenirFav.value = souvenirsList
             }
     }
 

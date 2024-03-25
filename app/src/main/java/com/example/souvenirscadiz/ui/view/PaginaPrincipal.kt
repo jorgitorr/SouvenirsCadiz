@@ -62,6 +62,8 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     }
 }
 
+
+
 /**
  * Detalles de los souvenirs
  * Página que detalla información del souvenir

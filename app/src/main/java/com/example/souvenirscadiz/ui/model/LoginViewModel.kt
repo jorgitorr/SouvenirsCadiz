@@ -7,6 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.User
+import com.example.souvenirscadiz.data.util.Constant
+import com.example.souvenirscadiz.data.util.Constant.Companion.CONTRASENIA_ADMIN
+import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -40,6 +43,8 @@ class LoginViewModel : ViewModel(){
         private set
     var userName by mutableStateOf("")
         private set
+
+    var esAdmin by mutableStateOf(false)
 
 
     /**
@@ -185,6 +190,17 @@ class LoginViewModel : ViewModel(){
         }
 
     }
+
+
+    fun checkAdmin():Boolean{
+        if(password==CONTRASENIA_ADMIN && email == EMAIL_ADMIN){
+            esAdmin = true
+        }
+        return esAdmin
+    }
 }
+
+
+
 
 

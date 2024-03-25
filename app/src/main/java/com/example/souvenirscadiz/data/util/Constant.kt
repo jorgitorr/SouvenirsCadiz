@@ -11,5 +11,7 @@ class Constant {
     companion object{
         const val MAX_SOUVENIRS: Int = 115
         const val MIN_SOUVENIRS: Int = 6
+        const val EMAIL_ADMIN:String = "arsenogue@gmail.com"
+        const val CONTRASENIA_ADMIN: String = "arsenogue" //ESTO TENDRÉ QUE OCULTARLO COGIENDOLO DE LA BASE DE DATOS
     }
 }

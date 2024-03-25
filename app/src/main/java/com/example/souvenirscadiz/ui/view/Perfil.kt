@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.souvenirscadiz.R
+import com.example.souvenirscadiz.data.util.Constant.Companion.CONTRASENIA_ADMIN
 import com.example.souvenirscadiz.data.util.Storage
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -89,7 +90,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
         ) {
 
             //imagen de perfil
-            SinglePhotoPicker()
+            //SinglePhotoPicker() -> arreglar
 
             //user
             Text(text = loginViewModel.userName,
@@ -111,13 +112,6 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
                     style = TextStyle(color = Silver))
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-            //boton para suprimir el perfil
-            Button(onClick = {  },
-                colors = ButtonDefaults.buttonColors(Redwood)) {
-                Text(text = "Suprimir",
-                    style = TextStyle(color = Silver))
-            }
 
             Button(onClick = { loginViewModel.signOut()
                              navController.navigate("Perfil")},
@@ -182,6 +176,11 @@ fun InicioSesion(loginViewModel: LoginViewModel, navController: NavController) {
             .clickable { navController.navigate("Registro") },
             fontFamily = KiwiMaru,
             color = Redwood)
+
+
+        if(loginViewModel.checkAdmin()){ //si es Admin
+            navController.navigate("PrincipalAdmin")//se dirige a una pantalla esclusiva para el admin
+        }
 
     }
 }
@@ -383,11 +382,14 @@ fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController
             Spacer(modifier = Modifier.height(8.dp))
 
 
-            Text(text = "Introduce la nueva contraseña: ", fontFamily = KiwiMaru)
-            val password = loginViewModel.password //tengo que cambiarlo para que me la introduzca
-            Text(text = "Introduce la nueva contraseña: ", fontFamily = KiwiMaru)
-            if(loginViewModel.password == password){
-                Log.d("Admin","Admin")
+
+
+            Spacer(modifier = Modifier.height(20.dp))
+            //boton para suprimir el perfil
+            Button(onClick = {  },
+                colors = ButtonDefaults.buttonColors(Redwood)) {
+                Text(text = "Suprimir",
+                    style = TextStyle(color = Silver))
             }
 
 

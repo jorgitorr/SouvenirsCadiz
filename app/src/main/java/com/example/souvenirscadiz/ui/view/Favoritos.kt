@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
-import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
@@ -49,7 +47,7 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  */
 @Composable
 fun SouvenirsSaved(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-    val souvenirSaved by souvenirsViewModel.souvenirSaved.collectAsState()//parametro que contiene los metodos guardados
+    val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()//parametro que contiene los metodos guardados
     LazyColumn{
         items(souvenirSaved){ souvenir ->
             val url = "img${souvenir.url}"
