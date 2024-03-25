@@ -39,7 +39,7 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            SouvenirsSaved(navController = navController, souvenirsViewModel = souvenirsViewModel)
+            SouvenirSavedFav(navController = navController, souvenirsViewModel = souvenirsViewModel)
         }
     }
 }
@@ -50,7 +50,7 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  * @param souvenirsViewModel viewModel de los souvenirs
  */
 @Composable
-fun SouvenirsSaved(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()//parametro que contiene los metodos guardados
     LazyColumn{
         items(souvenirSaved){ souvenir ->

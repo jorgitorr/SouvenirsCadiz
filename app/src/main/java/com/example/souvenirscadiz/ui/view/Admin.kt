@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -107,6 +109,28 @@ fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             souvenirsViewModel.fetchSouvenirsCarrito()
+
+        }
+    }
+}
+
+
+/**
+ * Souvenirs pedidos
+ * @param navController navegacion
+ * @param souvenirsViewModel viewmodel del souvenir
+ */
+@Composable
+fun SouvenirPedidos(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    val souvenirSaved by souvenirsViewModel.souvenirPedidos.collectAsState()//parametro que contiene los metodos guardados
+    LazyColumn{
+        items(souvenirSaved){ souvenir ->
+            val url = "img${souvenir.url}"
+            val resourceId = souvenirsViewModel.getResourceIdByName(url)
+            Cuadrado(navController = navController,
+                souvenir = souvenir,
+                url = resourceId,
+                souvenirsViewModel = souvenirsViewModel)
         }
     }
 }

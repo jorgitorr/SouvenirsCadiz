@@ -121,7 +121,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 modifier = Modifier
                     .padding(vertical = 2.dp)
                     .clickable { isFavorite = !isFavorite
-                        souvenirsViewModel.saveSouvenir {
+                        souvenirsViewModel.saveSouvenirInFav {
                             Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
                                 .show()
                         }

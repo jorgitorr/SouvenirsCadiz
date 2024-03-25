@@ -2,7 +2,6 @@ package com.example.souvenirscadiz.ui.model
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,8 +57,6 @@ class SouvenirsViewModel :ViewModel(){
 
     private val _souvenirPedidos = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirPedidos: StateFlow<List<SouvenirState>> =  _souvenirPedidos
-
-
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
@@ -196,7 +193,7 @@ class SouvenirsViewModel :ViewModel(){
      * @param onSuccess en el caso de lograr guardar en superHeroe
      * Guarda el superHeroe en la base de datos
      */
-    fun saveSouvenir(onSuccess:() -> Unit){
+    fun saveSouvenirInFav(onSuccess:() -> Unit){
         val email = auth.currentUser?.email
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
@@ -240,7 +237,7 @@ class SouvenirsViewModel :ViewModel(){
      * @param onSuccess lambda para que hace el método el caso de lograrlo
      * @param souvenir souvenir
      */
-    fun saveSouvenir(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
+    fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
         fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         val email = auth.currentUser?.email
         var esIgual = false //variable que comprueba si el souvenir está ya
@@ -281,12 +278,13 @@ class SouvenirsViewModel :ViewModel(){
     }
 
     /**
-     * Guarda souvenir en carrito
+     * Guarda souvenir en carritoç
+     * @param onSuccess lambda para que hace el método al ser logrado
      */
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit){
         val email = auth.currentUser?.email
-
+        var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             try {
                 val newSouvenir = hashMapOf(
@@ -298,14 +296,63 @@ class SouvenirsViewModel :ViewModel(){
                     "emailUser" to email.toString(),
                 )
 
-                firestore.collection("Carrito")
-                    .add(newSouvenir)
-                    .addOnSuccessListener {
-                        onSuccess()
-                        Log.d("Error save","Se guardó el souvenir")
-                    }.addOnFailureListener{
-                        Log.d("Save error","Error al guardar")
-                    }
+                if(!esIgual){
+                    firestore.collection("Carrito")
+                        .add(newSouvenir)
+                        .addOnSuccessListener {
+                            onSuccess()
+                            Log.d("Error save","Se guardó el souvenir")
+                        }.addOnFailureListener{
+                            Log.d("Save error","Error al guardar")
+                        }
+                }
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
+            }
+        }
+    }
+
+
+    /**
+     * Guarda souvenir en carrito
+     * @param onSuccess lambda que ocurre cuando se logra el método
+     */
+
+    fun saveSouvenirInPedido(onSuccess:() -> Unit){
+        val email = auth.currentUser?.email
+
+        viewModelScope.launch (Dispatchers.IO){
+            try {
+                //se guardan todos los souvenirs de la lista de _souvenirCarrito
+                for(souvenir in _souvenirCarrito.value){
+                    val newSouvenir = hashMapOf(
+                        "referencia" to souvenir.referencia,
+                        "nombre" to souvenir.nombre,
+                        "url" to souvenir.url,
+                        "tipo" to souvenir.tipo,
+                        "precio" to souvenir.precio,
+                        "emailUser" to email.toString(),
+                    )
+
+                    firestore.collection("Carrito")
+                        .add(newSouvenir)
+                        .addOnSuccessListener {
+                            onSuccess()
+                            Log.d("Error save","Se guardó el souvenir")
+                        }.addOnFailureListener{
+                            Log.d("Save error","Error al guardar")
+                        }
+                }
+
+                /*val newSouvenir = hashMapOf(
+                    "referencia" to actualSouvenir.referencia,
+                    "nombre" to actualSouvenir.nombre,
+                    "url" to actualSouvenir.url,
+                    "tipo" to actualSouvenir.tipo,
+                    "precio" to actualSouvenir.precio,
+                    "emailUser" to email.toString(),
+                )*/
+
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
             }

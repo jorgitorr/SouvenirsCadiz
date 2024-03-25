@@ -119,7 +119,7 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
                         .padding(vertical = 2.dp)
                         .clickable {
                             isFavorite = !isFavorite
-                            souvenirsViewModel.saveSouvenir (
+                            souvenirsViewModel.saveSouvenirInFav (
                                 { Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
                                     .show()}, souvenir)
                         }
@@ -147,9 +147,6 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
  */
 @Composable
 fun Cuadrado(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
-    var isFavorite by remember { mutableStateOf(false) }//variable fav
-    val context = LocalContext.current
-
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
