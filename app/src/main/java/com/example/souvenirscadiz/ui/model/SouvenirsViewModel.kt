@@ -255,7 +255,6 @@ class SouvenirsViewModel :ViewModel(){
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit){
         val email = auth.currentUser?.email
-        val userName = auth.currentUser?.displayName
         viewModelScope.launch (Dispatchers.IO){
             try {
                 val newSouvenir = hashMapOf(

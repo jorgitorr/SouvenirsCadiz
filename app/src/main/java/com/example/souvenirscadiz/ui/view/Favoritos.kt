@@ -4,12 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -51,18 +50,14 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
 @Composable
 fun SouvenirsSaved(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val souvenirSaved by souvenirsViewModel.souvenirSaved.collectAsState()//parametro que contiene los metodos guardados
-    if(souvenirSaved.isEmpty()){
-        Text(text = "No has guardado ninguno", fontFamily = KiwiMaru)
-    }else{
-        LazyRow{
-            items(souvenirSaved){ souvenir ->
-                val url = "img${souvenir.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                Cuadrado(navController = navController,
-                    souvenir = souvenir,
-                    url = resourceId,
-                    souvenirsViewModel = souvenirsViewModel)
-            }
-        }   
+    LazyColumn{
+        items(souvenirSaved){ souvenir ->
+            val url = "img${souvenir.url}"
+            val resourceId = souvenirsViewModel.getResourceIdByName(url)
+            Cuadrado(navController = navController,
+                souvenir = souvenir,
+                url = resourceId,
+                souvenirsViewModel = souvenirsViewModel)
+        }
     }
 }

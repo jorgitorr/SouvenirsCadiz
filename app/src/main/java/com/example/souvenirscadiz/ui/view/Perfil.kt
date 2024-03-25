@@ -113,10 +113,18 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
 
             Spacer(modifier = Modifier.height(20.dp))
             //boton para suprimir el perfil
-            Button(onClick = { },
+            Button(onClick = {  },
                 colors = ButtonDefaults.buttonColors(Redwood)) {
                 Text(text = "Suprimir",
                     style = TextStyle(color = Silver))
+            }
+
+            Button(onClick = { loginViewModel.signOut()
+                             navController.navigate("Perfil")},
+                colors = ButtonDefaults.buttonColors(White)) {
+                Text(text = "Cerrar Sesion",
+                    style = TextStyle(RaisanBlack)
+                )
             }
 
         }

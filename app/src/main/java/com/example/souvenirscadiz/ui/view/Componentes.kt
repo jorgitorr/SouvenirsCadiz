@@ -304,7 +304,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                         .padding(vertical = 2.dp)
                         .clickable {
                             souvenirsViewModel.setSelectedItem("Perfil")
-                            if (loginViewModel.email.isNotEmpty()) {
+                            if (loginViewModel.getCurrentUser()!=null) {
                                 navController.navigate("Perfil")
                             } else {
                                 navController.navigate("InicioSesion")

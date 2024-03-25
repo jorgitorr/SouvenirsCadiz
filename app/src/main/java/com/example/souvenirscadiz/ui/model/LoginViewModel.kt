@@ -42,11 +42,17 @@ class LoginViewModel : ViewModel(){
         private set
 
 
+    /**
+     * cierra sesion
+     */
     fun signOut(){
         auth.signOut()
     }
 
 
+    /**
+     * obtiene el usuario actual
+     */
     fun getCurrentUser(): FirebaseUser?{
         return auth.currentUser
     }
@@ -160,13 +166,6 @@ class LoginViewModel : ViewModel(){
         this.userName = userName
     }
 
-
-    /**
-     * cierra sesion
-     */
-    fun singOut(){
-        auth.signOut()
-    }
 
     fun singInWithGoogleCredential(credential: AuthCredential, home:()->Unit)
     = viewModelScope.launch{
