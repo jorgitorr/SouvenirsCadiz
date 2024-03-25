@@ -204,7 +204,7 @@ fun Cuadrado(navController: NavController, souvenir: SouvenirState, url:Int, sou
 
 
 /**
- * lista de souvenirs
+ * lista de souvenirs para la PÁGINA PRINCIPAL
  * Si la lista de souvenirs está vacía ya que no se a pulsado ninguno de los tipos de souvenirs
  * me coge la lista completa de souvenirs y me la muesra
  * si la lista (que contiene los souvenirs de un tipo) está vacía me la hace con todos los souvenirs

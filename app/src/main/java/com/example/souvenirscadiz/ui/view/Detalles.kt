@@ -21,7 +21,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 
 /**
- * página de detalles al seleccionar el logo
+ * página de detalles al seleccionar el lOGO
  * @param souvenirsViewModel viewmodel de souvenirs
  * @param navController navegacion entre páginas
  * @param loginViewModel viewmodel del login
@@ -54,7 +54,7 @@ fun Detalles(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
 }
 
 /**
- * implementacion de google maps
+ * implementacion de google maps para la página de detalle del logo y de la empresa
  */
 @Composable
 fun MyGoogleMaps(){

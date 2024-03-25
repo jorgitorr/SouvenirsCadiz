@@ -2,9 +2,7 @@ package com.example.souvenirscadiz.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,7 +20,7 @@ import com.example.souvenirscadiz.ui.view.Perfil
 import com.example.souvenirscadiz.ui.view.Principal
 import com.example.souvenirscadiz.ui.view.Registro
 import com.example.souvenirscadiz.ui.view.SouvenirDetail
-import com.example.souvenirscadiz.ui.view.Tienda
+import com.example.souvenirscadiz.ui.view.Carrito
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -40,7 +38,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             Perfil(loginViewModel, navController, souvenirsViewModel)
         }
         composable("Tienda"){
-            Tienda(souvenirsViewModel, navController, loginViewModel)
+            Carrito(souvenirsViewModel, navController, loginViewModel)
         }
         composable("Registro"){
             Registro(loginViewModel, navController)

@@ -428,4 +428,16 @@ class SouvenirsViewModel :ViewModel(){
             }
     }
 
+
+    /**
+     * obtiene el numero de souvenirs que hay en el carrito
+     * @return numero de souvenirs en el carrito
+     */
+    fun getNumberSouvenirsInCarrito():Int{
+        viewModelScope.launch {
+            fetchSouvenirsCarrito()//primero hay que pedirlos para que los saque de la base de datos
+        }
+        return _souvenirCarrito.value.size
+    }
+
 }
