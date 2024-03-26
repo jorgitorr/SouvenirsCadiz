@@ -31,7 +31,7 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
         },
         bottomBar = {
             Footer(navController, souvenirsViewModel, loginViewModel)
-        }
+        }, containerColor = Silver
     ) { innerPadding ->
         Column(
             modifier = Modifier

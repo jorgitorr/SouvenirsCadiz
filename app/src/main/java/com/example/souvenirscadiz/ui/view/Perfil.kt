@@ -51,7 +51,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.souvenirscadiz.R
-import com.example.souvenirscadiz.data.util.Constant.Companion.CONTRASENIA_ADMIN
 import com.example.souvenirscadiz.data.util.Storage
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -60,6 +59,7 @@ import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
+import com.example.souvenirscadiz.ui.theme.Teal
 import com.example.souvenirscadiz.ui.theme.White
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -78,7 +78,8 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
 
     Scaffold(
         topBar = { Header(navController) },
-        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
+        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) }
+        ,containerColor = Silver
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -112,12 +113,12 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
                     style = TextStyle(color = Silver))
             }
 
-
-            Button(onClick = { loginViewModel.signOut() //cierra sesion
+            //boton para cerra sesion
+            Button(onClick = { loginViewModel.signOut()
                              navController.navigate("Principal")},
-                colors = ButtonDefaults.buttonColors(White)) {
+                colors = ButtonDefaults.buttonColors(Teal)) {
                 Text(text = "Cerrar Sesion",
-                    style = TextStyle(RaisanBlack)
+                    style = TextStyle(Silver)
                 )
             }
 
@@ -373,15 +374,36 @@ fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = loginViewModel.userName,
-                color = RaisanBlack,
-                style = TextStyle(fontWeight = FontWeight.Bold))
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = loginViewModel.email)
 
-            Spacer(modifier = Modifier.height(8.dp))
+            var contraseniaActual by remember { mutableStateOf("") }
+
+            //si introduce la contrasenia actual
+            if(loginViewModel.password==contraseniaActual){
+                //muestra una pantalla para poder cambiar el nombre
+                var nuevoNombreUsuario by remember { mutableStateOf("") }
+
+                OutlinedTextField(
+                    value = nuevoNombreUsuario,
+                    onValueChange = { nuevoNombreUsuario = it },
+                    label = { Text("Nuevo nombre de usuario") },
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+
+                loginViewModel.changeUserName(nuevoNombreUsuario)
+            }else{
+                //sigue preguntando por la contrasenia
+                Text(text = "Introduce la contrasenia actual")
+                OutlinedTextField(
+                    value = contraseniaActual,
+                    onValueChange = { contraseniaActual = it },
+                    label = { Text("Nuevo nombre de usuario") },
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
 
 
+
+            Spacer(modifier = Modifier.height(20.dp))
 
 
             Spacer(modifier = Modifier.height(20.dp))

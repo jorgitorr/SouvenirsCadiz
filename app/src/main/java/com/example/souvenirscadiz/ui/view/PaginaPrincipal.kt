@@ -82,7 +82,8 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
 
     Scaffold(
         topBar = { Header(navController) },
-        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
+        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) }
+        , containerColor = Silver
     ) { innerPadding ->
         Column(
             modifier = Modifier

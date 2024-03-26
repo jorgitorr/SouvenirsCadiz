@@ -48,7 +48,7 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
         },
         bottomBar = {
             Footer(navController,souvenirsViewModel, loginViewModel)
-        }
+        }, containerColor = Silver
     ) { innerPadding ->
         Column(
             modifier = Modifier

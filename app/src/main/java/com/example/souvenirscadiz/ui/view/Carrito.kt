@@ -73,6 +73,8 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
 
 /**
  * Muestra los souvenirs guardados en fav
+ * @param navController navegacion
+ * @param souvenirsViewModel viewmodel de souvenirs
  */
 @Composable
 fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
