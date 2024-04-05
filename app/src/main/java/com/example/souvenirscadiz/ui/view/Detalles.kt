@@ -67,7 +67,7 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             Spacer(modifier = Modifier.height(2.dp))
             Text(text = "Para pedidos e información: ", fontFamily = KiwiMaru)
             Text(text = "617759036", fontFamily = KiwiMaru, color = Cerulean)
-            MakePhoneCall(customerPhone = "617759036", context = LocalContext.current)
+            //arreglar -> MakePhoneCall(customerPhone = "617759036", context = LocalContext.current)
         }
     }
 }
