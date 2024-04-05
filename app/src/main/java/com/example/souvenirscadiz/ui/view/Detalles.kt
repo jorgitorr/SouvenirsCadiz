@@ -10,6 +10,7 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.souvenirscadiz.data.util.Constant.Companion.NUMERO_TLF
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Cerulean
@@ -59,6 +61,7 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
+            var pulsar:Boolean = false
             Text(text = "Venta de souvenirs", fontFamily = KiwiMaru)
             Spacer(modifier = Modifier.height(2.dp))
             MyGoogleMaps()//google maps
@@ -66,8 +69,9 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             Text(text = "Jorge Arce Nogueroles" , fontFamily = KiwiMaru)
             Spacer(modifier = Modifier.height(2.dp))
             Text(text = "Para pedidos e información: ", fontFamily = KiwiMaru)
-            Text(text = "617759036", fontFamily = KiwiMaru, color = Cerulean)
-            //arreglar -> MakePhoneCall(customerPhone = "617759036", context = LocalContext.current)
+            Text(text = NUMERO_TLF, fontFamily = KiwiMaru, color = Cerulean, modifier = Modifier.clickable {})
+            MakePhoneCall(customerPhone = NUMERO_TLF, context = LocalContext.current)
+
         }
     }
 }
