@@ -89,10 +89,10 @@ dependencies {
     //authenticacion de Firebase por google
     implementation("com.google.android.gms:play-services-auth:21.0.0")
     // DCS - Base de datos Firestore
-    implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.11.0")
     //iconos
-    implementation ("androidx.compose.material:material-icons-core:1.6.3")
-    implementation ("androidx.compose.material:material-icons-extended:1.6.3")
+    implementation ("androidx.compose.material:material-icons-core:1.6.5")
+    implementation ("androidx.compose.material:material-icons-extended:1.6.5")
     //dependencias antiguas
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

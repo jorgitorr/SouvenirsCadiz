@@ -6,9 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -76,7 +79,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  */
 @Composable
 fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, referencia:String) {
-    var isFavorite by remember { mutableStateOf(false) }
+    var isFavorite by remember { mutableStateOf(false) } //esto habrá que guardarlo de alguna forma
     val context = LocalContext.current
 
 
@@ -90,7 +93,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 .fillMaxSize()
                 .padding(innerPadding)
                 .background(Silver),
-            verticalArrangement = Arrangement.Bottom
+            verticalArrangement = Arrangement.Center
         ) {
             //imagen del souvenir
             val souvenir = souvenirsViewModel.getByReference(referencia)
@@ -99,39 +102,62 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
             Image(painter = painterResource(id = resourceId),
                 contentDescription = "",
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().clickable { navController.navigateUp() }
             )
-            //nombre
-            Text(text = souvenir.nombre, fontFamily = KiwiMaru)
-            //referencia
-            Text(text = souvenir.referencia, fontFamily = KiwiMaru)
-            //precio
-            Text(text = souvenir.precio.toString()+"€", fontFamily = KiwiMaru)
 
+            LazyRow(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly){
 
-            //icono de carrito
-            Icon(imageVector = Icons.Default.ShoppingBasket, contentDescription = "Cesta de la compra",
-                modifier = Modifier.clickable { souvenirsViewModel.saveSouvenirInCarrito {
-                    Toast.makeText(context,"Souvenir guardado en carrito",Toast.LENGTH_SHORT)
-                        .show()
-                } })
+                item {
+                    //nombre
+                    Text(
+                        text = souvenir.nombre,
+                        fontFamily = KiwiMaru
+                    )
+                }
 
+                item {
+                    //referencia
+                    Text(text = souvenir.referencia,
+                        fontFamily = KiwiMaru)
+                }
 
-            //icono de fav
-            Icon(
-                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                contentDescription = "Favorite Icon",
-                tint = if (!isFavorite) RaisanBlack else Redwood,
-                modifier = Modifier
-                    .padding(vertical = 2.dp)
-                    .clickable { isFavorite = !isFavorite
-                        souvenirsViewModel.saveSouvenirInFav {
-                            Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                item {
+                    //icono de fav
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = "Favorite Icon",
+                        tint = if (!isFavorite) RaisanBlack else Redwood,
+                        modifier = Modifier
+                            .clickable {
+                                isFavorite = !isFavorite
+                                souvenirsViewModel.saveSouvenirInFav {
+                                    Toast
+                                        .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            }
+                    )
+                }
+            }
+
+            LazyRow(modifier = Modifier.fillMaxWidth().padding(),
+                horizontalArrangement = Arrangement.SpaceEvenly){
+                item{
+                    Row (modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround){
+                        //precio
+                        Text(text = souvenir.precio.toString()+"€", fontFamily = KiwiMaru)
+                        //icono de carrito
+                        Icon(imageVector = Icons.Default.ShoppingBasket, contentDescription = "Cesta de la compra",
+                            modifier = Modifier.clickable { souvenirsViewModel.saveSouvenirInCarrito {
+                                Toast.makeText(context,"Souvenir guardado en carrito",Toast.LENGTH_SHORT)
+                                    .show()
+                            } }.size(50.dp))
+
                     }
-            )
-            
+                }
+            }
         }
     }
 }

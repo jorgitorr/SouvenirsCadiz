@@ -169,7 +169,7 @@ fun InicioSesion(loginViewModel: LoginViewModel, navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
         BotonAceptarInicio(loginViewModel, navController)
         Spacer(modifier = Modifier.height(16.dp))
-        //InicioSesionGoogle(loginViewModel, navController) -> no funciona ahora mismo
+        InicioSesionGoogle(loginViewModel, navController)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "¿No tienes cuenta?", fontFamily = KiwiMaru)
         Spacer(modifier = Modifier.height(16.dp))
@@ -230,6 +230,8 @@ fun Registro(loginViewModel: LoginViewModel, navController: NavController) {
         BotonAceptarRegistro(loginViewModel, navController)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "¿Tienes cuenta?", fontFamily = KiwiMaru)
+        Spacer(modifier = Modifier.height(16.dp))
+        InicioSesionGoogle(loginViewModel, navController)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Inicia Sesión.", modifier = Modifier
             .clickable { navController.navigate("InicioSesion") },
@@ -449,7 +451,7 @@ fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavControl
         .clickable {
             val opciones = GoogleSignInOptions
                 .Builder(
-                    GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
+                    GoogleSignInOptions.DEFAULT_SIGN_IN
                 )
                 .requestIdToken(token)
                 .requestEmail()
@@ -461,11 +463,11 @@ fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavControl
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center){
 
-        Image(painter = painterResource(id = com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_dark),
+        /*Image(painter = painterResource(id = com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_dark),
             contentDescription = "Google",
             modifier = Modifier
                 .padding(10.dp)
-                .size(40.dp))
+                .size(40.dp))*/
         Text(text = "Login Google", fontSize = 18.sp, fontWeight = FontWeight.Bold)
     }
 }
