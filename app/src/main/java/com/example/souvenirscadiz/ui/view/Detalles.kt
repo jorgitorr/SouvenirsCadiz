@@ -1,5 +1,14 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.ui.model.LoginViewModel
@@ -57,6 +67,7 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             Spacer(modifier = Modifier.height(2.dp))
             Text(text = "Para pedidos e información: ", fontFamily = KiwiMaru)
             Text(text = "617759036", fontFamily = KiwiMaru, color = Cerulean)
+            MakePhoneCall(customerPhone = "617759036", context = LocalContext.current)
         }
     }
 }
@@ -71,5 +82,26 @@ fun MyGoogleMaps(){
         .fillMaxWidth()
         .height(450.dp)){
         Marker(position = marker, title = "Ubicación", snippet = "Empresa")
+    }
+}
+
+@Composable
+fun MakePhoneCall(customerPhone:String, context: Context) {
+    try {
+        val formattedPhone = "0$customerPhone"
+        val intent = Intent(Intent.ACTION_CALL)
+        val phoneUri = Uri.parse("tel:$formattedPhone")
+        intent.data = phoneUri
+
+        val permission = Manifest.permission.CALL_PHONE
+
+        if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED) {
+            context.startActivity(intent)
+        } else {
+            ActivityCompat.requestPermissions(context as Activity, arrayOf(permission), 0)
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Toast.makeText(context, "Error making phone call", Toast.LENGTH_LONG).show()
     }
 }

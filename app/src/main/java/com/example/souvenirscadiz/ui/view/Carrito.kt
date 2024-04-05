@@ -46,7 +46,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
         },
         bottomBar = {
             Footer(navController,souvenirsViewModel, loginViewModel)
-        }
+        }, containerColor = Silver
     ) { innerPadding ->
         Column(
             modifier = Modifier
