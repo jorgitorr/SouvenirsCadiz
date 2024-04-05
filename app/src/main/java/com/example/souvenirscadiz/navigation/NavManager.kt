@@ -11,7 +11,7 @@ import androidx.navigation.navArgument
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.view.AdminPrincipal
-import com.example.souvenirscadiz.ui.view.Detalles
+import com.example.souvenirscadiz.ui.view.DetallesLogo
 import com.example.souvenirscadiz.ui.view.Favoritos
 import com.example.souvenirscadiz.ui.view.InicioSesion
 import com.example.souvenirscadiz.ui.view.ModificarPerfil
@@ -56,7 +56,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             ModificarPerfil(loginViewModel, navController, souvenirsViewModel)
         }
         composable("Detalles"){
-            Detalles(souvenirsViewModel, navController, loginViewModel)
+            DetallesLogo(souvenirsViewModel, navController, loginViewModel)
         }
         composable("PrincipalAdmin"){
             AdminPrincipal(souvenirsViewModel, navController, loginViewModel)

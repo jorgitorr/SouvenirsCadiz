@@ -438,9 +438,11 @@ fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavControl
         try{
             val account = task.getResult(ApiException::class.java)
             val credential = GoogleAuthProvider.getCredential(account.idToken,null)
-            loginViewModel.singInWithGoogleCredential(credential){navController.navigate("PaginaPrincipal")}
+            loginViewModel.singInWithGoogleCredential(credential) {
+                navController.navigate("Principal")
+            }
         }catch (e:Exception){
-            Log.d("Excepcion","Excepcion + ${e.message}")
+            Log.e("InicioSesionGoogle", "Error al iniciar sesión con Google: ${e.message}", e)
         }
     }
 
