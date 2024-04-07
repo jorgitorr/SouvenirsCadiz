@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.souvenirscadiz.R
+import com.example.souvenirscadiz.data.util.Constant.Companion.TOKEN
 import com.example.souvenirscadiz.data.util.Storage
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -430,7 +431,6 @@ fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController
  */
 @Composable
 fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavController){
-    val token = "802100001314-0168qhbg5joqhv56bgjpf7ib4qbdotv0.apps.googleusercontent.com"
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()){//nos abre un activity para hacer login de google
@@ -455,7 +455,7 @@ fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavControl
                 .Builder(
                     GoogleSignInOptions.DEFAULT_SIGN_IN
                 )
-                .requestIdToken(token)
+                .requestIdToken(TOKEN)
                 .requestEmail()
                 .build()
             val googleSingInCliente = GoogleSignIn.getClient(context, opciones)
