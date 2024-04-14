@@ -51,6 +51,7 @@ class LoginViewModel : ViewModel(){
      * cierra sesion
      */
     fun signOut(){
+        resetearVariables()
         auth.signOut()
     }
 
@@ -201,6 +202,13 @@ class LoginViewModel : ViewModel(){
             esAdmin = true
         }
         return esAdmin
+    }
+
+
+    fun resetearVariables(){
+        email = ""
+        userName = ""
+        password = ""
     }
 }
 

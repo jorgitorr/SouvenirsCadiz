@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.navigation.NavManager
@@ -36,7 +37,10 @@ class MainActivity : ComponentActivity() {
     private val souvenirsViewModel:SouvenirsViewModel = SouvenirsViewModel()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        val screenSplash = installSplashScreen()
         super.onCreate(savedInstanceState)
+        screenSplash.setKeepOnScreenCondition{false}
+
         setContent {
             SouvenirsCadizTheme {
                 // A surface container using the 'background' color from the theme

@@ -1,6 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
 
+import android.graphics.drawable.VectorDrawable
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -428,7 +429,8 @@ fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController
 fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavController){
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()){//nos abre un activity para hacer login de google
+        contract = ActivityResultContracts
+            .StartActivityForResult()){//nos abre un activity para hacer login de google
         val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
         try{
             val account = task.getResult(ApiException::class.java)
@@ -460,12 +462,10 @@ fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavControl
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center){
 
-        /*Image(painter = painterResource(id = com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_dark),
-            contentDescription = "Google",
-            modifier = Modifier
-                .padding(10.dp)
-                .size(40.dp))*/
-        Text(text = "Login Google", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Login Google",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = KiwiMaru)
     }
 }
 
