@@ -248,8 +248,8 @@ fun Registro(loginViewModel: LoginViewModel, navController: NavController) {
 @Composable
 fun IntroducirContrasenia(loginViewModel: LoginViewModel){
     var hidden by remember { mutableStateOf(true) }
-    Text(text = "Contraseña", color = RaisanBlack, fontFamily = KiwiMaru)
     OutlinedTextField(
+        label = {Text(text = "Contraseña", color = RaisanBlack, fontFamily = KiwiMaru)},
         value = loginViewModel.password,
         onValueChange = { loginViewModel.changePassword(it) },
         visualTransformation =
@@ -265,7 +265,6 @@ fun IntroducirContrasenia(loginViewModel: LoginViewModel){
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         modifier = Modifier
-            .background(White)
             .clip(RoundedCornerShape(8.dp))
     )
 }
@@ -277,15 +276,12 @@ fun IntroducirContrasenia(loginViewModel: LoginViewModel){
  */
 @Composable
 fun IntroducirEmail(loginViewModel: LoginViewModel){
-    Text(text = "Email", color = RaisanBlack,
-        fontFamily = KiwiMaru
-    )
     OutlinedTextField(
+        label = {Text(text = "Email", color = RaisanBlack, fontFamily = KiwiMaru)},
         value = loginViewModel.email,
         onValueChange = { loginViewModel.changeEmail(it) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         modifier = Modifier
-            .background(White)
             .clip(RoundedCornerShape(8.dp))
     )
 }
@@ -299,12 +295,11 @@ fun IntroducirEmail(loginViewModel: LoginViewModel){
  */
 @Composable
 fun IntroducirUsuario(loginViewModel: LoginViewModel){
-    Text(text = "Usuario", color = RaisanBlack, fontFamily = KiwiMaru)
     OutlinedTextField(
+        label = {Text(text = "Usuario", color = RaisanBlack, fontFamily = KiwiMaru)},
         value = loginViewModel.userName,
         onValueChange = { loginViewModel.changeUserName(it) },
         modifier = Modifier
-            .background(White)
             .clip(RoundedCornerShape(8.dp))
     )
 }
