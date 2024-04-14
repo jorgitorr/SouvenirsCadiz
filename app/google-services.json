@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "802100001314-fq18n4vaodrcik18d05448tukdd1tnae.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.souvenirscadiz",
+            "certificate_hash": "3a36f26adfde998dbb52c8b6162e69ee31893657"
+          }
+        },
+        {
           "client_id": "802100001314-0168qhbg5joqhv56bgjpf7ib4qbdotv0.apps.googleusercontent.com",
           "client_type": 3
         }
