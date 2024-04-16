@@ -70,7 +70,7 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             Spacer(modifier = Modifier.height(2.dp))
             Text(text = "Para pedidos e información: ", fontFamily = KiwiMaru)
             Text(text = NUMERO_TLF, fontFamily = KiwiMaru, color = Cerulean, modifier = Modifier.clickable {})
-            MakePhoneCall(customerPhone = NUMERO_TLF, context = LocalContext.current)
+            //MakePhoneCall(customerPhone = NUMERO_TLF, context = LocalContext.current)
 
         }
     }
@@ -89,6 +89,11 @@ fun MyGoogleMaps(){
     }
 }
 
+/**
+ * Permite hacer una llamada por tlf
+ * @param customerPhone telefono
+ * @param context contexto
+ */
 @Composable
 fun MakePhoneCall(customerPhone:String, context: Context) {
     try {

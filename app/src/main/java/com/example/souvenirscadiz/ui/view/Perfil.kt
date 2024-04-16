@@ -1,7 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
 
-import android.graphics.drawable.VectorDrawable
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -117,7 +116,8 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
 
             //boton para cerra sesion
             Button(onClick = { loginViewModel.signOut()
-                             navController.navigate("Principal")},
+                             navController.navigate("Principal")
+                             souvenirsViewModel.setSelectedItem("Principal")},
                 colors = ButtonDefaults.buttonColors(Teal)) {
                 Text(text = "Cerrar Sesion",
                     style = TextStyle(Silver)
@@ -135,7 +135,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
  * @param navController navegacion
  */
 @Composable
-fun InicioSesion(loginViewModel: LoginViewModel, navController: NavController) {
+fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController) {
 
     Column(
         modifier = Modifier
@@ -171,7 +171,7 @@ fun InicioSesion(loginViewModel: LoginViewModel, navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
         BotonAceptarInicio(loginViewModel, navController)
         Spacer(modifier = Modifier.height(16.dp))
-        InicioSesionGoogle(loginViewModel, navController)
+        InicioSesionGoogle(souvenirsViewModel, loginViewModel, navController)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "¿No tienes cuenta?", fontFamily = KiwiMaru)
         Spacer(modifier = Modifier.height(16.dp))
@@ -194,7 +194,7 @@ fun InicioSesion(loginViewModel: LoginViewModel, navController: NavController) {
  * @param navController navegacion
  */
 @Composable
-fun Registro(loginViewModel: LoginViewModel, navController: NavController) {
+fun Registro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -233,7 +233,7 @@ fun Registro(loginViewModel: LoginViewModel, navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "¿Tienes cuenta?", fontFamily = KiwiMaru)
         Spacer(modifier = Modifier.height(16.dp))
-        InicioSesionGoogle(loginViewModel, navController)
+        InicioSesionGoogle(souvenirsViewModel, loginViewModel, navController)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Inicia Sesión.", modifier = Modifier
             .clickable { navController.navigate("InicioSesion") },
@@ -426,7 +426,7 @@ fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController
  * @param navController navegacion
  */
 @Composable
-fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavController){
+fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts
@@ -437,6 +437,7 @@ fun InicioSesionGoogle(loginViewModel: LoginViewModel, navController: NavControl
             val credential = GoogleAuthProvider.getCredential(account.idToken,null)
             loginViewModel.singInWithGoogleCredential(credential) {
                 navController.navigate("Principal")
+                souvenirsViewModel.setSelectedItem("Principal")
             }
         }catch (e:Exception){
             Log.e("InicioSesionGoogle", "Error al iniciar sesión con Google: ${e.message}", e)

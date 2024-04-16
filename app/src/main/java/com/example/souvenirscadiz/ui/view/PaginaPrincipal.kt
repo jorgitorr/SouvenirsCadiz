@@ -154,7 +154,6 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                                 Toast.makeText(context,"Souvenir guardado en carrito",Toast.LENGTH_SHORT)
                                     .show()
                             } }.size(50.dp))
-
                     }
                 }
             }

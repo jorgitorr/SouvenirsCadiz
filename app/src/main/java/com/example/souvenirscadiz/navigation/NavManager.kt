@@ -41,10 +41,10 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             Carrito(souvenirsViewModel, navController, loginViewModel)
         }
         composable("Registro"){
-            Registro(loginViewModel, navController)
+            Registro(souvenirsViewModel, loginViewModel, navController)
         }
         composable("InicioSesion"){
-            InicioSesion(loginViewModel, navController)
+            InicioSesion(souvenirsViewModel, loginViewModel, navController)
         }
         composable("SouvenirDetail/{referencia}", arguments = listOf(
             navArgument("referencia") { type = NavType.StringType }
