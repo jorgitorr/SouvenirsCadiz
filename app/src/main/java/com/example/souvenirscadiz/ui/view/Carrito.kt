@@ -42,7 +42,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
     val context = LocalContext.current
     Scaffold(
         topBar = {
-            Header(navController)
+            Header(navController, souvenirsViewModel)
         },
         bottomBar = {
             Footer(navController,souvenirsViewModel, loginViewModel)

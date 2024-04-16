@@ -170,6 +170,8 @@ class SouvenirsViewModel :ViewModel(){
     /**
      * cambia el texto del selectedItem al nuevo que haya seleccionado
      * @param elementoSeleccionado texto del elemento seleccionado del footer o header
+     * los posibles valores que puede recibir son:
+     * Perfil, Carrito, Favoritos y Principal
      */
     fun setSelectedItem(elementoSeleccionado:String){
         selectedItem.value = elementoSeleccionado

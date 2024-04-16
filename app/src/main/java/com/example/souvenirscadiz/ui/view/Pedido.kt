@@ -43,7 +43,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
 fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(
         topBar = {
-            HeaderAdmin(navController)
+            HeaderAdmin(navController, souvenirsViewModel)
         },
         bottomBar = {
             Footer(navController,souvenirsViewModel, loginViewModel)

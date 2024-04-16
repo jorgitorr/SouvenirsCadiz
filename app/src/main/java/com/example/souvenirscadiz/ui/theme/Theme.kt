@@ -15,10 +15,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+/**
+ * colores provisionales para el tema oscuro
+ */
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = RaisanBlack,
+    secondary = RaisanBlack,
+    tertiary = Silver,
+    primaryContainer = RaisanBlack,
+    onPrimary = RaisanBlack,
+    onSecondary = RaisanBlack,
+    onTertiary = RaisanBlack,
+    onBackground = RaisanBlack
 )
 
 private val LightColorScheme = lightColorScheme(

@@ -78,7 +78,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
 
     Scaffold(
-        topBar = { Header(navController) },
+        topBar = { Header(navController, souvenirsViewModel) },
         bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) }
         ,containerColor = Silver
     ) { innerPadding ->
@@ -362,7 +362,7 @@ fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavControl
 @Composable
 fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     Scaffold(
-        topBar = { Header(navController) },
+        topBar = { Header(navController, souvenirsViewModel) },
         bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
     ) { innerPadding ->
         Column(

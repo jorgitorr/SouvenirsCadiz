@@ -321,7 +321,8 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
  * @param navController navegacion entre páginas
  */
 @Composable
-fun Header(navController: NavController){
+fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -337,7 +338,11 @@ fun Header(navController: NavController){
             Icon(
                 imageVector = Icons.Default.ShoppingCart,
                 contentDescription = "Shop",
-                modifier = Modifier.clickable { navController.navigate("Tienda") })
+                tint = if(selectedItem=="Carrito") Cerulean else RaisanBlack,
+                modifier = Modifier.clickable {
+                    navController.navigate("Tienda")
+                    souvenirsViewModel.setSelectedItem("Carrito")
+                })
         }
     }
 }

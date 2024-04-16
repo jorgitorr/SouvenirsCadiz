@@ -47,7 +47,7 @@ import com.google.maps.android.compose.Marker
 fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(
         topBar = {
-            Header(navController)
+            Header(navController, souvenirsViewModel)
         },
         bottomBar = {
             Footer(navController,souvenirsViewModel, loginViewModel)

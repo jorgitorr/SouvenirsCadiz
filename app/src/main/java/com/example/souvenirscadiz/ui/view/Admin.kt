@@ -44,7 +44,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
 fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(
         topBar = {
-            HeaderAdmin(navController)
+            HeaderAdmin(navController, souvenirsViewModel)
         },
         bottomBar = {
             Footer(navController,souvenirsViewModel, loginViewModel)
@@ -69,7 +69,8 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
  * @param navController navegacion entre páginas
  */
 @Composable
-fun HeaderAdmin(navController: NavController){
+fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -86,6 +87,7 @@ fun HeaderAdmin(navController: NavController){
             Icon(
                 imageVector = Icons.Default.Sell,
                 contentDescription = "Shop",
+                tint = if(selectedItem=="Principal") Cerulean else RaisanBlack,
                 modifier = Modifier.clickable { navController.navigate("Pedidos") })
         }
     }

@@ -11,6 +11,7 @@ import com.example.souvenirscadiz.R
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
+        color = RaisanBlack,
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,

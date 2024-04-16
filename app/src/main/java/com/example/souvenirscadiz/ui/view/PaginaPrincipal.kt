@@ -47,9 +47,9 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     Scaffold(
         topBar = {
             if(loginViewModel.checkAdmin()){
-                HeaderAdmin(navController)
+                HeaderAdmin(navController, souvenirsViewModel)
             }else{
-                Header(navController)
+                Header(navController, souvenirsViewModel)
             }
         },
         bottomBar = {
@@ -84,7 +84,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
 
 
     Scaffold(
-        topBar = { Header(navController) },
+        topBar = { Header(navController, souvenirsViewModel) },
         bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) }
         , containerColor = Silver
     ) { innerPadding ->

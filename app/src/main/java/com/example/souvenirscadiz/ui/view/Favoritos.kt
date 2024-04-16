@@ -24,9 +24,9 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     Scaffold(
         topBar = {
             if(loginViewModel.checkAdmin()){
-                HeaderAdmin(navController)
+                HeaderAdmin(navController, souvenirsViewModel)
             }else{
-                Header(navController)
+                Header(navController,souvenirsViewModel)
             }
         },
         bottomBar = {
