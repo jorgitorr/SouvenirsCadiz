@@ -173,14 +173,27 @@ class LoginViewModel : ViewModel(){
     }
 
 
+    /**
+     * Permite iniciar sesion con google y guarda el correo y el usuario en las variables
+     * @param credential credenciales para el inicio de sesion
+     * @param home lambda que dice lo que hace el método al iniciar sesion
+     */
     fun singInWithGoogleCredential(credential: AuthCredential, home:()->Unit)
     = viewModelScope.launch{
         try {
             auth.signInWithCredential(credential)
                 .addOnCompleteListener{ task ->
                     if(task.isSuccessful){
-                        Log.d("Login Google","Logueado con éxito")
-                        home()
+                        val user = FirebaseAuth.getInstance().currentUser
+                        user?.let {
+                            //me guarda el correo y el nombre del usuario para mostrarlo
+                            val userEmail = user.email
+                            val nombreUser = user.displayName
+                            Log.d("Login Google", "Usuario: $nombreUser logueado con éxito")
+                            home()
+                            email = userEmail!!
+                            userName = nombreUser!!
+                        }
                     }
                 }.addOnFailureListener{
                     Log.d("Login Google Error","Error al loguear con google")

@@ -9,6 +9,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.souvenirscadiz.data.model.Pedido
+import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.data.model.Tipo
@@ -55,8 +57,8 @@ class SouvenirsViewModel :ViewModel(){
     private val _souvenirCarrito = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirCarrito: StateFlow<List<SouvenirState>> =  _souvenirCarrito
 
-    private val _souvenirPedidos = MutableStateFlow<List<SouvenirState>>(emptyList())
-    val souvenirPedidos: StateFlow<List<SouvenirState>> =  _souvenirPedidos
+    private val _souvenirPedidos = MutableStateFlow<List<PedidoState>>(emptyList())
+    val souvenirPedidos: StateFlow<List<PedidoState>> =  _souvenirPedidos
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
@@ -326,14 +328,14 @@ class SouvenirsViewModel :ViewModel(){
         viewModelScope.launch (Dispatchers.IO){
             try {
                 //se guardan todos los souvenirs de la lista de _souvenirCarrito
-                for(souvenir in _souvenirCarrito.value){
+                for(pedido in _souvenirPedidos.value){
+
                     val newSouvenir = hashMapOf(
-                        "referencia" to souvenir.referencia,
-                        "nombre" to souvenir.nombre,
-                        "url" to souvenir.url,
-                        "tipo" to souvenir.tipo,
-                        "precio" to souvenir.precio,
-                        "emailUser" to email.toString(),
+                        "userMail" to auth.currentUser!!.email,
+                        "referencia" to pedido.referencia,
+                        "nombre" to pedido.nombre,
+                        "url" to pedido.url,
+                        "tipo" to pedido.tipo
                     )
 
                     firestore.collection("Carrito")
@@ -345,16 +347,6 @@ class SouvenirsViewModel :ViewModel(){
                             Log.d("Save error","Error al guardar")
                         }
                 }
-
-                /*val newSouvenir = hashMapOf(
-                    "referencia" to actualSouvenir.referencia,
-                    "nombre" to actualSouvenir.nombre,
-                    "url" to actualSouvenir.url,
-                    "tipo" to actualSouvenir.tipo,
-                    "precio" to actualSouvenir.precio,
-                    "emailUser" to email.toString(),
-                )*/
-
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
             }
@@ -412,9 +404,10 @@ class SouvenirsViewModel :ViewModel(){
 
     /**
      * muestra todos los souvenirs que se han pedido
+     * esto lo ve el administrador
      */
     fun fetchSouvenirsPedido(){
-        val souvenirsList = mutableListOf<SouvenirState>()
+        val souvenirsList = mutableListOf<PedidoState>()
         firestore.collection("Pedido")
             .addSnapshotListener{querySnapshot, error->
                 if(error != null){
@@ -422,7 +415,7 @@ class SouvenirsViewModel :ViewModel(){
                 }
                 if(querySnapshot != null){
                     for(souvenir in querySnapshot){
-                        val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
+                        val souvenirObj = souvenir.toObject(PedidoState::class.java).copy()
                         souvenirsList.add(souvenirObj)
                     }
                 }

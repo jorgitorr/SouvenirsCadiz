@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -70,7 +71,7 @@ fun SouvenirsPedido(navController: NavController, souvenirsViewModel: SouvenirsV
     LazyRow{
         items(souvenirSaved){ souvenir ->
             CuadradoPedido(navController = navController,
-                souvenir = souvenir,
+                pedido = souvenir,
                 url = souvenir.url,
                 souvenirsViewModel = souvenirsViewModel)
         }
@@ -79,7 +80,7 @@ fun SouvenirsPedido(navController: NavController, souvenirsViewModel: SouvenirsV
 
 
 @Composable
-fun CuadradoPedido(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
+fun CuadradoPedido(navController: NavController, pedido: PedidoState, url:Int, souvenirsViewModel: SouvenirsViewModel){
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
@@ -91,11 +92,11 @@ fun CuadradoPedido(navController: NavController, souvenir: SouvenirState, url:In
                 model = ImageRequest.Builder(context = LocalContext.current)
                     .data(url)
                     .build(),
-                contentDescription = souvenir.nombre,
+                contentDescription = pedido.nombre,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
-                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+                    .clickable { navController.navigate("SouvenirDetail/${pedido.referencia}") }
 
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -104,23 +105,29 @@ fun CuadradoPedido(navController: NavController, souvenir: SouvenirState, url:In
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
                 Text(
-                    text = souvenir.nombre,
+                    text = pedido.userMail,
                     style = TextStyle(fontSize = 15.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp)
                 )
                 Text(
-                    text = souvenir.referencia,
+                    text = pedido.nombre,
                     style = TextStyle(fontSize = 15.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp)
                 )
                 Text(
-                    text = "${souvenir.precio}€",
+                    text = pedido.referencia,
+                    style = TextStyle(fontSize = 15.sp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(start = 4.dp, end = 8.dp)
+                )
+                Text(
+                    text = "${pedido.cantidad}€",
                     style = TextStyle(fontSize = 15.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

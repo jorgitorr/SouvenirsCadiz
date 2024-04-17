@@ -2,6 +2,7 @@ package com.example.souvenirscadiz.ui.view
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -10,11 +11,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,12 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
+import com.example.souvenirscadiz.ui.theme.White
 
 
 /**
@@ -60,11 +65,48 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
             //el boton no aparece en la pantalla
             if(souvenirsViewModel.getNumberSouvenirsInCarrito()!=0){
                 Button(onClick = { souvenirsViewModel.saveSouvenirInCarrito {
-                    Toast.makeText(context,"Souvenirs Pedidos", Toast.LENGTH_SHORT)
-                        .show()
+                    souvenirsViewModel.saveSouvenirInPedido {
+                        Toast.makeText(context,"Souvenirs Pedidos", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 } },
                     colors = ButtonDefaults.buttonColors(Redwood)) {
                     Text(text = "PEDIR", fontFamily = KiwiMaru)
+                }
+            }else{
+                //si inicia sesion con google me sigue entrando aqui
+                if (loginViewModel.userName == "") {
+                    // Mostrar un diálogo si el usuario no ha iniciado sesión
+                    AlertDialog(
+                        onDismissRequest = { /* No hacer nada en el cierre del diálogo */ },
+                        title = {
+                            Text(
+                                text = "No has iniciado sesión para ver tus elementos en el carrito",
+                                fontFamily = KiwiMaru,
+                                color = White,
+                                fontSize = 15.sp
+                            )
+                        },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    navController.navigate("InicioSesion")
+                                }
+                            ) {
+                                Text(
+                                    text = "Ir a Inicio de Sesión",
+                                    fontFamily = KiwiMaru,
+                                    color = Redwood
+                                )
+                            }
+                        }
+                    )
+                } else {
+                    // Mostrar un mensaje si el carrito está vacío
+                    Text(
+                        text = "Todavía no tienes souvenirs en el carrito",
+                        fontFamily = KiwiMaru
+                    )
                 }
             }
         }
