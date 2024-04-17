@@ -45,6 +45,7 @@ import com.example.souvenirscadiz.ui.theme.White
 @Composable
 fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     val context = LocalContext.current
+    val showDialog by remember { mutableStateOf(false) } //esto es para que salte un dialogo antes de confirmar el pedido
     Scaffold(
         topBar = {
             Header(navController, souvenirsViewModel)
@@ -64,14 +65,16 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
             //si no hay ningun souvenir en la lista de souvenirs del carrito
             //el boton no aparece en la pantalla
             if(souvenirsViewModel.getNumberSouvenirsInCarrito()!=0){
-                Button(onClick = { souvenirsViewModel.saveSouvenirInCarrito {
+                Button(onClick = {
+                    //solo queda introducir la cantidad de cada uno
                     souvenirsViewModel.saveSouvenirInPedido {
                         Toast.makeText(context,"Souvenirs Pedidos", Toast.LENGTH_SHORT)
                             .show()
-                    }
                 } },
                     colors = ButtonDefaults.buttonColors(Redwood)) {
-                    Text(text = "PEDIR", fontFamily = KiwiMaru)
+                    Text(text = "PEDIR",
+                        fontFamily = KiwiMaru
+                    )
                 }
             }else{
                 //si inicia sesion con google me sigue entrando aqui
@@ -128,5 +131,19 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
                 url = souvenir.url,
                 souvenirsViewModel = souvenirsViewModel)
         }
+        item { 
+            CantidadSouvenir()
+        }
     }
+}
+
+
+/**
+ * Cantidad de souvenirs que pide el cliente
+ */
+@Composable
+fun CantidadSouvenir(){
+    var cantidadSouvenir by remember { mutableStateOf("0") }
+    OutlinedTextField(value = cantidadSouvenir,
+        onValueChange = {cantidadSouvenir = it})
 }

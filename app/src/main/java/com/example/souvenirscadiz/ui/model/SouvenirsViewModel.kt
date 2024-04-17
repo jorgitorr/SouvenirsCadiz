@@ -58,8 +58,8 @@ class SouvenirsViewModel @Inject constructor(
     private val _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirFav: StateFlow<List<SouvenirState>> =  _souvenirFav
 
-    private val _souvenirCarrito = MutableStateFlow<List<SouvenirState>>(emptyList())
-    val souvenirCarrito: StateFlow<List<SouvenirState>> =  _souvenirCarrito
+    private var _souvenirCarrito = MutableStateFlow<List<SouvenirState>>(emptyList())
+    var souvenirCarrito: StateFlow<List<SouvenirState>> =  _souvenirCarrito
 
     private val _souvenirPedidos = MutableStateFlow<List<PedidoState>>(emptyList())
     val souvenirPedidos: StateFlow<List<PedidoState>> =  _souvenirPedidos
@@ -332,27 +332,27 @@ class SouvenirsViewModel @Inject constructor(
         viewModelScope.launch (Dispatchers.IO){
             try {
                 //se guardan todos los souvenirs de la lista de _souvenirCarrito
-                for(pedido in _souvenirPedidos.value){
+                for(pedido in _souvenirCarrito.value){
 
-                    val newSouvenir = hashMapOf(
-                        "userMail" to auth.currentUser!!.email,
+                    val newPedido = hashMapOf(
+                        "userMail" to email,
                         "referencia" to pedido.referencia,
                         "nombre" to pedido.nombre,
                         "url" to pedido.url,
                         "tipo" to pedido.tipo
                     )
 
-                    firestore.collection("Carrito")
-                        .add(newSouvenir)
+                    firestore.collection("Pedidos")
+                        .add(newPedido)
                         .addOnSuccessListener {
                             onSuccess()
-                            Log.d("Error save","Se guardó el souvenir")
+                            Log.d("Error save","Se guardó el pedido")
                         }.addOnFailureListener{
-                            Log.d("Save error","Error al guardar")
+                            Log.d("Save error","Error al guardar pedido")
                         }
                 }
             }catch (e:Exception){
-                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
+                Log.d("Error al guardar souvenir","Error al guardar Pedido")
             }
         }
     }
@@ -437,6 +437,15 @@ class SouvenirsViewModel @Inject constructor(
             fetchSouvenirsCarrito()//primero hay que pedirlos para que los saque de la base de datos
         }
         return _souvenirCarrito.value.size
+    }
+
+
+    /**
+     * Permite vaciar los souvenirs del carrito una vez pedidos
+     */
+    fun vaciarSouvenirsCarrito(){
+        _souvenirCarrito = MutableStateFlow(emptyList())
+        souvenirCarrito = _souvenirCarrito
     }
 
 }
