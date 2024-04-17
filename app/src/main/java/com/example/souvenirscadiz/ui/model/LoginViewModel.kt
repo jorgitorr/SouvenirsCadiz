@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.User
-import com.example.souvenirscadiz.data.util.Constant
 import com.example.souvenirscadiz.data.util.Constant.Companion.CONTRASENIA_ADMIN
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.google.firebase.auth.AuthCredential
@@ -16,13 +15,15 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-/**
- * ViewModel del login del usuario
- */
-class LoginViewModel : ViewModel(){
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    //inyectar los casos de uso
+): ViewModel(){
     /**
      * @param auth autorización para acceder a la base de datos
      * @param firestore proporciona acceso a los servicios de firebase

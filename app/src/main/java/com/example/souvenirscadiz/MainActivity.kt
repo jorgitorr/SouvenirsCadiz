@@ -22,6 +22,7 @@ import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.SouvenirsCadizTheme
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
@@ -32,6 +33,7 @@ import java.io.InputStreamReader
 import java.nio.charset.Charset
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel = LoginViewModel()
     private val souvenirsViewModel:SouvenirsViewModel = SouvenirsViewModel()

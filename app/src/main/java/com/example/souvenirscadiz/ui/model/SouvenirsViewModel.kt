@@ -9,7 +9,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
@@ -20,12 +19,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SouvenirsViewModel :ViewModel(){
+@HiltViewModel
+class SouvenirsViewModel @Inject constructor(
+    //aqui van los casos de uso
+):ViewModel(){
 
     //poner un contador de productos que tiene en el carrito el usuario
     //para poder añadirla al icono shop

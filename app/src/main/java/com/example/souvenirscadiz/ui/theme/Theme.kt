@@ -26,7 +26,7 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = RaisanBlack,
     onSecondary = RaisanBlack,
     onTertiary = RaisanBlack,
-    onBackground = RaisanBlack
+    onBackground = RaisanBlack,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -38,7 +38,6 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun SouvenirsCadizTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
