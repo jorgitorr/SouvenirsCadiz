@@ -130,8 +130,6 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
                 souvenir = souvenir,
                 url = souvenir.url,
                 souvenirsViewModel = souvenirsViewModel)
-        }
-        item { 
             CantidadSouvenir()
         }
     }
