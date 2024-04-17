@@ -65,10 +65,12 @@ android {
 }
 
 dependencies {
+    //mockk
+    testImplementation("io.mockk:mockk:1.12.2")
     //Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
+    implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     //splash
@@ -89,10 +91,6 @@ dependencies {
     // DCS - Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-analytics")
-
-    //authentication con google
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
-
     // TODO: Add the dependencies for Firebase products you want to use
     // When using the BoM, don't specify versions in Firebase dependencies
     // https://firebase.google.com/docs/android/setup#available-libraries
