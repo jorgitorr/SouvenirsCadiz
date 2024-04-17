@@ -22,6 +22,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +49,8 @@ import com.google.maps.android.compose.Marker
  */
 @Composable
 fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+    var telefonoSeleccionado by remember { mutableStateOf(false)}
+
     Scaffold(
         topBar = {
             Header(navController, souvenirsViewModel)
@@ -61,7 +67,6 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
-            var pulsar:Boolean = false
             Text(text = "Venta de souvenirs", fontFamily = KiwiMaru)
             Spacer(modifier = Modifier.height(2.dp))
             MyGoogleMaps()//google maps
@@ -69,12 +74,20 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             Text(text = "Jorge Arce Nogueroles" , fontFamily = KiwiMaru)
             Spacer(modifier = Modifier.height(2.dp))
             Text(text = "Para pedidos e información: ", fontFamily = KiwiMaru)
-            Text(text = NUMERO_TLF, fontFamily = KiwiMaru, color = Cerulean, modifier = Modifier.clickable {})
-            //MakePhoneCall(customerPhone = NUMERO_TLF, context = LocalContext.current)
+            Text(text = NUMERO_TLF, fontFamily = KiwiMaru, color = Cerulean, modifier = Modifier.clickable {
+                telefonoSeleccionado = true //para realizar la llamada al numero de telefono
+            })
+
+            if(telefonoSeleccionado){
+                MakePhoneCall(NUMERO_TLF, LocalContext.current)
+                telefonoSeleccionado = false //para que no vuelva a llamar al salir
+            }
 
         }
     }
 }
+
+
 
 /**
  * implementacion de google maps para la página de detalle del logo y de la empresa
@@ -97,7 +110,7 @@ fun MyGoogleMaps(){
 @Composable
 fun MakePhoneCall(customerPhone:String, context: Context) {
     try {
-        val formattedPhone = "0$customerPhone"
+        val formattedPhone = customerPhone
         val intent = Intent(Intent.ACTION_CALL)
         val phoneUri = Uri.parse("tel:$formattedPhone")
         intent.data = phoneUri

@@ -16,7 +16,7 @@ class Constant {
         const val MIN_SOUVENIRS: Int = 6
         const val EMAIL_ADMIN:String = "arsenogue@gmail.com"
         const val CONTRASENIA_ADMIN: String = "arsenogue"
-        const val NUMERO_TLF: String = "+36 617759036"
+        const val NUMERO_TLF: String = "617759036"
         const val TOKEN:String = "802100001314-0168qhbg5joqhv56bgjpf7ib4qbdotv0.apps.googleusercontent.com"
     }
 }
