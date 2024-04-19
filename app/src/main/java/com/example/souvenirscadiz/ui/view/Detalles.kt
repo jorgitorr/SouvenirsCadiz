@@ -38,7 +38,6 @@ import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Cerulean
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
-import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
