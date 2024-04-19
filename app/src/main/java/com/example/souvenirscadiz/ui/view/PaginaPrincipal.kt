@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,10 +45,12 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+    souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
+
     Scaffold(
         topBar = {
             if(loginViewModel.checkAdmin()){
-                HeaderAdmin(navController, souvenirsViewModel)
+                HeaderAdmin(navController, souvenirsViewModel) //tipo de header del administrador de la BDD
             }else{
                 Header(navController, souvenirsViewModel)
             }
@@ -79,9 +82,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  */
 @Composable
 fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, referencia:String) {
-    var isFavorite by remember { mutableStateOf(false) } //esto habrá que guardarlo de alguna forma
     val context = LocalContext.current
-
 
     Scaffold(
         topBar = { Header(navController, souvenirsViewModel) },
@@ -102,7 +103,8 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
             Image(painter = painterResource(id = resourceId),
                 contentDescription = "",
                 modifier = Modifier
-                    .fillMaxWidth().clickable { navController.navigateUp() }
+                    .fillMaxWidth()
+                    .clickable { navController.navigateUp() }
             )
 
             LazyRow(modifier = Modifier.fillMaxWidth(),
@@ -125,23 +127,28 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 item {
                     //icono de fav
                     Icon(
-                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        //si el souvenir esta guarado el icono se pone en rojo
+                        imageVector = if (souvenir.guardado) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = "Favorite Icon",
-                        tint = if (!isFavorite) RaisanBlack else Redwood,
+                        //si el souvenir esta guardado el color del icono cambia
+                        tint = if (!souvenir.guardado) RaisanBlack else Redwood,
                         modifier = Modifier
                             .clickable {
-                                isFavorite = !isFavorite
                                 souvenirsViewModel.saveSouvenirInFav {
                                     Toast
                                         .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
                                         .show()
                                 }
+                                //permite saber si el souvenir esta guardado
+                                souvenir.guardado = !souvenir.guardado
                             }
                     )
                 }
             }
 
-            LazyRow(modifier = Modifier.fillMaxWidth().padding(),
+            LazyRow(modifier = Modifier
+                .fillMaxWidth()
+                .padding(),
                 horizontalArrangement = Arrangement.SpaceEvenly){
                 item{
                     Row (modifier = Modifier.fillMaxWidth(),
@@ -150,10 +157,19 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                         Text(text = souvenir.precio.toString()+"€", fontFamily = KiwiMaru)
                         //icono de carrito
                         Icon(imageVector = Icons.Default.ShoppingBasket, contentDescription = "Cesta de la compra",
-                            modifier = Modifier.clickable { souvenirsViewModel.saveSouvenirInCarrito {
-                                Toast.makeText(context,"Souvenir guardado en carrito",Toast.LENGTH_SHORT)
-                                    .show()
-                            } }.size(50.dp))
+                            modifier = Modifier
+                                .clickable {
+                                    souvenirsViewModel.saveSouvenirInCarrito {
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                "Souvenir guardado en carrito",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            .show()
+                                    }
+                                }
+                                .size(50.dp))
                     }
                 }
             }

@@ -72,6 +72,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     //splash
     implementation("androidx.core:core-splashscreen:1.0.1")

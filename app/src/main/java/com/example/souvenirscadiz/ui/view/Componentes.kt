@@ -72,9 +72,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
-    var isFavorite by remember { mutableStateOf(false) }//variable fav
     val context = LocalContext.current
-
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
@@ -113,16 +111,23 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp)
                 )
                 Icon(
-                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    //cambia el icono si el souvenir está guardado
+                    imageVector = if (souvenir.guardado) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite Icon",
-                    tint = if (!isFavorite)RaisanBlack else Redwood,
+                    //cambia el color del icono si el souvenir esta o no guardado
+                    tint = if (!souvenir.guardado) RaisanBlack else Redwood,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable {
-                            isFavorite = !isFavorite
-                            souvenirsViewModel.saveSouvenirInFav (
-                                { Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
-                                    .show()}, souvenir)
+                            //guarda o elimina del guardado el souvenir
+                            souvenir.guardado = !souvenir.guardado
+                            souvenirsViewModel.saveSouvenirInFav(
+                                {
+                                    Toast
+                                        .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
+                                        .show()
+                                }, souvenir
+                            )
                         }
                 )
                 Text(
@@ -216,12 +221,19 @@ fun Cuadrado(navController: NavController, souvenir: SouvenirState, url:Int, sou
 fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsViewModel){
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState()//souvenirs de un tipo
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState()//todos los souvenirs
+    val souvenirsGuardado by souvenirsViewModel.souvenirFav.collectAsState()
 
     if(souvenirs.isEmpty()){
         LazyColumn{
             items(souvenirsPre){ souvenirP->
                 val url = "img${souvenirP.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
+                //recorre los souvenirs guardados para comprobar si es de los que muestra
+                for(souvenirG in souvenirsGuardado){
+                    if(souvenirP.referencia==souvenirG.referencia){
+                        souvenirP.guardado = true
+                    }
+                }
                 Cuadrado(navController,souvenirP, resourceId, souvenirsViewModel)
                 Spacer(modifier = Modifier.height(20.dp))
             }
@@ -231,6 +243,12 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
             items(souvenirs){ souvenir->
                 val url = "img${souvenir.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
+                //recorre los souvenirs guardados para comprobar si es de los que muestra
+                for(souvenirG in souvenirsGuardado){
+                    if(souvenir.referencia == souvenirG.referencia){
+                        souvenir.guardado = true
+                    }
+                }
                 Cuadrado(navController,souvenir, resourceId, souvenirsViewModel)
                 Spacer(modifier = Modifier.height(20.dp))
             }
@@ -304,7 +322,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                         .padding(vertical = 2.dp)
                         .clickable {
                             souvenirsViewModel.setSelectedItem("Perfil")
-                            if (loginViewModel.getCurrentUser()!=null) {
+                            if (loginViewModel.getCurrentUser() != null) {
                                 navController.navigate("Perfil")
                             } else {
                                 navController.navigate("InicioSesion")
