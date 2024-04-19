@@ -261,13 +261,17 @@ class SouvenirsViewModel @Inject constructor(
                     "emailUser" to email.toString()
                 )
 
-                for(souvenirF in _souvenirFav.value){ //recorre la lista de souvenirs favoritos
+                //recorre la lista de souvenirs favoritos
+                for(souvenirF in _souvenirFav.value){
+                    //si el souvenir en fav es igual al souvenir que quiere guardar
                     if(souvenirF.referencia==souvenir.referencia){
+                        //la variable es igual es true
                         esIgual = true
                     }
                 }
 
-                if(!esIgual){ // si el souvenir no es igual a uno que ya esté
+                //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
+                if(!esIgual){
                     firestore.collection("Souvenirs Favoritos")
                         .add(newSouvenir)
                         .addOnSuccessListener {
@@ -277,6 +281,7 @@ class SouvenirsViewModel @Inject constructor(
                             Log.d("Save error","Error al guardar")
                         }
                 }else{
+                    //si no muestra un mensaje de que el souvenir ya está repetido
                     Log.d("No se guardo","Está repetido")
                 }
             }catch (e:Exception){
@@ -303,6 +308,13 @@ class SouvenirsViewModel @Inject constructor(
                     "precio" to actualSouvenir.precio,
                     "emailUser" to email.toString(),
                 )
+
+                //recorre la lista de souvenirs favoritos
+                for(souvenirC in _souvenirCarrito.value){
+                    if(souvenirC.referencia == actualSouvenir.referencia){
+                        esIgual = true
+                    }
+                }
 
                 if(!esIgual){
                     firestore.collection("Carrito")
@@ -340,6 +352,7 @@ class SouvenirsViewModel @Inject constructor(
                         "nombre" to pedido.nombre,
                         "url" to pedido.url,
                         "tipo" to pedido.tipo
+                        //me queda guardar la cantidad que la recoge en un textField
                     )
 
                     firestore.collection("Pedidos")

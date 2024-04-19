@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ShoppingBasket
@@ -156,7 +157,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                         //precio
                         Text(text = souvenir.precio.toString()+"€", fontFamily = KiwiMaru)
                         //icono de carrito
-                        Icon(imageVector = Icons.Default.ShoppingBasket, contentDescription = "Cesta de la compra",
+                        Icon(imageVector = Icons.Default.AddShoppingCart, contentDescription = "Cesta de la compra",
                             modifier = Modifier
                                 .clickable {
                                     souvenirsViewModel.saveSouvenirInCarrito {

@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -138,10 +139,20 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
 
 /**
  * Cantidad de souvenirs que pide el cliente
+ * Comprueba si el valor introducido es un número antes de enviarlo
  */
 @Composable
-fun CantidadSouvenir(){
+fun CantidadSouvenir():Int{
+    val context = LocalContext.current
     var cantidadSouvenir by remember { mutableStateOf("0") }
     OutlinedTextField(value = cantidadSouvenir,
-        onValueChange = {cantidadSouvenir = it})
+        onValueChange = {
+            if (it.isDigitsOnly()) {
+                cantidadSouvenir = it
+            }else{
+                Toast.makeText(context,"Has introducido un campo erroneo",Toast.LENGTH_SHORT).show()
+            }},
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
+
+    return cantidadSouvenir.toInt()
 }
