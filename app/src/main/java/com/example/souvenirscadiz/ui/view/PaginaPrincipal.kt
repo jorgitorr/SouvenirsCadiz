@@ -31,6 +31,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -49,7 +54,6 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
     }
-
 
     Scaffold(
         topBar = {
@@ -129,7 +133,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 }
 
                 item {
-                    //icono de fav
+
                     Icon(
                         //si el souvenir esta guarado el icono se pone en rojo
                         imageVector = if (souvenir.guardado) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
@@ -146,6 +150,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
 
                                 }
                                 souvenir.guardado = !souvenir.guardado
+
                             }
                     )
                 }
@@ -173,6 +178,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                                             )
                                             .show()
                                     }
+
                                 }
                                 .size(50.dp))
                     }

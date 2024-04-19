@@ -14,6 +14,7 @@ subprojects {
 
 
 
+
 android {
     namespace = "com.example.souvenirscadiz"
     compileSdk = 34
@@ -64,7 +65,11 @@ android {
 
 }
 
+
+
 dependencies {
+    //lottie
+    implementation ("com.airbnb.android:lottie-compose:6.4.0")
     //mockk
     testImplementation("io.mockk:mockk:1.12.2")
     //Dagger Hilt
@@ -121,6 +126,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
+
+
 
 // DCS - Dagger Hilt - Allow references to generated code
 kapt {

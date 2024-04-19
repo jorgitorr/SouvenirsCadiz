@@ -53,6 +53,7 @@ class LoginViewModel @Inject constructor(
      */
     fun signOut(){
         auth.signOut()
+        showAlert = false
     }
 
 

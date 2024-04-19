@@ -7,14 +7,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
@@ -51,15 +58,26 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  */
 @Composable
 fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    LaunchedEffect(Unit){
+        souvenirsViewModel.fetchSouvenirsFav()
+    }
+
     val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()//parametro que contiene los metodos guardados
-    LazyColumn{
-        items(souvenirSaved){ souvenir ->
-            val url = "img${souvenir.url}"
-            val resourceId = souvenirsViewModel.getResourceIdByName(url)
-            Cuadrado(navController = navController,
-                souvenir = souvenir,
-                url = resourceId,
-                souvenirsViewModel = souvenirsViewModel)
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.angry_start)) //animacion de la estrella
+
+    if(souvenirSaved.isEmpty()){
+        LottieAnimation(composition = composition)
+        Text(text = "NO TIENES ELEMENTOS GUARDADOS EN FAVORITOS", fontFamily = KiwiMaru)
+    }else{
+        LazyColumn{
+            items(souvenirSaved){ souvenir ->
+                val url = "img${souvenir.url}"
+                val resourceId = souvenirsViewModel.getResourceIdByName(url)
+                Cuadrado(navController = navController,
+                    souvenir = souvenir,
+                    url = resourceId,
+                    souvenirsViewModel = souvenirsViewModel)
+            }
         }
     }
 }

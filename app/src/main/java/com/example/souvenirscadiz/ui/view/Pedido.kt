@@ -1,6 +1,5 @@
 package com.example.souvenirscadiz.ui.view
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,10 +31,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.souvenirscadiz.data.model.PedidoState
-import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
-import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
 

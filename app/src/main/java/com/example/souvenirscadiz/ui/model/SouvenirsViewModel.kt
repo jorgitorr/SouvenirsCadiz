@@ -55,7 +55,7 @@ class SouvenirsViewModel @Inject constructor(
     var souvenirsTipo = _souvenirsTipo
     private var actualSouvenir by mutableStateOf(Souvenir())
 
-    private val _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
+    private var _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirFav: StateFlow<List<SouvenirState>> =  _souvenirFav
 
     private var _souvenirCarrito = MutableStateFlow<List<SouvenirState>>(emptyList())
@@ -514,6 +514,18 @@ class SouvenirsViewModel @Inject constructor(
             fetchSouvenirsCarrito()//primero hay que pedirlos para que los saque de la base de datos
         }
         return _souvenirCarrito.value.size
+    }
+
+
+    /**
+     * obtiene el numero de souvenirs guardado en favoritos
+     * @return numero de souvenirs en favoritos
+     */
+    fun getNumberSouvenirsInFav():Int{
+        viewModelScope.launch {
+            fetchSouvenirsFav()//primero hay que pedirlos para que los saque de la base de datos
+        }
+        return _souvenirFav.value.size
     }
 
 

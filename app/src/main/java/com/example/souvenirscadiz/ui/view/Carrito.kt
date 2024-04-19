@@ -32,12 +32,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.White
+import org.apache.commons.lang3.ObjectUtils
 
 
 /**
@@ -47,6 +52,7 @@ import com.example.souvenirscadiz.ui.theme.White
 fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     val context = LocalContext.current
     val showDialog by remember { mutableStateOf(false) } //esto es para que salte un dialogo antes de confirmar el pedido
+    var onClickBasket by remember { mutableStateOf(true) }//al pulsar el boton del carrito
     Scaffold(
         topBar = {
             Header(navController, souvenirsViewModel)
@@ -78,8 +84,8 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                     )
                 }
             }else{
-                //si inicia sesion con google me sigue entrando aqui
-                if (loginViewModel.userName == "") {
+                //si el tamaño de souvenirs fav es diferente diferente
+                if (loginViewModel.showAlert) {
                     // Mostrar un diálogo si el usuario no ha iniciado sesión
                     AlertDialog(
                         onDismissRequest = { /* No hacer nada en el cierre del diálogo */ },
@@ -106,7 +112,6 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                         }
                     )
                 } else {
-                    // Mostrar un mensaje si el carrito está vacío
                     Text(
                         text = "Todavía no tienes souvenirs en el carrito",
                         fontFamily = KiwiMaru
@@ -131,7 +136,7 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
                 souvenir = souvenir,
                 url = souvenir.url,
                 souvenirsViewModel = souvenirsViewModel)
-            CantidadSouvenir()
+            cantidadSouvenir()
         }
     }
 }
@@ -142,7 +147,7 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
  * Comprueba si el valor introducido es un número antes de enviarlo
  */
 @Composable
-fun CantidadSouvenir():Int{
+fun cantidadSouvenir():Int{
     val context = LocalContext.current
     var cantidadSouvenir by remember { mutableStateOf("0") }
     OutlinedTextField(value = cantidadSouvenir,
