@@ -27,11 +27,16 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -117,14 +122,14 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable { //al hacer click en el corazón
-                                souvenirsViewModel.saveSouvenirInFav ({
-                                    Toast
-                                        .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
-                                        .show()
+                            souvenirsViewModel.saveSouvenirInFav({
+                                Toast
+                                    .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
+                                    .show()
 
-                                },souvenir)
+                            }, souvenir)
 
-                                souvenir.guardado = !souvenir.guardado
+                            souvenir.guardado = !souvenir.guardado
                         }
                     //.combinedClick no funciona bien no sé porque
 
@@ -341,6 +346,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
 @Composable
 fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -353,14 +359,23 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
             Text(text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave)
 
-            Icon(
-                imageVector = Icons.Default.ShoppingCart,
-                contentDescription = "Shop",
-                tint = if(selectedItem=="Carrito") Cerulean else RaisanBlack,
-                modifier = Modifier.clickable {
-                    navController.navigate("Tienda")
-                    souvenirsViewModel.setSelectedItem("Carrito")
-                })
+
+
+            BadgedBox(badge = {
+                Badge {
+                    Text(text = souvenirsViewModel.getNumberSouvenirsInCarrito().toString())
+                }
+                
+            }) {
+                Icon(
+                    imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = "Shop",
+                    tint = if(selectedItem=="Carrito") Cerulean else RaisanBlack,
+                    modifier = Modifier.clickable {
+                        navController.navigate("Tienda")
+                        souvenirsViewModel.setSelectedItem("Carrito")
+                    })
+            }
         }
     }
 }
