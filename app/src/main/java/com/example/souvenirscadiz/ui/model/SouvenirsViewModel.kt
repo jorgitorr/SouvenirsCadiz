@@ -291,6 +291,61 @@ class SouvenirsViewModel @Inject constructor(
     }
 
     /**
+     * Elimina el souvenir de la lista de favoritos
+     */
+    fun deleteSouvenirFromFav(onSuccess: () -> Unit) {
+        val email = auth.currentUser?.email
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("Souvenirs Favoritos")
+                    .whereEqualTo("referencia", actualSouvenir.referencia)
+                    .whereEqualTo("emailUser", email)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            onSuccess()
+                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
+            }
+        }
+    }
+
+
+
+    fun deleteSouvenirFromFav(onSuccess: () -> Unit, souvenir: Souvenir) {
+        val email = auth.currentUser?.email
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("Souvenirs Favoritos")
+                    .whereEqualTo("referencia", souvenir.referencia)
+                    .whereEqualTo("emailUser", email)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            onSuccess()
+                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
+            }
+        }
+    }
+
+    /**
      * Guarda souvenir en carritoç
      * @param onSuccess lambda para que hace el método al ser logrado
      */
@@ -331,6 +386,14 @@ class SouvenirsViewModel @Inject constructor(
             }
         }
     }
+
+
+
+
+
+
+
+
 
 
     /**

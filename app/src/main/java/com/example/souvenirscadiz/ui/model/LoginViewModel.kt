@@ -52,7 +52,6 @@ class LoginViewModel @Inject constructor(
      * cierra sesion
      */
     fun signOut(){
-        resetearVariables()
         auth.signOut()
     }
 
@@ -219,6 +218,9 @@ class LoginViewModel @Inject constructor(
     }
 
 
+    /**
+     * vacía las variables
+     */
     fun resetearVariables(){
         email = ""
         userName = ""

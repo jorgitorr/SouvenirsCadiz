@@ -76,7 +76,6 @@ import com.google.firebase.auth.GoogleAuthProvider
  */
 @Composable
 fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-
     Scaffold(
         topBar = { Header(navController, souvenirsViewModel) },
         bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) }
@@ -257,11 +256,9 @@ fun IntroducirContrasenia(loginViewModel: LoginViewModel){
         if (hidden) PasswordVisualTransformation() else VisualTransformation.None,//3
         trailingIcon = {
             IconButton(onClick = { hidden = !hidden }) {
-                val vector = if (hidden) Icons.Filled.Visibility
-                else Icons.Filled.VisibilityOff
-
+                val vector = if (hidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                 val description = if (hidden) "Ocultar contraseña" else "Revelar contraseña" //6
-                Icon(imageVector = vector, contentDescription = description)
+                Icon(imageVector = vector, contentDescription = description, tint = RaisanBlack)
             }
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),

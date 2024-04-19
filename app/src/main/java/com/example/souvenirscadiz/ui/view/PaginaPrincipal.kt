@@ -46,7 +46,10 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
-    souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
+    }
+
 
     Scaffold(
         topBar = {
@@ -135,12 +138,13 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                         tint = if (!souvenir.guardado) RaisanBlack else Redwood,
                         modifier = Modifier
                             .clickable {
+                                //si el souvenir no esta guardado
                                 souvenirsViewModel.saveSouvenirInFav {
                                     Toast
                                         .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
                                         .show()
+
                                 }
-                                //permite saber si el souvenir esta guardado
                                 souvenir.guardado = !souvenir.guardado
                             }
                     )

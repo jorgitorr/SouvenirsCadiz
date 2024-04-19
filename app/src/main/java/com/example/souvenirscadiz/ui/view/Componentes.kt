@@ -118,16 +118,15 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
                     tint = if (!souvenir.guardado) RaisanBlack else Redwood,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
-                        .clickable {
-                            //guarda o elimina del guardado el souvenir
-                            souvenir.guardado = !souvenir.guardado
-                            souvenirsViewModel.saveSouvenirInFav(
-                                {
+                        .clickable { //al hacer click en el corazón
+                                souvenirsViewModel.saveSouvenirInFav ({
                                     Toast
                                         .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
                                         .show()
-                                }, souvenir
-                            )
+
+                                },souvenir)
+
+                                souvenir.guardado = !souvenir.guardado
                         }
                 )
                 Text(
