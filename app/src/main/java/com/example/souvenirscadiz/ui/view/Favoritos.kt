@@ -63,10 +63,10 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
     }
 
     val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()//parametro que contiene los metodos guardados
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.angry_start)) //animacion de la estrella
+    val compositionAngryStart by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.angry_start)) //animacion de la estrella
 
     if(souvenirSaved.isEmpty()){
-        LottieAnimation(composition = composition)
+        LottieAnimation(composition = compositionAngryStart)
         Text(text = "NO TIENES ELEMENTOS GUARDADOS EN FAVORITOS", fontFamily = KiwiMaru)
     }else{
         LazyColumn{
