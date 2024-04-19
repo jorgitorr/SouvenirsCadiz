@@ -13,6 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.data.util.Constant.Companion.NUMERO_TLF
@@ -67,16 +69,23 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
-            Text(text = "Venta de souvenirs", fontFamily = KiwiMaru)
+
+            Row (modifier = Modifier.align(Alignment.CenterHorizontally)){
+                Text(text = "VENTA DE SOUVENIRS",
+                    fontFamily = KiwiMaru,
+                    textAlign = TextAlign.Center)
+            }
             Spacer(modifier = Modifier.height(2.dp))
             MyGoogleMaps()//google maps
             Spacer(modifier = Modifier.height(2.dp))
             Text(text = "Jorge Arce Nogueroles" , fontFamily = KiwiMaru)
             Spacer(modifier = Modifier.height(2.dp))
-            Text(text = "Para pedidos e información: ", fontFamily = KiwiMaru)
-            Text(text = NUMERO_TLF, fontFamily = KiwiMaru, color = Cerulean, modifier = Modifier.clickable {
-                telefonoSeleccionado = true //para realizar la llamada al numero de telefono
-            })
+            Row{
+                Text(text = "Para pedidos e información: ", fontFamily = KiwiMaru)
+                Text(text = NUMERO_TLF, fontFamily = KiwiMaru, color = Cerulean, modifier = Modifier.clickable {
+                    telefonoSeleccionado = true //para realizar la llamada al numero de telefono
+                })
+            }
 
             if(telefonoSeleccionado){
                 MakePhoneCall(NUMERO_TLF, LocalContext.current)
@@ -97,7 +106,7 @@ fun MyGoogleMaps(){
     val marker = com.google.android.gms.maps.model.LatLng(36.50180834956613, -6.268638314742377)
     GoogleMap(modifier = Modifier
         .fillMaxWidth()
-        .height(450.dp)){
+        .height(500.dp)){
         Marker(position = marker, title = "Ubicación", snippet = "Empresa")
     }
 }

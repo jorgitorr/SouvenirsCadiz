@@ -1,10 +1,13 @@
 package com.example.souvenirscadiz.ui.view
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -70,6 +74,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param souvenir
  * @param url de la imagen que queremos mostrar
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
     val context = LocalContext.current
@@ -128,6 +133,8 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
 
                                 souvenir.guardado = !souvenir.guardado
                         }
+                    //.combinedClick no funciona bien no sé porque
+
                 )
                 Text(
                     text = "${souvenir.precio}€",
