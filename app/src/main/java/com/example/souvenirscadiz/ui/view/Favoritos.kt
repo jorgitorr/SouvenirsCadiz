@@ -73,7 +73,7 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
             items(souvenirSaved){ souvenir ->
                 val url = "img${souvenir.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                Cuadrado(navController = navController,
+                Caja(navController = navController,
                     souvenir = souvenir,
                     url = resourceId,
                     souvenirsViewModel = souvenirsViewModel)

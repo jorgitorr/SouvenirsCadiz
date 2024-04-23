@@ -8,14 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -71,7 +66,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
             SouvenirsCarrito(navController, souvenirsViewModel)
             //si no hay ningun souvenir en la lista de souvenirs del carrito
             //el boton no aparece en la pantalla
-            if(souvenirCarrito.isEmpty()){
+            if(!souvenirCarrito.isEmpty()){
                 Button(onClick = {
                     //solo queda introducir la cantidad de cada uno
                     souvenirsViewModel.saveSouvenirInPedido {
@@ -111,7 +106,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                             }
                         }
                     )
-                } else if (souvenirCarrito.isEmpty()){ //en el
+                } else{
                     LottieAnimation(composition = compositionEmptyBasket)
                     Text(
                         text = "Todavía no tienes souvenirs en el carrito",
@@ -133,7 +128,7 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
     val souvenirSaved by souvenirsViewModel.souvenirCarrito.collectAsState()//parametro que contiene los metodos guardados
     LazyColumn{
         items(souvenirSaved){ souvenir ->
-            Cuadrado(navController = navController,
+            Caja(navController = navController,
                 souvenir = souvenir,
                 url = souvenir.url,
                 souvenirsViewModel = souvenirsViewModel)

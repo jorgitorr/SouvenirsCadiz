@@ -10,14 +10,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -50,7 +47,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -78,7 +74,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param url de la imagen que queremos mostrar
  */
 @Composable
-fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
+fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
     //val context = LocalContext.current
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -145,7 +141,7 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
  * @param souvenirsViewModel contiene el viewmodel de souvenir
  */
 @Composable
-fun Cuadrado(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
+fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
@@ -227,7 +223,7 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
                         souvenirP.guardadoFav = true
                     }
                 }
-                Cuadrado(navController,souvenirP, resourceId, souvenirsViewModel)
+                Caja(navController,souvenirP, resourceId, souvenirsViewModel)
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }
@@ -242,7 +238,7 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
                         souvenir.guardadoFav = true
                     }
                 }
-                Cuadrado(navController,souvenir, resourceId, souvenirsViewModel)
+                Caja(navController,souvenir, resourceId, souvenirsViewModel)
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }
