@@ -1,7 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,12 +30,10 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -84,16 +80,19 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = url),
-                contentDescription = souvenir.nombre,
-                contentScale = ContentScale.Crop, //para ajustar las imagenes al tamaño del cuadrado
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxSize()
-                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+            Box(contentAlignment = Alignment.TopEnd){
+                Image(
+                    painter = painterResource(id = url),
+                    contentDescription = souvenir.nombre,
+                    contentScale = ContentScale.Crop, //para ajustar las imagenes al tamaño del cuadrado
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
 
-            )
+                )
+                FavoriteButton(souvenir, souvenirsViewModel) //icono de fav
+            }
+
             Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxSize(),
@@ -115,12 +114,12 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp)
                 )
-                Icon(
+                /*Icon(
                     //cambia el icono si el souvenir está guardado
-                    imageVector = if (souvenir.guardado) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    imageVector = if (souvenir.guardadoFav) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite Icon",
                     //cambia el color del icono si el souvenir esta o no guardado
-                    tint = if (!souvenir.guardado) RaisanBlack else Redwood,
+                    tint = if (!souvenir.guardadoFav) RaisanBlack else Redwood,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable { //al hacer click en el corazón
@@ -131,11 +130,11 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
 
                             }, souvenir)
 
-                            souvenir.guardado = !souvenir.guardado
+                            souvenir.guardadoFav = !souvenir.guardadoFav
                         }
                     //.combinedClick no funciona bien no sé porque
 
-                )
+                )*/
                 Text(
                     text = "${souvenir.precio}€",
                     style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
@@ -171,6 +170,7 @@ fun Cuadrado(navController: NavController, souvenir: SouvenirState, url:Int, sou
                     .data(url)
                     .build(),
                 contentDescription = souvenir.nombre,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
@@ -183,7 +183,6 @@ fun Cuadrado(navController: NavController, souvenir: SouvenirState, url:Int, sou
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
                 Text(
                     text = souvenir.nombre,
                     style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
@@ -237,7 +236,7 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
                 //recorre los souvenirs guardados para comprobar si es de los que muestra
                 for(souvenirG in souvenirsGuardado){
                     if(souvenirP.referencia==souvenirG.referencia){
-                        souvenirP.guardado = true
+                        souvenirP.guardadoFav = true
                     }
                 }
                 Cuadrado(navController,souvenirP, resourceId, souvenirsViewModel)
@@ -252,7 +251,7 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
                 //recorre los souvenirs guardados para comprobar si es de los que muestra
                 for(souvenirG in souvenirsGuardado){
                     if(souvenir.referencia == souvenirG.referencia){
-                        souvenir.guardado = true
+                        souvenir.guardadoFav = true
                     }
                 }
                 Cuadrado(navController,souvenir, resourceId, souvenirsViewModel)
@@ -457,5 +456,43 @@ fun NombresSouvenirs(souvenirsViewModel: SouvenirsViewModel){
             )
         }
     }
+}
+
+
+/**
+ * Componente para el botón de favoritos
+ */
+@Composable
+fun FavoriteButton(
+    souvenir: Souvenir,
+    souvenirsViewModel: SouvenirsViewModel
+) {
+    val context = LocalContext.current
+
+    IconToggleButton(
+        checked = souvenir.guardadoFav,
+        onCheckedChange = {
+            souvenir.guardadoFav = !souvenir.guardadoFav
+        }
+    ) {
+        Icon(
+            tint = if (!souvenir.guardadoFav) RaisanBlack else Redwood,
+            imageVector = if (souvenir.guardadoFav) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            contentDescription = null,
+            modifier = Modifier
+                .clickable {
+                    //si el souvenir no esta guardado
+                    souvenirsViewModel.saveSouvenirInFav {
+                        Toast
+                            .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
+                            .show()
+
+                    }
+                    souvenir.guardadoFav = !souvenir.guardadoFav
+
+                }
+        )
+    }
+
 }
 

@@ -8,9 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -106,7 +111,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                             }
                         }
                     )
-                } else if (souvenirCarrito.isEmpty()){
+                } else if (souvenirCarrito.isEmpty()){ //en el
                     LottieAnimation(composition = compositionEmptyBasket)
                     Text(
                         text = "Todavía no tienes souvenirs en el carrito",
@@ -157,3 +162,4 @@ fun cantidadSouvenir():Int{
 
     return cantidadSouvenir.toInt()
 }
+

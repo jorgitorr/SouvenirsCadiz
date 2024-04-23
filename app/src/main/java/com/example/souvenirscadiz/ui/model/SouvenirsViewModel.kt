@@ -454,7 +454,7 @@ class SouvenirsViewModel @Inject constructor(
                     for(souvenir in querySnapshot){
                         val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
                         Log.d("Souvenir",souvenirObj.url.toString())
-                        souvenirObj.guardado = true
+                        souvenirObj.guardadoFav = true
                         souvenirsList.add(souvenirObj)
                     }
                 }

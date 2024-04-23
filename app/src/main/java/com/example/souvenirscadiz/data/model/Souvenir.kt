@@ -6,5 +6,6 @@ data class Souvenir(
     var url:Int = 0,
     var tipo:Tipo = Tipo.LLAVERO,
     var precio:Double = 2.99,
-    var guardado:Boolean = false
+    var guardadoFav:Boolean = false,
+    var guardadoCarrito:Boolean = false
 )

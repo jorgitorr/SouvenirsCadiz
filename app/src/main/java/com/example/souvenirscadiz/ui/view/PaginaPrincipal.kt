@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,16 +17,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.RemoveShoppingCart
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -100,12 +109,15 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
             val souvenir = souvenirsViewModel.getByReference(referencia)
             val url = "img${souvenir.url}"
             val resourceId = souvenirsViewModel.getResourceIdByName(url)
-            Image(painter = painterResource(id = resourceId),
-                contentDescription = "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { navController.navigateUp() }
-            )
+            //Box(contentAlignment = Alignment.TopEnd){
+                Image(painter = painterResource(id = resourceId),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { navController.navigateUp() }
+                )
+                //FavoriteButton(souvenir, souvenirsViewModel)
+            //}
 
             LazyRow(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly){
@@ -128,10 +140,10 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
 
                     Icon(
                         //si el souvenir esta guarado el icono se pone en rojo
-                        imageVector = if (souvenir.guardado) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        imageVector = if (souvenir.guardadoFav) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = "Favorite Icon",
                         //si el souvenir esta guardado el color del icono cambia
-                        tint = if (!souvenir.guardado) RaisanBlack else Redwood,
+                        tint = if (!souvenir.guardadoFav) RaisanBlack else Redwood,
                         modifier = Modifier
                             .clickable {
                                 //si el souvenir no esta guardado
@@ -141,7 +153,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                                         .show()
 
                                 }
-                                souvenir.guardado = !souvenir.guardado
+                                souvenir.guardadoFav = !souvenir.guardadoFav
 
                             }
                     )
@@ -158,7 +170,11 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                         //precio
                         Text(text = souvenir.precio.toString()+"€", fontFamily = KiwiMaru)
                         //icono de carrito
-                        Icon(imageVector = Icons.Default.AddShoppingCart, contentDescription = "Cesta de la compra",
+                        Icon(
+                            //si el elemento esta guardado en el carrito, el icono cambia a eliminar del guardado
+                            imageVector = if(!souvenir.guardadoCarrito) Icons.Default.AddShoppingCart else Icons.Default.RemoveShoppingCart,
+                            tint = if (!souvenir.guardadoCarrito) RaisanBlack else Redwood,
+                            contentDescription = "Cesta de la compra",
                             modifier = Modifier
                                 .clickable {
                                     souvenirsViewModel.saveSouvenirInCarrito {
@@ -170,7 +186,6 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                                             )
                                             .show()
                                     }
-
                                 }
                                 .size(50.dp))
                     }
@@ -179,3 +194,8 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
         }
     }
 }
+
+
+
+
+
