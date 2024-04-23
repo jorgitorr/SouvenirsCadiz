@@ -39,8 +39,15 @@ import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Cerulean
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.Silver
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.rememberCameraPositionState
 
 /**
  * página de detalles al seleccionar el lOGO
@@ -77,7 +84,7 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             Spacer(modifier = Modifier.height(2.dp))
             MyGoogleMaps()//google maps
             Spacer(modifier = Modifier.height(2.dp))
-            Text(text = "Jorge Arce Nogueroles" , fontFamily = KiwiMaru)
+            Text(text = "Jorge Arce Nogueroles" , fontFamily = KiwiMaru, textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.height(2.dp))
             Row{
                 Text(text = "Para pedidos e información: ", fontFamily = KiwiMaru)
@@ -99,13 +106,31 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
 
 /**
  * implementacion de google maps para la página de detalle del logo y de la empresa
+ * marker: marcador
+ * cameraPositionState: posicion de la camara
+ * UiSettings: para activar el zoom
+ * Poperties: Propiedades, para activar el satelite
  */
 @Composable
 fun MyGoogleMaps(){
-    val marker = com.google.android.gms.maps.model.LatLng(36.50180834956613, -6.268638314742377)
-    GoogleMap(modifier = Modifier
-        .fillMaxWidth()
-        .height(500.dp)){
+    val marker = LatLng(36.50180834956613, -6.268638314742377)
+
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(marker, 17f)
+    }
+    val uiSettings by remember {
+        mutableStateOf(MapUiSettings(zoomControlsEnabled = true))
+    }
+    val properties by remember {
+        mutableStateOf(MapProperties(mapType = MapType.SATELLITE))
+    }
+
+    GoogleMap(
+        modifier = Modifier.fillMaxWidth().height(500.dp),
+        cameraPositionState = cameraPositionState,
+        properties = properties,
+        uiSettings = uiSettings,
+    ){
         Marker(position = marker, title = "Ubicación", snippet = "Empresa")
     }
 }
@@ -118,9 +143,8 @@ fun MyGoogleMaps(){
 @Composable
 fun MakePhoneCall(customerPhone:String, context: Context) {
     try {
-        val formattedPhone = customerPhone
         val intent = Intent(Intent.ACTION_CALL)
-        val phoneUri = Uri.parse("tel:$formattedPhone")
+        val phoneUri = Uri.parse("tel:$customerPhone")
         intent.data = phoneUri
 
         val permission = Manifest.permission.CALL_PHONE

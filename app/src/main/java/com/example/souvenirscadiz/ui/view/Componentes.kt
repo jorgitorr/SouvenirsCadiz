@@ -79,7 +79,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
-    val context = LocalContext.current
+    //val context = LocalContext.current
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
@@ -488,8 +488,9 @@ fun FavoriteButton(
         Icon(
             tint = if (!souvenir.guardadoFav) RaisanBlack else Redwood,
             imageVector = if (souvenir.guardadoFav) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-            contentDescription = null,
+            contentDescription = "Favorite Icon",
             modifier = Modifier
+                .size(30.dp)
                 .clickable {
                     //si el souvenir no esta guardado
                     souvenirsViewModel.saveSouvenirInFav {
@@ -498,8 +499,8 @@ fun FavoriteButton(
                             .show()
 
                     }
-                    souvenir.guardadoFav = !souvenir.guardadoFav
 
+                    souvenir.guardadoFav = !souvenir.guardadoFav
                 }
         )
     }
@@ -539,6 +540,7 @@ fun ShopingCartButton(
                             )
                             .show()
                     }
+                    souvenir.guardadoCarrito = !souvenir.guardadoCarrito
                 }
 
         )

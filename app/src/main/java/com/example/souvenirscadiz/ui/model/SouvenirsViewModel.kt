@@ -2,6 +2,7 @@ package com.example.souvenirscadiz.ui.model
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -223,7 +224,7 @@ class SouvenirsViewModel @Inject constructor(
                     }
                 }
 
-                if(!esIgual){
+                if(!esIgual){ //si el souvenir no es igual a alguno de los que estan en la BDD
                     firestore.collection("Souvenirs Favoritos")
                         .add(newSouvenir)
                         .addOnSuccessListener {
@@ -233,7 +234,10 @@ class SouvenirsViewModel @Inject constructor(
                             Log.d("Save error","Error al guardar")
                         }
                 }else{
-                    Log.d("No se guardo","Está repetido")
+                    //si el souvenir ya está en la BDD lo borra
+                    deleteSouvenirFromFav {
+                        Log.d("Souvenir_borrado","Souvenir Borrado")
+                    }
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
@@ -284,8 +288,10 @@ class SouvenirsViewModel @Inject constructor(
                             Log.d("Save error","Error al guardar")
                         }
                 }else{
-                    //si no muestra un mensaje de que el souvenir ya está repetido
-                    Log.d("No se guardo","Está repetido")
+                    //si el souvenir ya está en la BDD lo borra
+                    deleteSouvenirFromFav ({
+                        Log.d("Souvenir_borrado","Souvenir Borrado")
+                    },souvenir)
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
@@ -295,6 +301,7 @@ class SouvenirsViewModel @Inject constructor(
 
     /**
      * Elimina el souvenir de la lista de favoritos
+     * @param onSuccess si se ha logrado muestra este mensaje
      */
     fun deleteSouvenirFromFav(onSuccess: () -> Unit) {
         val email = auth.currentUser?.email
@@ -322,7 +329,11 @@ class SouvenirsViewModel @Inject constructor(
     }
 
 
-
+    /**
+     * Borra el souvenir con su objeto
+     * @param onSuccess si es satisfactorio
+     * @param souvenir el souvenir
+     */
     fun deleteSouvenirFromFav(onSuccess: () -> Unit, souvenir: Souvenir) {
         val email = auth.currentUser?.email
 
@@ -389,15 +400,6 @@ class SouvenirsViewModel @Inject constructor(
             }
         }
     }
-
-
-
-
-
-
-
-
-
 
     /**
      * Guarda souvenir en carrito
