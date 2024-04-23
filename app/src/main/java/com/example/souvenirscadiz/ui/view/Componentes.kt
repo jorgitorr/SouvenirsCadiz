@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,6 +43,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -72,7 +74,6 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param souvenir
  * @param url de la imagen que queremos mostrar
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
     val context = LocalContext.current
@@ -86,9 +87,10 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
             Image(
                 painter = painterResource(id = url),
                 contentDescription = souvenir.nombre,
+                contentScale = ContentScale.Crop, //para ajustar las imagenes al tamaño del cuadrado
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
 
             )
