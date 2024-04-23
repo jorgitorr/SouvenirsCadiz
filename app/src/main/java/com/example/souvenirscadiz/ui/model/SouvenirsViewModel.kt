@@ -67,6 +67,9 @@ class SouvenirsViewModel @Inject constructor(
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
 
+    private var _numberSouvenir = MutableStateFlow(0)
+    val numberSouvenir:StateFlow<Int> = _numberSouvenir
+
     init {
         getSouvenirs()
     }
@@ -476,6 +479,7 @@ class SouvenirsViewModel @Inject constructor(
                     for(souvenir in querySnapshot){
                         val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
                         souvenirsList.add(souvenirObj)
+                        _numberSouvenir.value = souvenirsList.size
                     }
                 }
                 _souvenirCarrito.value = souvenirsList
@@ -514,18 +518,6 @@ class SouvenirsViewModel @Inject constructor(
             fetchSouvenirsCarrito()//primero hay que pedirlos para que los saque de la base de datos
         }
         return _souvenirCarrito.value.size
-    }
-
-
-    /**
-     * obtiene el numero de souvenirs guardado en favoritos
-     * @return numero de souvenirs en favoritos
-     */
-    fun getNumberSouvenirsInFav():Int{
-        viewModelScope.launch {
-            fetchSouvenirsFav()//primero hay que pedirlos para que los saque de la base de datos
-        }
-        return _souvenirFav.value.size
     }
 
 

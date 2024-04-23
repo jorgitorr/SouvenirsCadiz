@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,6 +39,9 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
 fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsPedido()
+    }
     Scaffold(
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
@@ -52,7 +56,7 @@ fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            souvenirsViewModel.fetchSouvenirsPedido()
+
             SouvenirsPedido(navController, souvenirsViewModel)
         }
     }

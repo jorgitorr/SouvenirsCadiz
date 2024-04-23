@@ -346,6 +346,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
 @Composable
 fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
+    val numberSouvenir by souvenirsViewModel.numberSouvenir.collectAsState()
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -363,7 +364,7 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
 
             BadgedBox(badge = {
                 Badge {
-                    Text(text = souvenirsViewModel.getNumberSouvenirsInCarrito().toString())
+                    Text(text = "$numberSouvenir")
                 }
                 
             }) {

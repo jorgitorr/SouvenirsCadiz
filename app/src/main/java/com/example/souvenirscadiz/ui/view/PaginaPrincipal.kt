@@ -41,8 +41,10 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+    //devuelve los souvenirs guardados en la BDD
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
+        souvenirsViewModel.fetchSouvenirsCarrito() //devuelve los souvenirs guardados en carritos
     }
 
     Scaffold(

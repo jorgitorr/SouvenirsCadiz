@@ -47,7 +47,7 @@ import com.example.souvenirscadiz.ui.theme.White
 fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     val context = LocalContext.current
     val compositionEmptyBasket by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty_basket))
-
+    val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
     Scaffold(
         topBar = {
             Header(navController, souvenirsViewModel)
@@ -66,7 +66,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
             SouvenirsCarrito(navController, souvenirsViewModel)
             //si no hay ningun souvenir en la lista de souvenirs del carrito
             //el boton no aparece en la pantalla
-            if(souvenirsViewModel.getNumberSouvenirsInCarrito()!=0){
+            if(souvenirCarrito.isEmpty()){
                 Button(onClick = {
                     //solo queda introducir la cantidad de cada uno
                     souvenirsViewModel.saveSouvenirInPedido {
@@ -106,7 +106,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                             }
                         }
                     )
-                } else {
+                } else if (souvenirCarrito.isEmpty()){
                     LottieAnimation(composition = compositionEmptyBasket)
                     Text(
                         text = "Todavía no tienes souvenirs en el carrito",
