@@ -187,7 +187,8 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                                             .show()
                                     }
                                 }
-                                .size(50.dp))
+                                .size(50.dp)
+                        )
                     }
                 }
             }

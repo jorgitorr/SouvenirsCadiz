@@ -10,20 +10,26 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.RemoveShoppingCart
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Badge
@@ -44,6 +50,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -91,6 +98,7 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
 
                 )
                 FavoriteButton(souvenir, souvenirsViewModel) //icono de fav
+                ShopingCartButton(souvenir, souvenirsViewModel)
             }
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -461,6 +469,8 @@ fun NombresSouvenirs(souvenirsViewModel: SouvenirsViewModel){
 
 /**
  * Componente para el botón de favoritos
+ * @param souvenir
+ * @param souvenirsViewModel viewmodel de los souvenirs para acceder al metodo que guarda souvenirs en la BDD
  */
 @Composable
 fun FavoriteButton(
@@ -495,4 +505,45 @@ fun FavoriteButton(
     }
 
 }
+
+
+
+@Composable
+fun ShopingCartButton(
+    souvenir: Souvenir,
+    souvenirsViewModel: SouvenirsViewModel
+) {
+    val context = LocalContext.current
+
+    IconToggleButton(
+        checked = souvenir.guardadoCarrito,
+        onCheckedChange = {
+            souvenir.guardadoCarrito = !souvenir.guardadoCarrito
+        },
+        modifier = Modifier.padding(top = 280.dp, end = 340.dp) //posicion del icono
+    ) {
+        Icon(
+            //si el elemento esta guardado en el carrito, el icono cambia a eliminar del guardado
+            imageVector = if(!souvenir.guardadoCarrito) Icons.Default.AddShoppingCart else Icons.Default.RemoveShoppingCart,
+            tint = if (!souvenir.guardadoCarrito) RaisanBlack else Redwood,
+            contentDescription = "Cesta de la compra",
+            modifier = Modifier
+                .size(30.dp)
+                .clickable {
+                    souvenirsViewModel.saveSouvenirInCarrito {
+                        Toast
+                            .makeText(
+                                context,
+                                "Souvenir guardado en carrito",
+                                Toast.LENGTH_SHORT
+                            )
+                            .show()
+                    }
+                }
+
+        )
+    }
+
+}
+
 
