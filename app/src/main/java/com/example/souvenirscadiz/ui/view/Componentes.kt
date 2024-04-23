@@ -122,27 +122,7 @@ fun Cuadrado(navController: NavController, souvenir: Souvenir, url:Int, souvenir
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp)
                 )
-                /*Icon(
-                    //cambia el icono si el souvenir está guardado
-                    imageVector = if (souvenir.guardadoFav) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = "Favorite Icon",
-                    //cambia el color del icono si el souvenir esta o no guardado
-                    tint = if (!souvenir.guardadoFav) RaisanBlack else Redwood,
-                    modifier = Modifier
-                        .padding(vertical = 2.dp)
-                        .clickable { //al hacer click en el corazón
-                            souvenirsViewModel.saveSouvenirInFav({
-                                Toast
-                                    .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
-                                    .show()
 
-                            }, souvenir)
-
-                            souvenir.guardadoFav = !souvenir.guardadoFav
-                        }
-                    //.combinedClick no funciona bien no sé porque
-
-                )*/
                 Text(
                     text = "${souvenir.precio}€",
                     style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
