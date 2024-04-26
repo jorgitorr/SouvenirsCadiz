@@ -216,6 +216,7 @@ class SouvenirsViewModel @Inject constructor(
                     "url" to actualSouvenir.url,
                     "tipo" to actualSouvenir.tipo,
                     "precio" to actualSouvenir.precio,
+                    "favorito" to actualSouvenir.guardadoFav,
                     "emailUser" to email.toString()
                 )
                 for(souvenirF in _souvenirFav.value){ //recorre la lista de souvenirs Fav
@@ -265,6 +266,7 @@ class SouvenirsViewModel @Inject constructor(
                     "url" to souvenir.url,
                     "tipo" to souvenir.tipo,
                     "precio" to souvenir.precio,
+                    "favorito" to souvenir.guardadoFav,
                     "emailUser" to email.toString()
                 )
 
@@ -342,6 +344,7 @@ class SouvenirsViewModel @Inject constructor(
                 firestore.collection("Souvenirs Favoritos")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .whereEqualTo("emailUser", email)
+                    .whereEqualTo("favorito",true) //si el souvenir está guardado lo elimina
                     .get()
                     .addOnSuccessListener { documents ->
                         for (document in documents) {
@@ -375,6 +378,7 @@ class SouvenirsViewModel @Inject constructor(
                     "url" to actualSouvenir.url,
                     "tipo" to actualSouvenir.tipo,
                     "precio" to actualSouvenir.precio,
+                    "carrito" to actualSouvenir.guardadoCarrito,
                     "emailUser" to email.toString(),
                 )
 
