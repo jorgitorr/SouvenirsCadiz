@@ -423,7 +423,8 @@ class SouvenirsViewModel @Inject constructor(
                         "referencia" to pedido.referencia,
                         "nombre" to pedido.nombre,
                         "url" to pedido.url,
-                        "tipo" to pedido.tipo
+                        "tipo" to pedido.tipo,
+                        "cantidad" to pedido.cantidad
                         //me queda guardar la cantidad que la recoge en un textField
                     )
 
