@@ -4,6 +4,8 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -163,7 +165,9 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
                 souvenir = souvenir,
                 url = souvenir.url,
                 souvenirsViewModel = souvenirsViewModel)
+                //Spacer(modifier = Modifier.height(5.dp))
                 souvenir.cantidad = cantidadSouvenir() //guarda la cantidad del souvenir
+            //Spacer(modifier = Modifier.height(50.dp))
         }
     }
 }

@@ -218,15 +218,6 @@ class LoginViewModel @Inject constructor(
         return esAdmin
     }
 
-
-    /**
-     * vacía las variables
-     */
-    fun resetearVariables(){
-        email = ""
-        userName = ""
-        password = ""
-    }
 }
 
 
