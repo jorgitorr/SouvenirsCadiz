@@ -8,5 +8,6 @@ data class SouvenirState (
     val tipo: String = "",
     val url:Int = 0,
     var guardadoFav:Boolean = false,
+    var cantidad: String = "",
     var guardadoCarrito:Boolean = false
 )

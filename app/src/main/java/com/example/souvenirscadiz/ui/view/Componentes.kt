@@ -65,6 +65,7 @@ import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
+import com.example.souvenirscadiz.ui.theme.White
 
 
 /**
@@ -345,8 +346,7 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
             Text(text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave)
 
-
-
+            //nube con el numero de objetos en el carrito
             BadgedBox(badge = {
                 Badge {
                     Text(text = "$numberSouvenir")
@@ -390,7 +390,9 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
         onSearch = { souvenirsViewModel.setActive(false) }, // DCS - Desactiva la búsqueda al presionar el botón de búsqueda.
         active = active,
         onActiveChange = { souvenirsViewModel.setActive(it) }, // DCS - Actualiza el estado de activación de la búsqueda.
-        placeholder = { Text(text = "Search") }, // DCS - Muestra un texto placeholder en la barra de búsqueda.
+        placeholder = {
+            Text(text = "Search",
+            color = Silver) }, // DCS - Muestra un texto placeholder en la barra de búsqueda.
         leadingIcon = {
             Icon(imageVector = Icons.Default.Search, contentDescription = "BUSCADOR")
         },
@@ -410,6 +412,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = KiwiMaru,
+                    color = Silver,
                     modifier = Modifier
                         .padding(bottom = 10.dp, start = 10.dp)
                         .clickable { navController.navigate("SouvenirDetail/${it.referencia}") }

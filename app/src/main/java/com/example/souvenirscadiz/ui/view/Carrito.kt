@@ -48,6 +48,8 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
     val context = LocalContext.current
     val compositionEmptyBasket by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty_basket))
     val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
+    val showDialog = remember { mutableStateOf(true) } //muestra el dialogo
+
     Scaffold(
         topBar = {
             Header(navController, souvenirsViewModel)
@@ -64,14 +66,15 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
         ) {
             souvenirsViewModel.fetchSouvenirsCarrito()
             SouvenirsCarrito(navController, souvenirsViewModel)
-            //si no hay ningun souvenir en la lista de souvenirs del carrito
-            //el boton no aparece en la pantalla
-            if(!souvenirCarrito.isEmpty()){
+
+            //si no hay souvenirs en el carrito
+            if(souvenirCarrito.isNotEmpty()){
                 Button(onClick = {
                     //solo queda introducir la cantidad de cada uno
                     souvenirsViewModel.saveSouvenirInPedido {
-                        Toast.makeText(context,"Souvenirs Pedidos", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(context,
+                            "Souvenirs Pedidos",
+                            Toast.LENGTH_SHORT).show()
                 } },
                     colors = ButtonDefaults.buttonColors(Redwood)) {
                     Text(text = "PEDIR",
@@ -108,10 +111,37 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                     )
                 } else{
                     LottieAnimation(composition = compositionEmptyBasket)
-                    Text(
-                        text = "Todavía no tienes souvenirs en el carrito",
-                        fontFamily = KiwiMaru
-                    )
+                    //muestra el AlertDialog
+                    if (showDialog.value) {
+                        AlertDialog(
+                            onDismissRequest = {
+                                showDialog.value = false
+                            },
+                            title = {
+                                Text(text = "Alerta",
+                                    fontFamily = KiwiMaru,
+                                    color = White)
+                            },
+                            text = {
+                                Text(
+                                    text = "NO TIENES ELEMENTOS GUARDADOS EN FAVORITOS",
+                                    fontFamily = KiwiMaru,
+                                    color = White
+                                )
+                            },
+                            confirmButton = {
+                                Button(
+                                    onClick = {
+                                        showDialog.value = false
+                                    }
+                                ) {
+                                    Text("Aceptar",
+                                        fontFamily = KiwiMaru,
+                                        color = White)
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -126,13 +156,14 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
 @Composable
 fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val souvenirSaved by souvenirsViewModel.souvenirCarrito.collectAsState()//parametro que contiene los metodos guardados
+
     LazyColumn{
         items(souvenirSaved){ souvenir ->
             Caja(navController = navController,
                 souvenir = souvenir,
                 url = souvenir.url,
                 souvenirsViewModel = souvenirsViewModel)
-            cantidadSouvenir()
+                souvenir.cantidad = cantidadSouvenir() //guarda la cantidad del souvenir
         }
     }
 }
@@ -143,9 +174,10 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
  * Comprueba si el valor introducido es un número antes de enviarlo
  */
 @Composable
-fun cantidadSouvenir():Int{
+fun cantidadSouvenir():String{
     val context = LocalContext.current
-    var cantidadSouvenir by remember { mutableStateOf("0") }
+    var cantidadSouvenir by remember { mutableStateOf("") }
+
     OutlinedTextField(value = cantidadSouvenir,
         onValueChange = {
             if (it.isDigitsOnly()) {
@@ -155,6 +187,6 @@ fun cantidadSouvenir():Int{
             }},
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number))
 
-    return cantidadSouvenir.toInt()
+    return cantidadSouvenir
 }
 

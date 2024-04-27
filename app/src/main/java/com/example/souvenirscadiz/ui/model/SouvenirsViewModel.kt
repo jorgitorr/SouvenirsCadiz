@@ -2,7 +2,6 @@ package com.example.souvenirscadiz.ui.model
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -382,13 +381,14 @@ class SouvenirsViewModel @Inject constructor(
                     "emailUser" to email.toString(),
                 )
 
-                //recorre la lista de souvenirs favoritos
+                //recorre la lista de souvenirs carrito
                 for(souvenirC in _souvenirCarrito.value){
-                    if(souvenirC.referencia == actualSouvenir.referencia){
+                    if(souvenirC.referencia == actualSouvenir.referencia)
                         esIgual = true
-                    }
+
                 }
 
+                //si el souvenir no existe en el carrito lo guarda
                 if(!esIgual){
                     firestore.collection("Carrito")
                         .add(newSouvenir)
