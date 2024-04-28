@@ -1,5 +1,6 @@
 package com.example.souvenirscadiz.ui.model
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.data.util.Constant.Companion.CONTRASENIA_ADMIN
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -19,6 +22,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -52,8 +56,13 @@ class LoginViewModel @Inject constructor(
      * cierra sesion
      */
     fun signOut(){
-        auth.signOut()
-        showAlert = false
+        try {
+            auth.signOut()
+            showAlert = false
+        } catch(e: Exception) {
+            e.printStackTrace()
+            if(e is CancellationException) throw e
+        }
     }
 
 
@@ -62,6 +71,22 @@ class LoginViewModel @Inject constructor(
      */
     fun getCurrentUser(): FirebaseUser?{
         return auth.currentUser
+    }
+
+
+    /**
+     *
+     */
+    fun fetchUser(onSuccess: () -> Unit){
+        viewModelScope.launch {
+            try {
+                email = auth.currentUser?.email.toString()
+                val user = auth.currentUser
+                userName = user?.displayName.toString()
+            }catch (e:Exception){
+                Log.d("Error de login","Error")
+            }
+        }
     }
 
 
@@ -179,8 +204,11 @@ class LoginViewModel @Inject constructor(
      * @param credential credenciales para el inicio de sesion
      * @param home lambda que dice lo que hace el método al iniciar sesion
      */
-    fun singInWithGoogleCredential(credential: AuthCredential, home:()->Unit)
+
+    fun singInWithGoogleCredential(credential: AuthCredential, home:()->Unit, context:Context)
+
     = viewModelScope.launch{
+
         try {
             auth.signInWithCredential(credential)
                 .addOnCompleteListener{ task ->
@@ -195,6 +223,9 @@ class LoginViewModel @Inject constructor(
                             email = userEmail!!
                             userName = nombreUser!!
                         }
+                    }else{
+                        val googleSignInClient = GoogleSignIn.getClient(context, GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        //tiene que dejarme iniciar sesion con una cuenta de google de nuevo
                     }
                 }.addOnFailureListener{
                     Log.d("Login Google Error","Error al loguear con google")

@@ -413,6 +413,7 @@ class SouvenirsViewModel @Inject constructor(
     fun saveSouvenirInPedido(onSuccess:() -> Unit){
         val email = auth.currentUser?.email
 
+
         viewModelScope.launch (Dispatchers.IO){
             try {
                 //se guardan todos los souvenirs de la lista de _souvenirCarrito

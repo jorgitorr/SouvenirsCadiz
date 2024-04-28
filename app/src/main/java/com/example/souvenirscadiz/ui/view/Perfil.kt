@@ -3,6 +3,7 @@ package com.example.souvenirscadiz.ui.view
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,19 +29,23 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -50,6 +57,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.util.Constant.Companion.TOKEN
 import com.example.souvenirscadiz.data.util.Storage
@@ -76,6 +85,14 @@ import com.google.firebase.auth.GoogleAuthProvider
  */
 @Composable
 fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    val context = LocalContext.current
+
+    LaunchedEffect(true){
+        loginViewModel.fetchUser {
+            Toast.makeText(context,"Has iniciado sesión ${loginViewModel.userName}",Toast.LENGTH_SHORT).show()
+        } //para coger el usuario actual
+    }
+
     Scaffold(
         topBar = { Header(navController, souvenirsViewModel) },
         bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) }
@@ -91,7 +108,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
         ) {
 
             //imagen de perfil
-            //SinglePhotoPicker() -> arreglar
+            ProfileImage()
 
             //user
             Text(text = loginViewModel.userName,
@@ -116,7 +133,9 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             //boton para cerra sesion
             Button(onClick = { loginViewModel.signOut()
                              navController.navigate("Principal")
-                             souvenirsViewModel.setSelectedItem("Principal")},
+                             souvenirsViewModel.setSelectedItem("Principal")
+                             //hacer que al cerrar sesion me cierre sesion en google
+                             },
                 colors = ButtonDefaults.buttonColors(Teal)) {
                 Text(text = "Cerrar Sesion",
                     style = TextStyle(Silver)
@@ -432,10 +451,12 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
         try{
             val account = task.getResult(ApiException::class.java)
             val credential = GoogleAuthProvider.getCredential(account.idToken,null)
-            loginViewModel.singInWithGoogleCredential(credential) {
+            loginViewModel.singInWithGoogleCredential(
+                credential, {
                 navController.navigate("Principal")
                 souvenirsViewModel.setSelectedItem("Principal")
-            }
+            },
+                context)
         }catch (e:Exception){
             Log.e("InicioSesionGoogle", "Error al iniciar sesión con Google: ${e.message}", e)
         }
@@ -469,45 +490,45 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
 
 
 /**
- * Escoge una imagen como foto de perfil
+ * Añade imagen de perfil
  */
 @Composable
-fun SinglePhotoPicker(){
-    var uri by remember{
-        mutableStateOf<Uri?>(null)
+fun ProfileImage() {
+    val imageUri = rememberSaveable { mutableStateOf("") }
+    val painter = rememberAsyncImagePainter(
+        if(imageUri.value.isEmpty())
+            R.drawable.imagen_perfil_pre
+        else
+            imageUri.value
+    )
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { imageUri.value = it.toString() }
     }
 
-    val singlePhotoPicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = {
-            uri = it
-        }
-    )
-
-    val context = LocalContext.current
-
-
-    Column{
-        Button(onClick = {
-            singlePhotoPicker.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Card(
+            shape = CircleShape,
+            modifier = Modifier
+                .padding(10.dp)
+                .size(100.dp)
+        ) {
+            Image(
+                painter = painter,
+                contentDescription = null,
+                modifier = Modifier
+                    .clip(CircleShape) // Aplicar un recorte circular al ImageView
+                    .fillMaxSize()
+                    .clickable { launcher.launch("image/*") },
+                contentScale = ContentScale.Crop
             )
-
-        }){
-            Text("Pick Single Image")
         }
-
-        AsyncImage(model = uri, contentDescription = null, modifier = Modifier.size(248.dp))
-
-        Button(onClick = {
-            uri?.let{
-                Storage.uploadToStorage(uri=it, context=context, type="image")
-            }
-
-        }){
-            Text("Upload")
-        }
-
     }
 }
 
