@@ -210,7 +210,6 @@ class SouvenirsViewModel @Inject constructor(
      * Guarda el superHeroe en la base de datos
      */
     fun saveSouvenirInFav(onSuccess:() -> Unit){
-        //val email = auth.currentUser?.email
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             try {
@@ -308,7 +307,6 @@ class SouvenirsViewModel @Inject constructor(
      */
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit){
-        //val email = auth.currentUser?.email
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             try {
@@ -347,14 +345,12 @@ class SouvenirsViewModel @Inject constructor(
     }
 
     /**
-     * Guarda souvenir en carrito
+     * Guarda souvenir en carrito y le pasa al administrador
+     * todos los que tenga el usuario guardado
      * @param onSuccess lambda que ocurre cuando se logra el método
      */
 
     fun saveSouvenirInPedido(onSuccess:() -> Unit){
-        //val email = auth.currentUser?.email
-
-
         viewModelScope.launch (Dispatchers.IO){
             try {
                 //se guardan todos los souvenirs de la lista de _souvenirCarrito
@@ -442,6 +438,11 @@ class SouvenirsViewModel @Inject constructor(
     }
 
 
+    /**
+     * elimina el souvenir del carrito
+     * @param onSuccess
+     * @param souvenir
+     */
     fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -498,7 +499,6 @@ class SouvenirsViewModel @Inject constructor(
      * devuelve todos los souvenirs guardados en la lista de favoritos
      */
     fun fetchSouvenirsFav(){
-        //val email = auth.currentUser?.email
         firestore.collection("Souvenirs Favoritos")
             .whereEqualTo("emailUser",email.toString())
             .addSnapshotListener{querySnapshot, error->
@@ -524,8 +524,8 @@ class SouvenirsViewModel @Inject constructor(
      * Devuelve los souvenirs guardados en la lista de carrito
      */
     fun fetchSouvenirsCarrito(){
-        //val email = auth.currentUser?.email
         val souvenirsList = mutableListOf<SouvenirState>()
+
         firestore.collection("Carrito")
             .whereEqualTo("emailUser",email.toString())
             .addSnapshotListener{querySnapshot, error->
@@ -535,8 +535,9 @@ class SouvenirsViewModel @Inject constructor(
                 if(querySnapshot != null){
                     for(souvenir in querySnapshot){
                         val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
-                        souvenirsList.add(souvenirObj)
+                        souvenirObj.guardadoCarrito = true
                         _numberSouvenir.value = souvenirsList.size
+                        souvenirsList.add(souvenirObj)
                     }
                 }
                 _souvenirCarrito.value = souvenirsList

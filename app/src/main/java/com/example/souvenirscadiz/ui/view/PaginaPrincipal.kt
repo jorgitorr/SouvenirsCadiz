@@ -6,14 +6,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -125,6 +130,54 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                         fontFamily = KiwiMaru)
                 }
 
+            }
+        }
+    }
+}
+
+
+/**
+ * lista de souvenirs para la PÁGINA PRINCIPAL
+ * Si la lista de souvenirs está vacía ya que no se a pulsado ninguno de los tipos de souvenirs
+ * me coge la lista completa de souvenirs y me la muesra
+ * si la lista (que contiene los souvenirs de un tipo) está vacía me la hace con todos los souvenirs
+ * @param navController navegacion
+ * @param souvenirsViewModel viewmodel de souvenirs
+ */
+@Composable
+fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsViewModel){
+    val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState()//souvenirs de un tipo
+    val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState()//todos los souvenirs
+    val souvenirsGuardado by souvenirsViewModel.souvenirFav.collectAsState()
+
+    if(souvenirs.isEmpty()){
+        LazyColumn{
+            items(souvenirsPre){ souvenirP->
+                val url = "img${souvenirP.url}"
+                val resourceId = souvenirsViewModel.getResourceIdByName(url)
+                //recorre los souvenirs guardados para comprobar si es de los que muestra
+                for(souvenirG in souvenirsGuardado){
+                    if(souvenirP.referencia==souvenirG.referencia){
+                        souvenirP.guardadoFav = true
+                    }
+                }
+                Caja(navController,souvenirP, resourceId, souvenirsViewModel)
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+        }
+    }else{
+        LazyColumn{
+            items(souvenirs){ souvenir->
+                val url = "img${souvenir.url}"
+                val resourceId = souvenirsViewModel.getResourceIdByName(url)
+                //recorre los souvenirs guardados para comprobar si es de los que muestra
+                for(souvenirG in souvenirsGuardado){
+                    if(souvenir.referencia == souvenirG.referencia){
+                        souvenir.guardadoFav = true
+                    }
+                }
+                Caja(navController,souvenir, resourceId, souvenirsViewModel)
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
