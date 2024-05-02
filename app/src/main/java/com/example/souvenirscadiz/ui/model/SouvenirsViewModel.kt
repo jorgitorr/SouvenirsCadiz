@@ -206,46 +206,6 @@ class SouvenirsViewModel @Inject constructor(
 
 
     /**
-     * @param onSuccess en el caso de lograr guardar en superHeroe
-     * Guarda el superHeroe en la base de datos
-     */
-    fun saveSouvenirInFav(onSuccess:() -> Unit){
-        var esIgual = false //variable que comprueba si el souvenir está ya
-        viewModelScope.launch (Dispatchers.IO){
-            try {
-                val newSouvenir = hashMapOf(
-                    "referencia" to actualSouvenir.referencia,
-                    "nombre" to actualSouvenir.nombre,
-                    "url" to actualSouvenir.url,
-                    "tipo" to actualSouvenir.tipo,
-                    "precio" to actualSouvenir.precio,
-                    "favorito" to actualSouvenir.guardadoFav,
-                    "emailUser" to email.toString()
-                )
-                for(souvenirF in _souvenirFav.value){ //recorre la lista de souvenirs Fav
-                    if(souvenirF.referencia==actualSouvenir.referencia){
-                        esIgual = true
-                    }
-                }
-
-                if(!esIgual){ //si el souvenir no es igual a alguno de los que estan en la BDD
-                    firestore.collection("Souvenirs Favoritos")
-                        .add(newSouvenir)
-                        .addOnSuccessListener {
-                            onSuccess()
-                            Log.d("Error save","Se guardó el souvenir")
-                        }.addOnFailureListener{
-                            Log.d("Save error","Error al guardar")
-                        }
-                }
-            }catch (e:Exception){
-                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
-            }
-        }
-    }
-
-
-    /**
      * Guardar souvenir desde la pantalla principal, para ello le paso el souvenir
      * en vez de recuperarlo en el viewModel
      * @param onSuccess lambda para que hace el método el caso de lograrlo
@@ -253,7 +213,6 @@ class SouvenirsViewModel @Inject constructor(
      */
     fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
         fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
-        //val email = auth.currentUser?.email
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
 
@@ -306,28 +265,32 @@ class SouvenirsViewModel @Inject constructor(
      * @param onSuccess lambda para que hace el método al ser logrado
      */
 
-    fun saveSouvenirInCarrito(onSuccess:() -> Unit){
+    fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
+        fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
+
             try {
                 val newSouvenir = hashMapOf(
-                    "referencia" to actualSouvenir.referencia,
-                    "nombre" to actualSouvenir.nombre,
-                    "url" to actualSouvenir.url,
-                    "tipo" to actualSouvenir.tipo,
-                    "precio" to actualSouvenir.precio,
-                    "carrito" to actualSouvenir.guardadoCarrito,
-                    "emailUser" to email.toString(),
+                    "referencia" to souvenir.referencia,
+                    "nombre" to souvenir.nombre,
+                    "url" to souvenir.url,
+                    "tipo" to souvenir.tipo,
+                    "precio" to souvenir.precio,
+                    "carrito" to souvenir.guardadoCarrito,
+                    "emailUser" to email.toString()
                 )
 
-                //recorre la lista de souvenirs carrito
+                //recorre la lista de souvenirs favoritos
                 for(souvenirC in _souvenirCarrito.value){
-                    if(souvenirC.referencia == actualSouvenir.referencia)
+                    //si el souvenir en fav es igual al souvenir que quiere guardar
+                    if(souvenirC.referencia==souvenir.referencia){
+                        //la variable es igual es true
                         esIgual = true
-
+                    }
                 }
 
-                //si el souvenir no existe en el carrito lo guarda
+                //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
                 if(!esIgual){
                     firestore.collection("Carrito")
                         .add(newSouvenir)
@@ -337,12 +300,75 @@ class SouvenirsViewModel @Inject constructor(
                         }.addOnFailureListener{
                             Log.d("Save error","Error al guardar")
                         }
+                }else{
+                    //si el souvenir ya está en la BDD lo borra
+                    deleteSouvenirInCarrito ({
+                        Log.d("Souvenir_borrado","Souvenir Borrado")
+                    },souvenir)
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
             }
         }
     }
+
+
+
+    /**
+     * Guarda souvenir en carritoç
+     * @param onSuccess lambda para que hace el método al ser logrado
+     */
+
+    fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
+        fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
+        var esIgual = false //variable que comprueba si el souvenir está ya
+        viewModelScope.launch (Dispatchers.IO){
+
+            try {
+                val newSouvenir = hashMapOf(
+                    "referencia" to souvenir.referencia,
+                    "nombre" to souvenir.nombre,
+                    "url" to souvenir.url,
+                    "tipo" to souvenir.tipo,
+                    "precio" to souvenir.precio,
+                    "carrito" to souvenir.guardadoCarrito,
+                    "emailUser" to email.toString()
+                )
+
+                //recorre la lista de souvenirs favoritos
+                for(souvenirC in _souvenirCarrito.value){
+                    //si el souvenir en fav es igual al souvenir que quiere guardar
+                    if(souvenirC.referencia==souvenir.referencia){
+                        //la variable es igual es true
+                        esIgual = true
+                    }
+                }
+
+                //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
+                if(!esIgual){
+                    firestore.collection("Carrito")
+                        .add(newSouvenir)
+                        .addOnSuccessListener {
+                            onSuccess()
+                            Log.d("Error save","Se guardó el souvenir")
+                        }.addOnFailureListener{
+                            Log.d("Save error","Error al guardar")
+                        }
+                }else{
+                    //si el souvenir ya está en la BDD lo borra
+                    deleteSouvenirInCarrito ({
+                        Log.d("Souvenir_borrado","Souvenir Borrado")
+                    },souvenir)
+                }
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
+            }
+        }
+    }
+
+
+
+
 
     /**
      * Guarda souvenir en carrito y le pasa al administrador
@@ -380,35 +406,6 @@ class SouvenirsViewModel @Inject constructor(
             }
         }
     }
-
-
-    /**
-     * Elimina el souvenir de la lista de favoritos
-     * @param onSuccess si se ha logrado muestra este mensaje
-     */
-    fun deleteSouvenirInFav(onSuccess: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                firestore.collection("Souvenirs Favoritos")
-                    .whereEqualTo("referencia", actualSouvenir.referencia)
-                    .whereEqualTo("emailUser", email)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        for (document in documents) {
-                            document.reference.delete()
-                            onSuccess()
-                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
-                    }
-            } catch (e: Exception) {
-                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
-            }
-        }
-    }
-
 
     /**
      * Borra el souvenir con su objeto

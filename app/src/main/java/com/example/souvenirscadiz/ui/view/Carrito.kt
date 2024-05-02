@@ -140,7 +140,7 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
                     },
                     text = {
                         Text(
-                            text = "NO TIENES ELEMENTOS GUARDADOS EN FAVORITOS",
+                            text = "NO TIENES ELEMENTOS GUARDADOS EN EL CARRITO",
                             fontFamily = KiwiMaru,
                             color = if(isSystemInDarkTheme()) Silver else RaisanBlack)
                     },

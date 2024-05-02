@@ -113,6 +113,7 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
             items(souvenirSaved){ souvenir ->
                 val url = "img${souvenir.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
+
                 Caja(navController = navController,
                     souvenir = souvenir,
                     url = resourceId)

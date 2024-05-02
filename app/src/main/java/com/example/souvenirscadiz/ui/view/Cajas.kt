@@ -176,7 +176,13 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
 
 }
 
-
+/**
+ * Caja del carrito
+ * @param navController navegacion
+ * @param souvenir souvenirState
+ * @param url url del souvenir
+ * @param souvenirsViewModel viewmodel del souvenir
+ */
 @Composable
 fun CajaCarrito(
     navController: NavController,
@@ -261,7 +267,6 @@ fun CajaCarrito(
                 souvenir.cantidad = cantidadSouvenir
 
             }
-
 
         }
     }
