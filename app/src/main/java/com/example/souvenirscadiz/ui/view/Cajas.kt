@@ -52,7 +52,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param url contiene el numero de la url
  */
 @Composable
-fun Caja(navController: NavController, souvenir: SouvenirState, url:Int){
+fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
@@ -72,6 +72,7 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int){
                     .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
 
             )
+            FavoriteButton(souvenir, souvenirsViewModel)
             Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxSize(),

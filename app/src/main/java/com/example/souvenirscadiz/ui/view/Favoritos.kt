@@ -116,7 +116,8 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
 
                 Caja(navController = navController,
                     souvenir = souvenir,
-                    url = resourceId)
+                    url = resourceId,
+                    souvenirsViewModel)
             }
         }
     }

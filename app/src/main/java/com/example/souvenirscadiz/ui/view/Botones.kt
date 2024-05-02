@@ -71,6 +71,50 @@ fun FavoriteButton(
 }
 
 
+@Composable
+fun FavoriteButton(
+    souvenir: SouvenirState,
+    souvenirsViewModel: SouvenirsViewModel
+) {
+    val context = LocalContext.current
+
+    IconToggleButton(
+        checked = souvenir.guardadoFav,
+        onCheckedChange = {
+            souvenir.guardadoFav = !souvenir.guardadoFav
+        }
+    ) {
+        Icon(
+            tint = if (!souvenir.guardadoFav) RaisanBlack else Redwood,
+            imageVector = if (souvenir.guardadoFav) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            contentDescription = "Favorite Icon",
+            modifier = Modifier
+                .size(30.dp)
+                .clickable {
+                    if(!souvenir.guardadoFav){
+                        //si el souvenir no esta guardado
+                        souvenirsViewModel.saveSouvenirInFav({
+                            Toast
+                                .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
+                                .show()
+                        },souvenir)
+                    }else{
+                        souvenirsViewModel.deleteSouvenirInFav ({
+                            Toast
+                                .makeText(context, "Souvenir eliminado", Toast.LENGTH_SHORT)
+                                .show()
+                        },souvenir)
+                    }
+
+                    souvenir.guardadoFav = !souvenir.guardadoFav
+                }
+        )
+    }
+
+}
+
+
+
 
 
 /**

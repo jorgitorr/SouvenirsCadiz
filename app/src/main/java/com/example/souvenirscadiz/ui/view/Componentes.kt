@@ -4,6 +4,7 @@ package com.example.souvenirscadiz.ui.view
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -193,7 +194,6 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
     val query by souvenirsViewModel.query.collectAsState()
     val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
 
-
     SearchBar(
         modifier = Modifier
             .fillMaxWidth()
@@ -205,7 +205,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
         onActiveChange = { souvenirsViewModel.setActive(it) }, // DCS - Actualiza el estado de activación de la búsqueda.
         placeholder = {
             Text(text = "Search",
-            color = Silver)}, // DCS - Muestra un texto placeholder en la barra de búsqueda.
+            color = if(isSystemInDarkTheme()) Silver else RaisanBlack)}, // DCS - Muestra un texto placeholder en la barra de búsqueda.
         leadingIcon = {
             Icon(imageVector = Icons.Default.Search, contentDescription = "BUSCADOR")
         },
@@ -225,7 +225,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = KiwiMaru,
-                    color = Silver,
+                    color = if(isSystemInDarkTheme())Silver else RaisanBlack,
                     modifier = Modifier
                         .padding(bottom = 10.dp, start = 10.dp)
                         .clickable { navController.navigate("SouvenirDetail/${it.referencia}") }

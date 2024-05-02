@@ -259,6 +259,60 @@ class SouvenirsViewModel @Inject constructor(
     }
 
 
+    /**
+     * Guardar souvenir desde la pantalla principal, para ello le paso el souvenir
+     * en vez de recuperarlo en el viewModel
+     * @param onSuccess lambda para que hace el método el caso de lograrlo
+     * @param souvenir souvenir
+     */
+    fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
+        fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
+        var esIgual = false //variable que comprueba si el souvenir está ya
+        viewModelScope.launch (Dispatchers.IO){
+
+            try {
+                val newSouvenir = hashMapOf(
+                    "referencia" to souvenir.referencia,
+                    "nombre" to souvenir.nombre,
+                    "url" to souvenir.url,
+                    "tipo" to souvenir.tipo,
+                    "precio" to souvenir.precio,
+                    "favorito" to souvenir.guardadoFav,
+                    "emailUser" to email.toString()
+                )
+
+                //recorre la lista de souvenirs favoritos
+                for(souvenirF in _souvenirFav.value){
+                    //si el souvenir en fav es igual al souvenir que quiere guardar
+                    if(souvenirF.referencia==souvenir.referencia){
+                        //la variable es igual es true
+                        esIgual = true
+                    }
+                }
+
+                //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
+                if(!esIgual){
+                    firestore.collection("Souvenirs Favoritos")
+                        .add(newSouvenir)
+                        .addOnSuccessListener {
+                            onSuccess()
+                            Log.d("Error save","Se guardó el souvenir")
+                        }.addOnFailureListener{
+                            Log.d("Save error","Error al guardar")
+                        }
+                }else{
+                    //si el souvenir ya está en la BDD lo borra
+                    deleteSouvenirInFav ({
+                        Log.d("Souvenir_borrado","Souvenir Borrado")
+                    },souvenir)
+                }
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
+            }
+        }
+    }
+
+
 
     /**
      * Guarda souvenir en carritoç
@@ -434,6 +488,33 @@ class SouvenirsViewModel @Inject constructor(
         }
     }
 
+
+    /**
+     * Borra el souvenir con su objeto
+     * @param onSuccess si es satisfactorio
+     * @param souvenir el souvenir
+     */
+    fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: SouvenirState) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("Souvenirs Favoritos")
+                    .whereEqualTo("referencia", souvenir.referencia)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            onSuccess()
+                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
+            }
+        }
+    }
 
     /**
      * elimina el souvenir del carrito
