@@ -1,6 +1,5 @@
 package com.example.souvenirscadiz.ui.view
 
-
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -121,10 +120,10 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
 
             //boton para cerra sesion
             Button(onClick = { loginViewModel.signOut()
-                             navController.navigate("Principal")
-                             souvenirsViewModel.setSelectedItem("Principal")
-                             //hacer que al cerrar sesion me cierre sesion en google
-                             },
+                navController.navigate("Principal")
+                souvenirsViewModel.setSelectedItem("Principal")
+                //hacer que al cerrar sesion me cierre sesion en google
+            },
                 colors = ButtonDefaults.buttonColors(Teal)) {
                 Text(text = "Cerrar Sesion",
                     style = TextStyle(Silver)
@@ -442,10 +441,10 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
             val credential = GoogleAuthProvider.getCredential(account.idToken,null)
             loginViewModel.singInWithGoogleCredential(
                 credential, {
-                navController.navigate("Principal")
-                souvenirsViewModel.setSelectedItem("Principal")
+                    navController.navigate("Principal")
+                    souvenirsViewModel.setSelectedItem("Principal")
                     Toast.makeText(context,"Has iniciado sesión",Toast.LENGTH_LONG).show()
-            },
+                },
                 context)
         }catch (e:Exception){
             Log.e("InicioSesionGoogle", "Error al iniciar sesión con Google: ${e.message}", e)
