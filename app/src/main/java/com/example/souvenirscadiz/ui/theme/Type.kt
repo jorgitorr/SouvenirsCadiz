@@ -26,8 +26,6 @@ val Typography = Typography(
  */
 val KiwiMaru = FontFamily(
     Font(R.font.kiwimarumedium, FontWeight.Medium),
-    Font(R.font.kiwimarulight, FontWeight.Light),
-    Font(R.font.kiwimaruregular, FontWeight.Normal)
 )
 
 val KneWave = FontFamily(
@@ -36,5 +34,4 @@ val KneWave = FontFamily(
 
 val KleeOne = FontFamily(
     Font(R.font.kleeoneregular, FontWeight.Normal),
-    Font(R.font.kleeonesemibold, FontWeight.Bold)
 )

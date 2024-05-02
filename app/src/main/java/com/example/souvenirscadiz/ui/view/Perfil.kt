@@ -58,7 +58,13 @@ import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.util.Constant.Companion.TOKEN
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
-import com.example.souvenirscadiz.ui.theme.*
+import com.example.souvenirscadiz.ui.theme.KiwiMaru
+import com.example.souvenirscadiz.ui.theme.KneWave
+import com.example.souvenirscadiz.ui.theme.RaisanBlack
+import com.example.souvenirscadiz.ui.theme.Redwood
+import com.example.souvenirscadiz.ui.theme.Silver
+import com.example.souvenirscadiz.ui.theme.Teal
+import com.example.souvenirscadiz.ui.theme.White
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -142,7 +148,6 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
  */
 @Composable
 fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -366,8 +371,8 @@ fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavControl
 @Composable
 fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     Scaffold(
-        topBar = { Header(navController, souvenirsViewModel) },
-        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
+        topBar = { /*Header(navController, souvenirsViewModel)*/ },
+        bottomBar = { /*Footer(navController, souvenirsViewModel, loginViewModel)*/ },
     ) { innerPadding ->
         Column(
             modifier = Modifier

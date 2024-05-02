@@ -353,8 +353,10 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
         Row (modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
+            //logo personalizado
             Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO",
                 modifier = Modifier.clickable { navController.navigate("Detalles") })
+            //texto de souvenirs cadiz
             Text(text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave)
 

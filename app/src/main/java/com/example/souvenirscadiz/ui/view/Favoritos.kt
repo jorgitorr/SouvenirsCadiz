@@ -31,7 +31,9 @@ import com.example.souvenirscadiz.ui.theme.White
 
 @Composable
 fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
-    souvenirsViewModel.fetchSouvenirsFav()
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsFav()
+    }
 
     Scaffold(
         topBar = {

@@ -179,9 +179,11 @@ fun SouvenirsCarrito(navController: NavController, souvenirsViewModel: Souvenirs
             souvenir ->
             Spacer(modifier = Modifier.height(20.dp))
 
+            val url = "img${souvenir.url}"
+            val resourceId = souvenirsViewModel.getResourceIdByName(url)
             CajaCarrito(navController = navController,
                 souvenir = souvenir,
-                url = souvenir.url,
+                url = resourceId,
                 souvenirsViewModel = souvenirsViewModel)
         }
         item {
