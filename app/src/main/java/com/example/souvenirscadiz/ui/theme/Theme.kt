@@ -19,20 +19,17 @@ import androidx.core.view.WindowCompat
  * colores provisionales para el tema oscuro
  */
 private val DarkColorScheme = darkColorScheme(
+    background = RaisanBlack,
     primary = RaisanBlack,
-    secondary = RaisanBlack,
-    tertiary = Silver,
-    primaryContainer = RaisanBlack,
     onPrimary = RaisanBlack,
-    onSecondary = RaisanBlack,
-    onTertiary = RaisanBlack,
-    onBackground = RaisanBlack,
 )
 
 private val LightColorScheme = lightColorScheme(
+    background = Silver,
     primary = Purple40,
     secondary = PurpleGrey40,
-    tertiary = Pink40
+    tertiary = Pink40,
+    onSecondary = Silver
 )
 
 @Composable

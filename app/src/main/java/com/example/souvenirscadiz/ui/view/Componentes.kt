@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,9 +19,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
@@ -35,11 +36,16 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,9 +53,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -66,7 +74,6 @@ import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
-import com.example.souvenirscadiz.ui.theme.White
 
 
 /**
@@ -77,7 +84,6 @@ import com.example.souvenirscadiz.ui.theme.White
  */
 @Composable
 fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
-    //val context = LocalContext.current
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
@@ -111,12 +117,14 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
                     style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    color = RaisanBlack,
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp)
                 )
                 Text(
                     text = souvenir.referencia,
                     style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
                     maxLines = 1,
+                    color = RaisanBlack,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 4.dp, end = 8.dp)
                 )
@@ -125,6 +133,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
                     text = "${souvenir.precio}€",
                     style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
                     maxLines = 1,
+                    color = RaisanBlack,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 3.dp, end = 4.dp)
                 )
@@ -140,10 +149,9 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
  * @param navController navegacion
  * @param souvenir contiene souvenirState que es el objeto de la base de datos
  * @param url contiene el numero de la url
- * @param souvenirsViewModel contiene el viewmodel de souvenir
  */
 @Composable
-fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
+fun Caja(navController: NavController, souvenir: SouvenirState, url:Int){
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
@@ -174,21 +182,24 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
                     style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 4.dp, end = 8.dp)
+                    modifier = Modifier.padding(start = 4.dp, end = 8.dp),
+                    color = RaisanBlack
                 )
                 Text(
                     text = souvenir.referencia,
                     style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 4.dp, end = 8.dp)
+                    modifier = Modifier.padding(start = 4.dp, end = 8.dp),
+                    color = RaisanBlack
                 )
                 Text(
                     text = "${souvenir.precio}€",
                     style = androidx.compose.ui.text.TextStyle(fontSize = 15.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 3.dp, end = 4.dp)
+                    modifier = Modifier.padding(start = 3.dp, end = 4.dp),
+                    color = RaisanBlack
                 )
             }
         }
@@ -349,10 +360,11 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
 
             //nube con el numero de objetos en el carrito
             BadgedBox(badge = {
-                Badge {
-                    Text(text = "$numberSouvenir")
+                if(numberSouvenir>0){
+                    Badge {
+                        Text(text = "$numberSouvenir")
+                    }
                 }
-                
             }) {
                 Icon(
                     imageVector = Icons.Default.ShoppingCart,
@@ -382,6 +394,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
     val query by souvenirsViewModel.query.collectAsState()
     val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
 
+
     SearchBar(
         modifier = Modifier
             .fillMaxWidth()
@@ -393,7 +406,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
         onActiveChange = { souvenirsViewModel.setActive(it) }, // DCS - Actualiza el estado de activación de la búsqueda.
         placeholder = {
             Text(text = "Search",
-            color = Silver) }, // DCS - Muestra un texto placeholder en la barra de búsqueda.
+            color = Silver)}, // DCS - Muestra un texto placeholder en la barra de búsqueda.
         leadingIcon = {
             Icon(imageVector = Icons.Default.Search, contentDescription = "BUSCADOR")
         },
@@ -527,5 +540,133 @@ fun ShopingCartButton(
     }
 
 }
+
+
+@Composable
+fun CajaCarrito(
+    navController: NavController,
+    souvenir: SouvenirState,
+    url: Int,
+    souvenirsViewModel: SouvenirsViewModel
+) {
+    val context = LocalContext.current
+    var cantidadSouvenir by remember { mutableStateOf("") }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Silver, shape = RoundedCornerShape(5.dp))
+            .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
+            .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+            .padding(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            // Imagen
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(url)
+                    .build(),
+                contentDescription = souvenir.nombre,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
+                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            // Detalles del souvenir
+            Column(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                //boton de eliminar souvenir del carrito
+                EliminarButton(souvenirsViewModel, souvenir)
+
+                Text(
+                    text = souvenir.nombre,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RaisanBlack,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = "Ref: ${souvenir.referencia}",
+                    fontSize = 14.sp,
+                    color = RaisanBlack,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = "${souvenir.precio}€",
+                    fontSize = 14.sp,
+                    color = RaisanBlack,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                OutlinedTextField(value = cantidadSouvenir,
+                    onValueChange = {
+                        if (it.isDigitsOnly()) {
+                            cantidadSouvenir = it
+                        }else{
+                            Toast.makeText(context,"Has introducido un campo erroneo",Toast.LENGTH_SHORT).show()
+                        }},
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+
+                souvenir.cantidad = cantidadSouvenir
+
+            }
+
+
+        }
+    }
+}
+
+
+@Composable
+fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: SouvenirState) {
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
+
+    var eliminar = false
+    val context = LocalContext.current
+
+    IconToggleButton(
+        checked = eliminar,
+        onCheckedChange = {
+            eliminar = !eliminar
+        }
+    ) {
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = "Eliminar",
+            tint = Redwood,
+            modifier = Modifier.clickable {
+                souvenirsViewModel.deleteSouvenirFromCarrito(
+                    {
+                        Toast.makeText(context,
+                            "Has eliminado un souvenir del carrito",
+                            Toast.LENGTH_SHORT).show()
+                    }, souvenir
+                )
+
+                souvenir.guardadoCarrito = false
+            }
+        )
+    }
+
+}
+
 
 

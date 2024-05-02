@@ -11,6 +11,7 @@ import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.data.util.Constant.Companion.CONTRASENIA_ADMIN
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
@@ -208,7 +209,6 @@ class LoginViewModel @Inject constructor(
     fun singInWithGoogleCredential(credential: AuthCredential, home:()->Unit, context:Context)
 
     = viewModelScope.launch{
-
         try {
             auth.signInWithCredential(credential)
                 .addOnCompleteListener{ task ->
@@ -218,14 +218,13 @@ class LoginViewModel @Inject constructor(
                             //me guarda el correo y el nombre del usuario para mostrarlo
                             val userEmail = user.email
                             val nombreUser = user.displayName
-                            Log.d("Login Google", "Usuario: $nombreUser logueado con éxito")
                             home()
                             email = userEmail!!
                             userName = nombreUser!!
                         }
                     }else{
                         val googleSignInClient = GoogleSignIn.getClient(context, GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        //tiene que dejarme iniciar sesion con una cuenta de google de nuevo
+                        googleSignInClient.signOut()
                     }
                 }.addOnFailureListener{
                     Log.d("Login Google Error","Error al loguear con google")

@@ -5,7 +5,6 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -56,21 +54,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.util.Constant.Companion.TOKEN
-import com.example.souvenirscadiz.data.util.Storage
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
-import com.example.souvenirscadiz.ui.theme.KiwiMaru
-import com.example.souvenirscadiz.ui.theme.KneWave
-import com.example.souvenirscadiz.ui.theme.RaisanBlack
-import com.example.souvenirscadiz.ui.theme.Redwood
-import com.example.souvenirscadiz.ui.theme.Silver
-import com.example.souvenirscadiz.ui.theme.Teal
-import com.example.souvenirscadiz.ui.theme.White
+import com.example.souvenirscadiz.ui.theme.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -455,6 +444,7 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
                 credential, {
                 navController.navigate("Principal")
                 souvenirsViewModel.setSelectedItem("Principal")
+                    Toast.makeText(context,"Has iniciado sesión",Toast.LENGTH_LONG).show()
             },
                 context)
         }catch (e:Exception){
@@ -496,10 +486,7 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
 fun ProfileImage() {
     val imageUri = rememberSaveable { mutableStateOf("") }
     val painter = rememberAsyncImagePainter(
-        if(imageUri.value.isEmpty())
-            R.drawable.imagen_perfil_pre
-        else
-            imageUri.value
+        imageUri.value.ifEmpty { R.drawable.imagen_perfil_pre }
     )
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()

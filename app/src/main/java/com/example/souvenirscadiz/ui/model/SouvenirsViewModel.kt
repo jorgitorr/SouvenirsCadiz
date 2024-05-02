@@ -66,9 +66,14 @@ class SouvenirsViewModel @Inject constructor(
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
+    private val email = auth.currentUser?.email
+
 
     private var _numberSouvenir = MutableStateFlow(0)
     val numberSouvenir:StateFlow<Int> = _numberSouvenir
+
+
+
 
     init {
         getSouvenirs()
@@ -205,7 +210,7 @@ class SouvenirsViewModel @Inject constructor(
      * Guarda el superHeroe en la base de datos
      */
     fun saveSouvenirInFav(onSuccess:() -> Unit){
-        val email = auth.currentUser?.email
+        //val email = auth.currentUser?.email
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             try {
@@ -254,7 +259,7 @@ class SouvenirsViewModel @Inject constructor(
      */
     fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
         fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
-        val email = auth.currentUser?.email
+        //val email = auth.currentUser?.email
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
 
@@ -300,66 +305,7 @@ class SouvenirsViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Elimina el souvenir de la lista de favoritos
-     * @param onSuccess si se ha logrado muestra este mensaje
-     */
-    fun deleteSouvenirFromFav(onSuccess: () -> Unit) {
-        val email = auth.currentUser?.email
 
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                firestore.collection("Souvenirs Favoritos")
-                    .whereEqualTo("referencia", actualSouvenir.referencia)
-                    .whereEqualTo("emailUser", email)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        for (document in documents) {
-                            document.reference.delete()
-                            onSuccess()
-                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
-                    }
-            } catch (e: Exception) {
-                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
-            }
-        }
-    }
-
-
-    /**
-     * Borra el souvenir con su objeto
-     * @param onSuccess si es satisfactorio
-     * @param souvenir el souvenir
-     */
-    fun deleteSouvenirFromFav(onSuccess: () -> Unit, souvenir: Souvenir) {
-        val email = auth.currentUser?.email
-
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                firestore.collection("Souvenirs Favoritos")
-                    .whereEqualTo("referencia", souvenir.referencia)
-                    .whereEqualTo("emailUser", email)
-                    .whereEqualTo("favorito",true) //si el souvenir está guardado lo elimina
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        for (document in documents) {
-                            document.reference.delete()
-                            onSuccess()
-                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
-                    }
-            } catch (e: Exception) {
-                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
-            }
-        }
-    }
 
     /**
      * Guarda souvenir en carritoç
@@ -367,7 +313,7 @@ class SouvenirsViewModel @Inject constructor(
      */
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit){
-        val email = auth.currentUser?.email
+        //val email = auth.currentUser?.email
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             try {
@@ -411,7 +357,7 @@ class SouvenirsViewModel @Inject constructor(
      */
 
     fun saveSouvenirInPedido(onSuccess:() -> Unit){
-        val email = auth.currentUser?.email
+        //val email = auth.currentUser?.email
 
 
         viewModelScope.launch (Dispatchers.IO){
@@ -446,10 +392,93 @@ class SouvenirsViewModel @Inject constructor(
 
 
     /**
+     * Elimina el souvenir de la lista de favoritos
+     * @param onSuccess si se ha logrado muestra este mensaje
+     */
+    fun deleteSouvenirFromFav(onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("Souvenirs Favoritos")
+                    .whereEqualTo("referencia", actualSouvenir.referencia)
+                    .whereEqualTo("emailUser", email)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            onSuccess()
+                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
+            }
+        }
+    }
+
+
+    /**
+     * Borra el souvenir con su objeto
+     * @param onSuccess si es satisfactorio
+     * @param souvenir el souvenir
+     */
+    fun deleteSouvenirFromFav(onSuccess: () -> Unit, souvenir: Souvenir) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("Souvenirs Favoritos")
+                    .whereEqualTo("referencia", souvenir.referencia)
+                    .whereEqualTo("emailUser", email)
+                    .whereEqualTo("favorito",true) //si el souvenir está guardado lo elimina
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            onSuccess()
+                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
+            }
+        }
+    }
+
+
+    fun deleteSouvenirFromCarrito(onSuccess: () -> Unit, souvenir: SouvenirState) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("Carrito")
+                    .whereEqualTo("referencia", souvenir.referencia)
+                    .whereEqualTo("emailUser", souvenir.emailUser)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            onSuccess()
+                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
+                        }
+                    }
+
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
+            }
+        }
+    }
+
+
+    /**
      * devuelve todos los souvenirs guardados en la lista de favoritos
      */
     fun fetchSouvenirsFav(){
-        val email = auth.currentUser?.email
+        //val email = auth.currentUser?.email
         firestore.collection("Souvenirs Favoritos")
             .whereEqualTo("emailUser",email.toString())
             .addSnapshotListener{querySnapshot, error->
@@ -475,7 +504,7 @@ class SouvenirsViewModel @Inject constructor(
      * Devuelve los souvenirs guardados en la lista de carrito
      */
     fun fetchSouvenirsCarrito(){
-        val email = auth.currentUser?.email
+        //val email = auth.currentUser?.email
         val souvenirsList = mutableListOf<SouvenirState>()
         firestore.collection("Carrito")
             .whereEqualTo("emailUser",email.toString())
@@ -516,17 +545,6 @@ class SouvenirsViewModel @Inject constructor(
             }
     }
 
-
-    /**
-     * obtiene el numero de souvenirs que hay en el carrito
-     * @return numero de souvenirs en el carrito
-     */
-    fun getNumberSouvenirsInCarrito():Int{
-        viewModelScope.launch {
-            fetchSouvenirsCarrito()//primero hay que pedirlos para que los saque de la base de datos
-        }
-        return _souvenirCarrito.value.size
-    }
 
 
     /**
