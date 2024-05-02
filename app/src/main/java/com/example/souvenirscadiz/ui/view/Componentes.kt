@@ -444,7 +444,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
  * @param souvenirsViewModel viewmodel de souvenirs
  */
 @Composable
-fun NombresSouvenirs(souvenirsViewModel: SouvenirsViewModel){
+fun EnumaradoSouvenirs(souvenirsViewModel: SouvenirsViewModel){
     souvenirsViewModel.setTipo()//poner el tipo de souvenir para cada souvenir
     LazyRow {
         items(Tipo.entries.toTypedArray()) { tipo ->
@@ -487,12 +487,19 @@ fun FavoriteButton(
             modifier = Modifier
                 .size(30.dp)
                 .clickable {
-                    //si el souvenir no esta guardado
-                    souvenirsViewModel.saveSouvenirInFav {
-                        Toast
-                            .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
-                            .show()
-
+                    if(!souvenir.guardadoFav){
+                        //si el souvenir no esta guardado
+                        souvenirsViewModel.saveSouvenirInFav {
+                            Toast
+                                .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }else{
+                        souvenirsViewModel.deleteSouvenirInFav {
+                            Toast
+                                .makeText(context, "Souvenir eliminado", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
 
                     souvenir.guardadoFav = !souvenir.guardadoFav
@@ -526,16 +533,30 @@ fun ShopingCartButton(
             modifier = Modifier
                 .size(30.dp)
                 .clickable {
-                    souvenirsViewModel.saveSouvenirInCarrito {
-                        Toast
-                            .makeText(
-                                context,
-                                "Souvenir guardado en carrito",
-                                Toast.LENGTH_SHORT
-                            )
-                            .show()
+
+                    if(!souvenir.guardadoCarrito){
+                        souvenirsViewModel.saveSouvenirInCarrito {
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Souvenir guardado en carrito",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        }
+                        souvenir.guardadoCarrito = !souvenir.guardadoCarrito
+                    }else{
+                        souvenirsViewModel.deleteSouvenirInCarrito({
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Souvenir guardado en carrito",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        },souvenir)
                     }
-                    souvenir.guardadoCarrito = !souvenir.guardadoCarrito
+
                 }
 
         )
@@ -655,7 +676,7 @@ fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: SouvenirSta
             contentDescription = "Eliminar",
             tint = Redwood,
             modifier = Modifier.clickable {
-                souvenirsViewModel.deleteSouvenirFromCarrito(
+                souvenirsViewModel.deleteSouvenirInCarrito(
                     {
                         Toast.makeText(context,
                             "Has eliminado un souvenir del carrito",

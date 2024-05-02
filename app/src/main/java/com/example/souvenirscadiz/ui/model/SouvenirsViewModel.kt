@@ -238,11 +238,6 @@ class SouvenirsViewModel @Inject constructor(
                         }.addOnFailureListener{
                             Log.d("Save error","Error al guardar")
                         }
-                }else{
-                    //si el souvenir ya está en la BDD lo borra
-                    deleteSouvenirFromFav {
-                        Log.d("Souvenir_borrado","Souvenir Borrado")
-                    }
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
@@ -295,7 +290,7 @@ class SouvenirsViewModel @Inject constructor(
                         }
                 }else{
                     //si el souvenir ya está en la BDD lo borra
-                    deleteSouvenirFromFav ({
+                    deleteSouvenirInFav ({
                         Log.d("Souvenir_borrado","Souvenir Borrado")
                     },souvenir)
                 }
@@ -395,7 +390,7 @@ class SouvenirsViewModel @Inject constructor(
      * Elimina el souvenir de la lista de favoritos
      * @param onSuccess si se ha logrado muestra este mensaje
      */
-    fun deleteSouvenirFromFav(onSuccess: () -> Unit) {
+    fun deleteSouvenirInFav(onSuccess: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 firestore.collection("Souvenirs Favoritos")
@@ -424,13 +419,11 @@ class SouvenirsViewModel @Inject constructor(
      * @param onSuccess si es satisfactorio
      * @param souvenir el souvenir
      */
-    fun deleteSouvenirFromFav(onSuccess: () -> Unit, souvenir: Souvenir) {
+    fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 firestore.collection("Souvenirs Favoritos")
                     .whereEqualTo("referencia", souvenir.referencia)
-                    .whereEqualTo("emailUser", email)
-                    .whereEqualTo("favorito",true) //si el souvenir está guardado lo elimina
                     .get()
                     .addOnSuccessListener { documents ->
                         for (document in documents) {
@@ -449,12 +442,11 @@ class SouvenirsViewModel @Inject constructor(
     }
 
 
-    fun deleteSouvenirFromCarrito(onSuccess: () -> Unit, souvenir: SouvenirState) {
+    fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 firestore.collection("Carrito")
                     .whereEqualTo("referencia", souvenir.referencia)
-                    .whereEqualTo("emailUser", souvenir.emailUser)
                     .get()
                     .addOnSuccessListener { documents ->
                         for (document in documents) {
@@ -463,7 +455,35 @@ class SouvenirsViewModel @Inject constructor(
                             Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
                         }
                     }
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
+            }
+        }
+    }
 
+
+    /**
+     * hace lo mismo que el anterior deleteSouvenirInCarrito pero en vez de
+     * pasarle un Souvenir le pasamos la clase SouvenirState
+     * @param onSuccess Toast
+     * @param souvenir souvenirState
+     */
+    fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: SouvenirState) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("Carrito")
+                    .whereEqualTo("referencia", souvenir.referencia)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            onSuccess()
+                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
+                        }
+                    }
                     .addOnFailureListener { exception ->
                         Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
                     }
