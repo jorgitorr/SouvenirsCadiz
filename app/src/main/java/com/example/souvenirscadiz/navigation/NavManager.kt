@@ -22,10 +22,15 @@ import com.example.souvenirscadiz.ui.view.Registro
 import com.example.souvenirscadiz.ui.view.SouvenirDetail
 import com.example.souvenirscadiz.ui.view.Carrito
 
+/**
+ * navManager que permite la navegacion entre páginas
+ * @param souvenirsViewModel viewmodel de souvenirs
+ * @param loginViewModel viewmodel del login
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
-    val navController = rememberNavController();
+    val navController = rememberNavController()
     
     NavHost(navController = navController, startDestination = "Principal"){
         composable("Principal"){

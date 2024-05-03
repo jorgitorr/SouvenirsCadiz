@@ -241,7 +241,7 @@ class SouvenirsViewModel @Inject constructor(
 
                 //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
                 if(!esIgual){
-                    firestore.collection("Souvenirs Favoritos")
+                    firestore.collection("Favoritos")
                         .add(newSouvenir)
                         .addOnSuccessListener {
                             onSuccess()
@@ -295,7 +295,7 @@ class SouvenirsViewModel @Inject constructor(
 
                 //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
                 if(!esIgual){
-                    firestore.collection("Souvenirs Favoritos")
+                    firestore.collection("Favoritos")
                         .add(newSouvenir)
                         .addOnSuccessListener {
                             onSuccess()
@@ -436,9 +436,9 @@ class SouvenirsViewModel @Inject constructor(
             try {
                 //se guardan todos los souvenirs de la lista de _souvenirCarrito
                 for(pedido in _souvenirCarrito.value){
-
                     val newPedido = hashMapOf(
-                        "userMail" to pedido.emailUser,
+                        "emailUser" to pedido.emailUser,
+                        "emailUser" to auth.currentUser?.email,
                         "referencia" to pedido.referencia,
                         "nombre" to pedido.nombre,
                         "url" to pedido.url,
@@ -469,7 +469,7 @@ class SouvenirsViewModel @Inject constructor(
     fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                firestore.collection("Souvenirs Favoritos")
+                firestore.collection("Favoritos")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .get()
                     .addOnSuccessListener { documents ->
@@ -497,7 +497,7 @@ class SouvenirsViewModel @Inject constructor(
     fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: SouvenirState) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                firestore.collection("Souvenirs Favoritos")
+                firestore.collection("Favoritos")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .get()
                     .addOnSuccessListener { documents ->
@@ -577,7 +577,7 @@ class SouvenirsViewModel @Inject constructor(
      * devuelve todos los souvenirs guardados en la lista de favoritos
      */
     fun fetchSouvenirsFav(){
-        firestore.collection("Souvenirs Favoritos")
+        firestore.collection("Favoritos")
             .whereEqualTo("emailUser",email.toString())
             .addSnapshotListener{querySnapshot, error->
                 if(error != null){
@@ -628,7 +628,8 @@ class SouvenirsViewModel @Inject constructor(
      */
     fun fetchSouvenirsPedido(){
         val souvenirsList = mutableListOf<PedidoState>()
-        firestore.collection("Pedido")
+        firestore.collection("Pedidos")
+            .whereEqualTo("emailUser","jorgearceruiz97@gmail.com")
             .addSnapshotListener{querySnapshot, error->
                 if(error != null){
                     return@addSnapshotListener

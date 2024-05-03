@@ -35,6 +35,7 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
         souvenirsViewModel.fetchSouvenirsFav()
     }
 
+
     Scaffold(
         topBar = {
             if(loginViewModel.checkAdmin()){

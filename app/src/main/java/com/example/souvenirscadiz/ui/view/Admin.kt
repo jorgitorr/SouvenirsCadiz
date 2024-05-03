@@ -64,7 +64,6 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
 fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
 
-
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
@@ -80,9 +79,13 @@ fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
 
             Icon(
                 imageVector = Icons.Default.Sell,
-                contentDescription = "Shop",
-                tint = if(selectedItem=="Principal") Cerulean else RaisanBlack,
-                modifier = Modifier.clickable { navController.navigate("Pedidos") })
+                contentDescription = "Pedidos",
+                tint = if(selectedItem=="Pedidos") Cerulean else RaisanBlack,
+                modifier = Modifier.clickable {
+                    souvenirsViewModel.setSelectedItem("Pedidos")
+                    navController.navigate("Pedidos")
+                })
+
         }
     }
 }

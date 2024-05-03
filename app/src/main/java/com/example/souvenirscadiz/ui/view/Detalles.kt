@@ -59,6 +59,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     var telefonoSeleccionado by remember { mutableStateOf(false)}
 
+
     Scaffold(
         topBar = {
             Header(navController, souvenirsViewModel)

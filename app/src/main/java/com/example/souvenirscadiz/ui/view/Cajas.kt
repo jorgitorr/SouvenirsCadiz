@@ -39,6 +39,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -285,4 +286,87 @@ fun CajaCarrito(
         }
     }
 }
+
+
+
+/**
+ * Caja del carrito
+ * @param navController navegacion
+ * @param souvenir souvenirState
+ * @param url url del souvenir
+ * @param souvenirsViewModel viewmodel del souvenir
+ */
+@Composable
+fun CajaPedido(
+    navController: NavController,
+    souvenir: PedidoState,
+    url: Int
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Silver, shape = RoundedCornerShape(5.dp))
+            .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
+            .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+            .padding(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Box(contentAlignment = Alignment.TopEnd){
+                // Imagen
+                /*AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(url)
+                        .build(),
+                    contentDescription = souvenir.nombre,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+
+                )*/
+
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            // Detalles del souvenir
+            Column(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = souvenir.nombre,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RaisanBlack,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = "Ref: ${souvenir.referencia}",
+                    fontSize = 14.sp,
+                    color = RaisanBlack,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    text = "${souvenir.cantidad}",
+                    fontSize = 14.sp,
+                    color = RaisanBlack,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+
+
+            }
+
+        }
+    }
+}
+
 
