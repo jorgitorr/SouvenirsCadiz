@@ -65,7 +65,7 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  */
 @Composable
 fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-    LaunchedEffect(Unit){
+    LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav()
     }
 
@@ -115,9 +115,9 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
 
                 Caja(navController = navController,
-                    souvenir = souvenir,
                     url = resourceId,
-                    souvenirsViewModel)
+                    souvenir = souvenir,
+                    souvenirsViewModel = souvenirsViewModel)
             }
         }
     }

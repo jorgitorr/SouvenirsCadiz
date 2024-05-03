@@ -28,7 +28,7 @@ class AlarmNotification: BroadcastReceiver() {
         val notification = NotificationCompat.Builder(context, MainActivity.MY_CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_delete)
             .setContentTitle("My title")
-            .setContentText("Esto es un ejemplo <3")
+            .setContentText("Souvenir nuevos")
             .setStyle(
                 NotificationCompat.BigTextStyle()
                     .bigText("Has recibido nuevos souvenirs")

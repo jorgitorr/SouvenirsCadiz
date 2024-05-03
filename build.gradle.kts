@@ -6,5 +6,6 @@ plugins {
     id("org.jetbrains.dokka") version "1.9.20"
     //DCS - Dagger Hilt
     id("com.google.dagger.hilt.android") version "2.44" apply false
-
+    //detekt analizador de codigo
+    id("io.gitlab.arturbosch.detekt") version "1.23.0"
 }

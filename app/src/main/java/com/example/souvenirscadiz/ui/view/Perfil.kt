@@ -371,8 +371,8 @@ fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavControl
 @Composable
 fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     Scaffold(
-        topBar = { /*Header(navController, souvenirsViewModel)*/ },
-        bottomBar = { /*Footer(navController, souvenirsViewModel, loginViewModel)*/ },
+        topBar = { Header(navController, souvenirsViewModel) },
+        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
     ) { innerPadding ->
         Column(
             modifier = Modifier

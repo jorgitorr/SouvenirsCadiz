@@ -6,11 +6,15 @@ plugins {
     //DCS - Dagger Hilt
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    //detekt -> analizador de codigo
+    id("io.gitlab.arturbosch.detekt")
 }
 
 subprojects {
     apply(plugin = "org.jetbrains.dokka")
 }
+
+
 
 
 

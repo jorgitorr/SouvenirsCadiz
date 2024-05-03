@@ -1,5 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -35,6 +37,12 @@ fun FavoriteButton(
 ) {
     val context = LocalContext.current
 
+    val soundEffect = MediaPlayer.create(context, R.raw.like_sound)
+
+    LaunchedEffect(souvenir.guardadoFav){
+        souvenirsViewModel.fetchSouvenirsFav()
+    }
+
     IconToggleButton(
         checked = souvenir.guardadoFav,
         onCheckedChange = {
@@ -62,8 +70,9 @@ fun FavoriteButton(
                                 .show()
                         },souvenir)
                     }
-
                     souvenir.guardadoFav = !souvenir.guardadoFav
+                    //efecto de sonido
+                    soundEffect.start()
                 }
         )
     }
@@ -77,6 +86,11 @@ fun FavoriteButton(
     souvenirsViewModel: SouvenirsViewModel
 ) {
     val context = LocalContext.current
+    LaunchedEffect(souvenir.guardadoFav){
+        souvenirsViewModel.fetchSouvenirsFav()
+    }
+
+    val soundEffect = MediaPlayer.create(context, R.raw.like_sound)
 
     IconToggleButton(
         checked = souvenir.guardadoFav,
@@ -105,16 +119,14 @@ fun FavoriteButton(
                                 .show()
                         },souvenir)
                     }
-
                     souvenir.guardadoFav = !souvenir.guardadoFav
+                    //efecto de sonido
+                    soundEffect.start()
                 }
         )
     }
 
 }
-
-
-
 
 
 /**
@@ -175,60 +187,11 @@ fun ShopingCartButton(
 
 }
 
-
-@Composable
-fun ShopingCartButton(
-    souvenir: SouvenirState,
-    souvenirsViewModel: SouvenirsViewModel
-) {
-    val context = LocalContext.current
-
-    IconToggleButton(
-        checked = souvenir.guardadoCarrito,
-        onCheckedChange = {
-            souvenir.guardadoCarrito = !souvenir.guardadoCarrito
-        },
-        modifier = Modifier.padding(top = 280.dp, end = 340.dp) //posicion del icono
-    ) {
-        Icon(
-            //si el elemento esta guardado en el carrito, el icono cambia a eliminar del guardado
-            imageVector = if(!souvenir.guardadoCarrito) Icons.Default.AddShoppingCart else Icons.Default.RemoveShoppingCart,
-            tint = if (!souvenir.guardadoCarrito) RaisanBlack else Redwood,
-            contentDescription = "Cesta de la compra",
-            modifier = Modifier
-                .size(30.dp)
-                .clickable {
-                    if(!souvenir.guardadoCarrito){
-                        souvenirsViewModel.saveSouvenirInCarrito ({
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Souvenir guardado en carrito",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        },souvenir)
-                    }else{
-                        souvenirsViewModel.deleteSouvenirInCarrito({
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Souvenir guardado en carrito",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        },souvenir)
-                    }
-
-                    souvenir.guardadoCarrito = !souvenir.guardadoCarrito
-
-                }
-
-        )
-    }
-
-}
-
+/**
+ * Boton de eliminar
+ * @param souvenirsViewModel viewmodel de souvenir
+ * @param souvenir souvenirState
+ */
 @Composable
 fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: SouvenirState) {
     LaunchedEffect(true){

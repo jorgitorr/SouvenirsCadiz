@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +54,10 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
+    LaunchedEffect(souvenir.guardadoFav){
+        souvenirsViewModel.fetchSouvenirsFav()
+    }
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))
@@ -119,6 +124,11 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
  */
 @Composable
 fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsFav()
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(Silver, shape = RoundedCornerShape(5.dp))

@@ -150,6 +150,11 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState()//todos los souvenirs
     val souvenirsGuardado by souvenirsViewModel.souvenirFav.collectAsState()
 
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsFav()
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
+
     if(souvenirs.isEmpty()){
         LazyColumn{
             items(souvenirsPre){ souvenirP->
