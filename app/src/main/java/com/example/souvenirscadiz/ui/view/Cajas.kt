@@ -60,19 +60,20 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()) {
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(url)
-                    .build(),
-                contentDescription = souvenir.nombre,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth()
-                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+            Box(contentAlignment = Alignment.TopEnd){
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(url)
+                        .build(),
+                    contentDescription = souvenir.nombre,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
 
-            )
-            FavoriteButton(souvenir, souvenirsViewModel)
+                )
+                FavoriteButton(souvenir, souvenirsViewModel)
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxSize(),

@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -49,11 +48,17 @@ class SouvenirsViewModel @Inject constructor(
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
     val selectedItem = MutableStateFlow("Principal")
+
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
+
     private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsTipo = _souvenirsTipo
-    private var actualSouvenir by mutableStateOf(Souvenir())
+
+    private val _actualSouvenir by mutableStateOf(Souvenir())
+    var actualSouvenir = _actualSouvenir
+    private val _actualSouvenirState by mutableStateOf(SouvenirState())
+    var actualSouvenirState = _actualSouvenirState
 
     private var _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirFav: StateFlow<List<SouvenirState>> =  _souvenirFav
@@ -67,7 +72,6 @@ class SouvenirsViewModel @Inject constructor(
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
     private val email = auth.currentUser?.email
-
 
     private var _numberSouvenir = MutableStateFlow(0)
     val numberSouvenir:StateFlow<Int> = _numberSouvenir
@@ -653,5 +657,18 @@ class SouvenirsViewModel @Inject constructor(
         _souvenirCarrito = MutableStateFlow(emptyList())
         souvenirCarrito = _souvenirCarrito
     }
+
+
+
+    fun setSouvenirInFav(){
+        _actualSouvenir.guardadoFav = !_actualSouvenir.guardadoFav
+    }
+
+    fun setSouvenirInCarrito(){
+        _actualSouvenir.guardadoCarrito = !_actualSouvenir.guardadoCarrito
+    }
+
+
+
 
 }
