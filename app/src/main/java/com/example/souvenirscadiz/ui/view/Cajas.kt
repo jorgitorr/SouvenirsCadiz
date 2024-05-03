@@ -78,6 +78,7 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
 
                 )
                 FavoriteButton(souvenir, souvenirsViewModel)
+                ShopingCartButton(souvenir, souvenirsViewModel)
             }
             Spacer(modifier = Modifier.height(4.dp))
             Row(
@@ -146,7 +147,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
                         .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
 
                 )
-                FavoriteButton(souvenir, souvenirsViewModel) //icono de fav
+                FavoriteButton(souvenir, souvenirsViewModel)
                 ShopingCartButton(souvenir, souvenirsViewModel)
             }
 
@@ -218,28 +219,29 @@ fun CajaCarrito(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            // Imagen
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(url)
-                    .build(),
-                contentDescription = souvenir.nombre,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth()
-                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+            Box(contentAlignment = Alignment.TopEnd){
+                // Imagen
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(url)
+                        .build(),
+                    contentDescription = souvenir.nombre,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
 
-            )
+                )
+                //boton de eliminar souvenir del carrito
+                EliminarButton(souvenirsViewModel, souvenir)
+
+            }
             Spacer(modifier = Modifier.height(8.dp))
             // Detalles del souvenir
             Column(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 verticalArrangement = Arrangement.Center
             ) {
-                //boton de eliminar souvenir del carrito
-                EliminarButton(souvenirsViewModel, souvenir)
-
                 Text(
                     text = souvenir.nombre,
                     fontSize = 16.sp,

@@ -64,6 +64,7 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
 fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
 
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)

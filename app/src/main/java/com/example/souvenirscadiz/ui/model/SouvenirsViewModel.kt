@@ -3,6 +3,7 @@ package com.example.souvenirscadiz.ui.model
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
@@ -73,8 +74,6 @@ class SouvenirsViewModel @Inject constructor(
     private val firestore = Firebase.firestore
     private val email = auth.currentUser?.email
 
-    private var _numberSouvenir = MutableStateFlow(0)
-    val numberSouvenir:StateFlow<Int> = _numberSouvenir
 
 
 
@@ -371,7 +370,6 @@ class SouvenirsViewModel @Inject constructor(
     }
 
 
-
     /**
      * Guarda souvenir en carritoç
      * @param onSuccess lambda para que hace el método al ser logrado
@@ -427,7 +425,6 @@ class SouvenirsViewModel @Inject constructor(
 
 
 
-
     /**
      * Guarda souvenir en carrito y le pasa al administrador
      * todos los que tenga el usuario guardado
@@ -441,13 +438,12 @@ class SouvenirsViewModel @Inject constructor(
                 for(pedido in _souvenirCarrito.value){
 
                     val newPedido = hashMapOf(
-                        "userMail" to email,
+                        "userMail" to pedido.emailUser,
                         "referencia" to pedido.referencia,
                         "nombre" to pedido.nombre,
                         "url" to pedido.url,
                         "tipo" to pedido.tipo,
                         "cantidad" to pedido.cantidad
-                        //me queda guardar la cantidad que la recoge en un textField
                     )
 
                     firestore.collection("Pedidos")
@@ -618,7 +614,6 @@ class SouvenirsViewModel @Inject constructor(
                     for(souvenir in querySnapshot){
                         val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
                         souvenirObj.guardadoCarrito = true
-                        _numberSouvenir.value = souvenirsList.size
                         souvenirsList.add(souvenirObj)
                     }
                 }
@@ -658,17 +653,42 @@ class SouvenirsViewModel @Inject constructor(
         souvenirCarrito = _souvenirCarrito
     }
 
-
-
-    fun setSouvenirInFav(){
-        _actualSouvenir.guardadoFav = !_actualSouvenir.guardadoFav
+    /**
+     * @return obtiene el numero de souvenirs pedidos
+     */
+    fun getNumberSouvenirsPedidos(): Int{
+        viewModelScope.launch { fetchSouvenirsPedido() }
+        return souvenirPedidos.value.size
     }
 
-    fun setSouvenirInCarrito(){
-        _actualSouvenir.guardadoCarrito = !_actualSouvenir.guardadoCarrito
+
+    /**
+     * @return obtiene el numero de souvenirs en el carrito
+     */
+    fun getNumberSouvenirsInCarrito(): Int{
+        viewModelScope.launch { fetchSouvenirsCarrito() }
+        return souvenirCarrito.value.size
     }
 
 
+    /**
+     * checkea si el souvenir esta guardado en fav o en el carrito
+     * @param souvenir
+     */
+    fun CheckSouvenirIsSaved(souvenir: Souvenir){
+        //comprueba si el souvenir esta en los souvenirs favoritos
+        for(souvenirG in _souvenirFav.value){
+            if(souvenir.referencia==souvenirG.referencia){
+                souvenir.guardadoFav = true
+            }
+        }
+        //comprueba si el souvenir esta en los souvenirs del carrito
+        for(souvenirC in _souvenirCarrito.value){
+            if(souvenirC.referencia == souvenir.referencia){
+                souvenir.guardadoCarrito = true
+            }
+        }
+    }
 
 
 }

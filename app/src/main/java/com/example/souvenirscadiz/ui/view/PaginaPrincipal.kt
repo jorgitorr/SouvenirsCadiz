@@ -25,6 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -148,26 +149,20 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
 fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsViewModel){
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState()//souvenirs de un tipo
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState()//todos los souvenirs
-    val souvenirsGuardado by souvenirsViewModel.souvenirFav.collectAsState()
 
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav()
         souvenirsViewModel.fetchSouvenirsCarrito()
     }
-
+    //si no ha seleccionado ningun tipo de souvenirs me rellena los souvenirs con todos los tipos
+    //si no lo rellena con los seleccionados
     if(souvenirs.isEmpty()){
         LazyColumn{
             items(souvenirsPre){ souvenirP->
                 val url = "img${souvenirP.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                //recorre los souvenirs guardados para comprobar si es de los que muestra
-                for(souvenirG in souvenirsGuardado){
-                    if(souvenirP.referencia==souvenirG.referencia){
-                        souvenirP.guardadoFav = true
-                    }
-                }
+                souvenirsViewModel.CheckSouvenirIsSaved(souvenirP)
                 Caja(navController,souvenirP, resourceId, souvenirsViewModel)
-                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }else{
@@ -175,18 +170,13 @@ fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsView
             items(souvenirs){ souvenir->
                 val url = "img${souvenir.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                //recorre los souvenirs guardados para comprobar si es de los que muestra
-                for(souvenirG in souvenirsGuardado){
-                    if(souvenir.referencia == souvenirG.referencia){
-                        souvenir.guardadoFav = true
-                    }
-                }
+                souvenirsViewModel.CheckSouvenirIsSaved(souvenir)
                 Caja(navController,souvenir, resourceId, souvenirsViewModel)
-                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
 }
+
 
 
 

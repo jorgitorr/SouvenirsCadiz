@@ -52,10 +52,6 @@ import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
 
 
-
-
-
-
 /**
  * Footer
  * @param navController navegacion entre páginas
@@ -142,7 +138,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
 @Composable
 fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
-    val numberSouvenir by souvenirsViewModel.numberSouvenir.collectAsState()
+    val souvenirsCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -158,11 +154,12 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
             Text(text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave)
 
+
             //nube con el numero de objetos en el carrito
             BadgedBox(badge = {
-                if(numberSouvenir>0){
+                if(souvenirsCarrito.isNotEmpty()){
                     Badge {
-                        Text(text = "$numberSouvenir")
+                        Text(text = "${souvenirsCarrito.size}")
                     }
                 }
             }) {

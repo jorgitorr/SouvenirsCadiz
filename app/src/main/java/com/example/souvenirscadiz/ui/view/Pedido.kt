@@ -43,7 +43,6 @@ fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController
         souvenirsViewModel.fetchSouvenirsPedido()
     }
 
-
     Scaffold(
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
@@ -58,7 +57,6 @@ fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-
             SouvenirsPedido(navController, souvenirsViewModel)
         }
     }

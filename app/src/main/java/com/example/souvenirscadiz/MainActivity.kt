@@ -60,23 +60,16 @@ class MainActivity : ComponentActivity() {
                     readCSV()
                     SouvenirsAddImages(souvenirsViewModel)
                     NavManager(souvenirsViewModel, loginViewModel)
+
+                    createChannel()
+
                 }
             }
         }
 
-        createChannel()
-
-        if(getNumberSouvenirsPedidos()>0){
-            sheduleNotification()
-        }
     }
 
     //NOTIFICACIONES
-
-    fun getNumberSouvenirsPedidos(): Int{
-        souvenirsViewModel.fetchSouvenirsPedido()
-        return souvenirsViewModel.souvenirPedidos.value.size
-    }
 
     /**
      * notificacion que se activa con el tiempo
@@ -95,7 +88,7 @@ class MainActivity : ComponentActivity() {
         //en que momento decirle que se lance
         alarmManager.setExact(
             AlarmManager.RTC_WAKEUP,
-            Calendar.getInstance().timeInMillis + 150,
+            Calendar.getInstance().timeInMillis + 15000,
             pendingIndent,
         )
     }

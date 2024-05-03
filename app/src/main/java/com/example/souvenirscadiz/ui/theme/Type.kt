@@ -25,7 +25,7 @@ val Typography = Typography(
  * letra nueva kiwiMaru añadida
  */
 val KiwiMaru = FontFamily(
-    Font(R.font.kiwimarumedium, FontWeight.Medium),
+    Font(R.font.kiwimarumedium, FontWeight.Medium)
 )
 
 val KneWave = FontFamily(
@@ -33,5 +33,5 @@ val KneWave = FontFamily(
 )
 
 val KleeOne = FontFamily(
-    Font(R.font.kleeoneregular, FontWeight.Normal),
+    Font(R.font.kleeoneregular, FontWeight.Normal)
 )

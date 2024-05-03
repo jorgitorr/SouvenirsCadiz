@@ -9,6 +9,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val Silver = Color(198,197,185)
 val RaisanBlack = Color(33,39,56)
+
 val Cerulean = Color(0,126,167)
 val Teal = Color(16,126,125)
 val Redwood = Color(178,110,99)

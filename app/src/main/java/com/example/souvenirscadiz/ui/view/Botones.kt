@@ -79,7 +79,10 @@ fun FavoriteButton(
 
 }
 
-
+/**
+ * @param souvenir souvenirState que es de la base de datos
+ * @param souvenirsViewModel viewmodel del souvenir
+ */
 @Composable
 fun FavoriteButton(
     souvenir: SouvenirState,
@@ -187,6 +190,67 @@ fun ShopingCartButton(
 
 }
 
+
+
+/**
+ * icono del carrito en cada caja
+ * @param souvenir souvenir actual
+ * @param souvenirsViewModel viewmodel
+ */
+@Composable
+fun ShopingCartButton(
+    souvenir: SouvenirState,
+    souvenirsViewModel: SouvenirsViewModel
+) {
+    val context = LocalContext.current
+
+    IconToggleButton(
+        checked = souvenir.guardadoCarrito,
+        onCheckedChange = {
+            souvenir.guardadoCarrito = !souvenir.guardadoCarrito
+        },
+        modifier = Modifier.padding(top = 280.dp, end = 340.dp) //posicion del icono
+    ) {
+        Icon(
+            //si el elemento esta guardado en el carrito, el icono cambia a eliminar del guardado
+            imageVector = if(!souvenir.guardadoCarrito) Icons.Default.AddShoppingCart else Icons.Default.RemoveShoppingCart,
+            tint = if (!souvenir.guardadoCarrito) RaisanBlack else Redwood,
+            contentDescription = "Cesta de la compra",
+            modifier = Modifier
+                .size(30.dp)
+                .clickable {
+                    if(!souvenir.guardadoCarrito){
+                        souvenirsViewModel.saveSouvenirInCarrito ({
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Souvenir guardado en carrito",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        },souvenir)
+                    }else{
+                        souvenirsViewModel.deleteSouvenirInCarrito({
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Souvenir guardado en carrito",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        },souvenir)
+                    }
+
+                    souvenir.guardadoCarrito = !souvenir.guardadoCarrito
+
+                }
+
+        )
+    }
+
+}
+
+
 /**
  * Boton de eliminar
  * @param souvenirsViewModel viewmodel de souvenir
@@ -194,17 +258,12 @@ fun ShopingCartButton(
  */
 @Composable
 fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: SouvenirState) {
-    LaunchedEffect(true){
-        souvenirsViewModel.fetchSouvenirsCarrito()
-    }
-
-    var eliminar = false
     val context = LocalContext.current
 
     IconToggleButton(
-        checked = eliminar,
+        checked = souvenir.guardadoCarrito,
         onCheckedChange = {
-            eliminar = !eliminar
+            souvenir.guardadoCarrito = !souvenir.guardadoCarrito
         }
     ) {
         Icon(

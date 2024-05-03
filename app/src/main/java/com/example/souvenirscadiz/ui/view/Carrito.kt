@@ -45,6 +45,10 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
+
     Scaffold(
         topBar = {
             Header(navController, souvenirsViewModel)
@@ -59,7 +63,6 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            souvenirsViewModel.fetchSouvenirsCarrito()
             SouvenirsCarrito(navController, souvenirsViewModel, loginViewModel) //souvenirs en el carrito
         }
     }
@@ -86,10 +89,7 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
                 Toast.makeText(context,
                     "Souvenirs Pedidos",
                     Toast.LENGTH_SHORT).show()
-            }
-
-            //vaciar souvenirs del carrito
-            souvenirsViewModel.vaciarSouvenirsCarrito() },
+            }},
 
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(Redwood)) {

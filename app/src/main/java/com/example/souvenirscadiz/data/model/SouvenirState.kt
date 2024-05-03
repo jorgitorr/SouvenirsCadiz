@@ -1,6 +1,6 @@
 package com.example.souvenirscadiz.data.model
 
-data class SouvenirState (
+data class SouvenirState(
     val emailUser:String = "",
     val nombre:String = "",
     val precio:Double = 2.99,
