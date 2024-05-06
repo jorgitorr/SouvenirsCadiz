@@ -47,7 +47,7 @@ import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
 
 /**
- * Sobreescritura del componente cuadrado
+ * Caja con State
  * para que me permita introducir un State
  * @param navController navegacion
  * @param souvenir contiene souvenirState que es el objeto de la base de datos
@@ -119,7 +119,7 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
 
 
 /**
- * Cuadrado que contiene cada imagen del souvenir y su nombre, referencia y precio
+ * Caja que contiene cada imagen del souvenir y su nombre, referencia y precio
  * @param navController navegacion
  * @param souvenir clase souvenir
  * @param url de la imagen que queremos mostrar
@@ -293,14 +293,11 @@ fun CajaCarrito(
  * Caja del carrito
  * @param navController navegacion
  * @param souvenir souvenirState
- * @param url url del souvenir
- * @param souvenirsViewModel viewmodel del souvenir
  */
 @Composable
 fun CajaPedido(
     navController: NavController,
     souvenir: PedidoState,
-    url: Int
 ) {
     Box(
         modifier = Modifier
@@ -315,27 +312,19 @@ fun CajaPedido(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            Box(contentAlignment = Alignment.TopEnd){
-                // Imagen
-                /*AsyncImage(
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(url)
-                        .build(),
-                    contentDescription = souvenir.nombre,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
-
-                )*/
-
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            // Detalles del souvenir
             Column(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 verticalArrangement = Arrangement.Center
             ) {
+                Text(
+                    text = souvenir.emailUser,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RaisanBlack,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
                 Text(
                     text = souvenir.nombre,
                     fontSize = 16.sp,
@@ -361,10 +350,7 @@ fun CajaPedido(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
-
-
             }
-
         }
     }
 }

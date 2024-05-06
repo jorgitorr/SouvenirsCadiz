@@ -89,7 +89,9 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
                 Toast.makeText(context,
                     "Souvenirs Pedidos",
                     Toast.LENGTH_SHORT).show()
-            }},
+            }
+            //vaciar souvenirs del carrito
+            souvenirsViewModel.vaciarSouvenirsCarrito() },
 
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(Redwood)) {

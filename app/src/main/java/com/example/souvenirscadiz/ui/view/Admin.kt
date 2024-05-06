@@ -72,8 +72,8 @@ fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
             Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO",
-                modifier = Modifier.clickable { navController.navigate("Detalles") })
-            Text(text = "SOUVENIRS CADIZ",
+                modifier = Modifier.clickable { /*navController.navigate("Detalles")*/ })
+            Text(text = "ADMIN SOUVENIRS CADIZ",
                 fontFamily = KneWave
             )
 
