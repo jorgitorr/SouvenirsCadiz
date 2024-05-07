@@ -16,11 +16,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -126,10 +129,14 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
  */
 @Composable
 fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
+
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav()
         souvenirsViewModel.fetchSouvenirsCarrito()
     }
+
+    val onChangeFav = souvenirsViewModel.onChangeFav.collectAsState()
+    val onChangeCarrito = souvenirsViewModel.onChangeCarrito.collectAsState()
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -148,8 +155,19 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
                         .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
 
                 )
-                FavoriteButton(souvenir, souvenirsViewModel)
-                ShopingCartButton(souvenir, souvenirsViewModel)
+
+                if(onChangeFav.value){
+                    FavoriteButton(souvenir, souvenirsViewModel)
+                }else{
+                    FavoriteButton(souvenir, souvenirsViewModel)
+                }
+
+
+                if(onChangeCarrito.value){
+                    ShopingCartButton(souvenir, souvenirsViewModel)
+                }else{
+                    ShopingCartButton(souvenir, souvenirsViewModel)
+                }
             }
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -269,18 +287,17 @@ fun CajaCarrito(
                 )
 
                 OutlinedTextField(value = cantidadSouvenir,
+                    label = { Text(text = "Cantidad a pedir ${souvenir.cantidad}")},
                     onValueChange = {
                         if (it.isDigitsOnly()) {
                             cantidadSouvenir = it
+                            souvenir.cantidad = cantidadSouvenir
                         }else{
                             Toast.makeText(context,"Has introducido un campo erroneo", Toast.LENGTH_SHORT).show()
                         }},
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
-
-                souvenir.cantidad = cantidadSouvenir
-
             }
 
         }

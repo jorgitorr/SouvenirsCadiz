@@ -3,7 +3,6 @@ package com.example.souvenirscadiz.ui.model
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +44,8 @@ class SouvenirsViewModel @Inject constructor(
      * @param souvenirSaved variable publica que muestra los souvenirs guardados
      * @param auth autorizacion de firebase
      * @param firestore permite guardar en la base de datos
+     * @param _onChangeFav revisa el ultimo elemento en fav y si se ha añadido uno o se
+     * a eliminado cambia la variable
      */
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
@@ -58,8 +59,6 @@ class SouvenirsViewModel @Inject constructor(
 
     private val _actualSouvenir by mutableStateOf(Souvenir())
     var actualSouvenir = _actualSouvenir
-    private val _actualSouvenirState by mutableStateOf(SouvenirState())
-    var actualSouvenirState = _actualSouvenirState
 
     private var _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirFav: StateFlow<List<SouvenirState>> =  _souvenirFav
@@ -74,8 +73,35 @@ class SouvenirsViewModel @Inject constructor(
     private val firestore = Firebase.firestore
     private val email = auth.currentUser?.email
 
+    private var _visibleItemCount = MutableStateFlow(5)
+    var visibleItemCount = _visibleItemCount
+
+    private var _onChangeFav = MutableStateFlow(false)
+    var onChangeFav = _onChangeFav
+
+    private var _onChangeCarrito = MutableStateFlow(false)
+    var onChangeCarrito = _onChangeCarrito
 
 
+    /**
+     * checkea el fav anterior
+     */
+    fun checkAnteriorFav(){
+        _onChangeFav.value = !_onChangeFav.value
+    }
+
+    fun checkAnteriorCarrito(){
+        _onChangeCarrito.value = !_onChangeCarrito.value
+    }
+    /**
+     * funcion para cargar más souvenirs cuando se alcanza el final de la lista
+     * @param index es la ubicacion actual de la lista
+     */
+    fun onListEndReached(index: Int) {
+        if (index == _visibleItemCount.value - 1 && _visibleItemCount.value < _souvenirs.value.size) {
+            _visibleItemCount.value += 5
+        }
+    }
 
 
     init {
@@ -218,7 +244,7 @@ class SouvenirsViewModel @Inject constructor(
         fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
-
+            checkAnteriorFav()
             try {
                 val newSouvenir = hashMapOf(
                     "referencia" to souvenir.referencia,
@@ -272,7 +298,7 @@ class SouvenirsViewModel @Inject constructor(
         fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
-
+            checkAnteriorFav()
             try {
                 val newSouvenir = hashMapOf(
                     "referencia" to souvenir.referencia,
@@ -326,7 +352,7 @@ class SouvenirsViewModel @Inject constructor(
         fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
-
+            checkAnteriorCarrito()
             try {
                 val newSouvenir = hashMapOf(
                     "referencia" to souvenir.referencia,
@@ -379,7 +405,7 @@ class SouvenirsViewModel @Inject constructor(
         fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
-
+            checkAnteriorCarrito()
             try {
                 val newSouvenir = hashMapOf(
                     "referencia" to souvenir.referencia,
@@ -469,6 +495,7 @@ class SouvenirsViewModel @Inject constructor(
     fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                checkAnteriorFav()
                 firestore.collection("Favoritos")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .get()
@@ -497,6 +524,7 @@ class SouvenirsViewModel @Inject constructor(
     fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: SouvenirState) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                checkAnteriorFav()
                 firestore.collection("Favoritos")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .get()
@@ -524,6 +552,7 @@ class SouvenirsViewModel @Inject constructor(
     fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                checkAnteriorCarrito()
                 firestore.collection("Carrito")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .get()
@@ -553,6 +582,7 @@ class SouvenirsViewModel @Inject constructor(
     fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: SouvenirState) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                checkAnteriorCarrito()
                 firestore.collection("Carrito")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .get()
@@ -677,17 +707,30 @@ class SouvenirsViewModel @Inject constructor(
      * @param souvenir
      */
     fun CheckSouvenirIsSaved(souvenir: Souvenir){
+        var souvenirGuardadoFav = false
+        var souvenirGuardadoCarrito = false
         //comprueba si el souvenir esta en los souvenirs favoritos
         for(souvenirG in _souvenirFav.value){
             if(souvenir.referencia==souvenirG.referencia){
                 souvenir.guardadoFav = true
+                souvenirGuardadoFav = true
             }
         }
+
         //comprueba si el souvenir esta en los souvenirs del carrito
         for(souvenirC in _souvenirCarrito.value){
             if(souvenirC.referencia == souvenir.referencia){
                 souvenir.guardadoCarrito = true
+                souvenirGuardadoCarrito = true
             }
+        }
+
+        if(!souvenirGuardadoFav){
+            souvenir.guardadoFav = false
+        }
+
+        if(!souvenirGuardadoCarrito){
+            souvenir.guardadoCarrito = false
         }
     }
 

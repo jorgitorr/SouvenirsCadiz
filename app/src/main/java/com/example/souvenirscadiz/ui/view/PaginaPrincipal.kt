@@ -6,13 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,10 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -44,6 +42,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
         souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
         souvenirsViewModel.fetchSouvenirsCarrito() //devuelve los souvenirs guardados en carritos
     }
+
 
     Scaffold(
         topBar = {
@@ -80,6 +79,8 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  */
 @Composable
 fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, referencia:String) {
+
+
     Scaffold(
         topBar = { Header(navController, souvenirsViewModel) },
         bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) }
@@ -104,6 +105,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                         .fillMaxWidth()
                         .clickable { navController.navigateUp() }
                 )
+
                 FavoriteButton(souvenir, souvenirsViewModel)
                 ShopingCartButton(souvenir, souvenirsViewModel)
             }
@@ -146,36 +148,37 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
  * @param souvenirsViewModel viewmodel de souvenirs
  */
 @Composable
-fun SouvenirsList(navController: NavController,souvenirsViewModel: SouvenirsViewModel){
-    val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState()//souvenirs de un tipo
-    val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState()//todos los souvenirs
+fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel) {
+    val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState() // souvenirs de un tipo
+    val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
+    val visibleItemCount by souvenirsViewModel.visibleItemCount.collectAsState()
 
-    LaunchedEffect(true){
-        souvenirsViewModel.fetchSouvenirsFav()
-        souvenirsViewModel.fetchSouvenirsCarrito()
-    }
-    //si no ha seleccionado ningun tipo de souvenirs me rellena los souvenirs con todos los tipos
-    //si no lo rellena con los seleccionados
-    if(souvenirs.isEmpty()){
-        LazyColumn{
-            items(souvenirsPre){ souvenirP->
+
+    // si no ha seleccionado ningún tipo de souvenirs, muestra todos los souvenirs
+    if (souvenirs.isEmpty()) {
+        LazyColumn {
+            itemsIndexed(souvenirsPre.take(visibleItemCount)) { index, souvenirP ->
                 val url = "img${souvenirP.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
                 souvenirsViewModel.CheckSouvenirIsSaved(souvenirP)
-                Caja(navController,souvenirP, resourceId, souvenirsViewModel)
+                Caja(navController, souvenirP, resourceId, souvenirsViewModel)
+                souvenirsViewModel.onListEndReached(index)
             }
         }
-    }else{
-        LazyColumn{
-            items(souvenirs){ souvenir->
+    } else { // si hay un tipo seleccionado, muestra los souvenirs de ese tipo
+        LazyColumn {
+            itemsIndexed(souvenirs.take(visibleItemCount)) { index, souvenir ->
                 val url = "img${souvenir.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
                 souvenirsViewModel.CheckSouvenirIsSaved(souvenir)
-                Caja(navController,souvenir, resourceId, souvenirsViewModel)
+                Caja(navController, souvenir, resourceId, souvenirsViewModel)
+                souvenirsViewModel.onListEndReached(index)
             }
         }
     }
 }
+
+
 
 
 
