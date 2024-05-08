@@ -59,7 +59,6 @@ fun FavoriteButton(
             modifier = Modifier
                 .size(30.dp)
                 .clickable {
-
                     if (!souvenir.guardadoFav) {
                         souvenir.guardadoFav = true
 
@@ -75,7 +74,7 @@ fun FavoriteButton(
                     } else {
                         souvenir.guardadoFav = false
 
-                        souvenirsViewModel.deleteSouvenirInCarrito({
+                        souvenirsViewModel.deleteSouvenirInFav({
                             Toast
                                 .makeText(
                                     context,

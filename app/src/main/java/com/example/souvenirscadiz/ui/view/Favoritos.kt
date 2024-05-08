@@ -1,6 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +28,7 @@ import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
+import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.White
 
@@ -34,7 +37,6 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav()
     }
-
 
     Scaffold(
         topBar = {
@@ -86,13 +88,13 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
                 title = {
                     Text(text = "Alerta",
                         fontFamily = KiwiMaru,
-                        color = White)
+                        color = MaterialTheme.colorScheme.tertiaryContainer)
                 },
                 text = {
                     Text(
                         text = "NO TIENES ELEMENTOS GUARDADOS EN FAVORITOS",
                         fontFamily = KiwiMaru,
-                        color = White
+                        color = MaterialTheme.colorScheme.tertiaryContainer
                     )
                 },
                 confirmButton = {
@@ -102,8 +104,7 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
                         }
                     ) {
                         Text("Aceptar",
-                            fontFamily = KiwiMaru,
-                            color = White)
+                            fontFamily = KiwiMaru)
                     }
                 }
             )

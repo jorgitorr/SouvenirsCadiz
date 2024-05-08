@@ -72,8 +72,6 @@ android {
 
 
 dependencies {
-    //logger
-    implementation("com.orhanobut:logger:2.2.0")
     //lottie
     implementation ("com.airbnb.android:lottie-compose:6.4.0")
     //mockk
@@ -103,19 +101,16 @@ dependencies {
     // DCS - Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-analytics")
-    // TODO: Add the dependencies for Firebase products you want to use
-    // When using the BoM, don't specify versions in Firebase dependencies
-    // https://firebase.google.com/docs/android/setup#available-libraries
-    // DCS - Servicio de Autenticación
+    // DCS - Service de Authenticate
     implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
-    //authenticacion de Firebase por google
+    //authentication de Firebase por google
     implementation("com.google.android.gms:play-services-auth:21.1.1")
-    // DCS - Base de datos Firestore
+    // DCS - Base de dates Firestore
     implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
-    //iconos
+    //icons
     implementation ("androidx.compose.material:material-icons-core:1.6.7")
     implementation ("androidx.compose.material:material-icons-extended:1.6.7")
-    //dependencias antiguas
+    //old dependencies
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.9.0")

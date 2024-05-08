@@ -28,6 +28,7 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -50,6 +51,7 @@ import com.example.souvenirscadiz.ui.theme.KleeOne
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
+import com.example.souvenirscadiz.ui.theme.White
 
 
 /**
@@ -139,6 +141,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
 fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
     val souvenirsCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
+    val onChange by souvenirsViewModel.onChangeCarrito.collectAsState()
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -155,7 +158,9 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
                 fontFamily = KneWave)
 
 
+
             //nube con el numero de objetos en el carrito
+
             BadgedBox(badge = {
                 if(souvenirsCarrito.isNotEmpty()){
                     Badge {
@@ -222,7 +227,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = KiwiMaru,
-                    color = if(isSystemInDarkTheme())Silver else RaisanBlack,
+                    color = if(isSystemInDarkTheme()) White else RaisanBlack,
                     modifier = Modifier
                         .padding(bottom = 10.dp, start = 10.dp)
                         .clickable { navController.navigate("SouvenirDetail/${it.referencia}") }

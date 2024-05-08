@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -79,8 +78,6 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  */
 @Composable
 fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, referencia:String) {
-
-
     Scaffold(
         topBar = { Header(navController, souvenirsViewModel) },
         bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) }
@@ -160,7 +157,7 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
             itemsIndexed(souvenirsPre.take(visibleItemCount)) { index, souvenirP ->
                 val url = "img${souvenirP.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                souvenirsViewModel.CheckSouvenirIsSaved(souvenirP)
+                souvenirsViewModel.checkSouvenirIsSaved(souvenirP)
                 Caja(navController, souvenirP, resourceId, souvenirsViewModel)
                 souvenirsViewModel.onListEndReached(index)
             }
@@ -170,7 +167,7 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
             itemsIndexed(souvenirs.take(visibleItemCount)) { index, souvenir ->
                 val url = "img${souvenir.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                souvenirsViewModel.CheckSouvenirIsSaved(souvenir)
+                souvenirsViewModel.checkSouvenirIsSaved(souvenir)
                 Caja(navController, souvenir, resourceId, souvenirsViewModel)
                 souvenirsViewModel.onListEndReached(index)
             }

@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,6 +47,7 @@ import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
 
@@ -140,20 +142,22 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
 
     Box(modifier = Modifier
         .fillMaxWidth()
-        .background(Silver, shape = RoundedCornerShape(5.dp))
-        .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))){
+        .background(color = Silver, shape = RoundedCornerShape(5.dp))
+        .border(width = 1.dp, color = RaisanBlack, shape = RoundedCornerShape(5.dp))){
+
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()) {
+
             Box(contentAlignment = Alignment.TopEnd){
                 Image(
                     painter = painterResource(id = url),
                     contentDescription = souvenir.nombre,
-                    contentScale = ContentScale.Crop, //para ajustar las imagenes al tamaño del cuadrado
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
+                        .height(345.dp)
                         .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
-
                 )
 
                 if(onChangeFav.value){
@@ -161,7 +165,6 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
                 }else{
                     FavoriteButton(souvenir, souvenirsViewModel)
                 }
-
 
                 if(onChangeCarrito.value){
                     ShopingCartButton(souvenir, souvenirsViewModel)
@@ -171,42 +174,45 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
             }
 
             Spacer(modifier = Modifier.height(4.dp))
+
+            // Ajustamos el modificador del Row
             Row(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(2.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                Text(
-                    text = souvenir.nombre,
-                    style = TextStyle(fontSize = 15.sp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = RaisanBlack,
-                    modifier = Modifier.padding(start = 4.dp, end = 8.dp)
-                )
-                Text(
-                    text = souvenir.referencia,
-                    style = TextStyle(fontSize = 15.sp),
-                    maxLines = 1,
-                    color = RaisanBlack,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 4.dp, end = 8.dp)
-                )
+                // Quitamos el modificador de peso del Column
+                Row {
+                    Text(
+                        text = souvenir.nombre,
+                        style = TextStyle(fontSize = 15.sp),
+                        fontFamily = KiwiMaru,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = RaisanBlack,
+                        modifier = Modifier.padding(start = 4.dp, end = 8.dp)
+                    )
 
-                Text(
-                    text = "${souvenir.precio}€",
-                    style = TextStyle(fontSize = 15.sp),
-                    maxLines = 1,
-                    color = RaisanBlack,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 3.dp, end = 4.dp)
-                )
+                    Text(
+                        text = souvenir.referencia,
+                        style = TextStyle(fontSize = 15.sp),
+                        fontFamily = KiwiMaru,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = RaisanBlack,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.padding(start = 4.dp, end = 8.dp)
+                            .weight(1f)
+                    )
+                }
             }
         }
     }
-
 }
+
 
 /**
  * Caja del carrito

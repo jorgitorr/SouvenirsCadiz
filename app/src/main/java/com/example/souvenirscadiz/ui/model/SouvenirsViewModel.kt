@@ -46,6 +46,7 @@ class SouvenirsViewModel @Inject constructor(
      * @param firestore permite guardar en la base de datos
      * @param _onChangeFav revisa el ultimo elemento en fav y si se ha añadido uno o se
      * a eliminado cambia la variable
+     *
      */
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
@@ -58,7 +59,7 @@ class SouvenirsViewModel @Inject constructor(
     var souvenirsTipo = _souvenirsTipo
 
     private val _actualSouvenir by mutableStateOf(Souvenir())
-    var actualSouvenir = _actualSouvenir
+    private var actualSouvenir = _actualSouvenir
 
     private var _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirFav: StateFlow<List<SouvenirState>> =  _souvenirFav
@@ -84,13 +85,16 @@ class SouvenirsViewModel @Inject constructor(
 
 
     /**
-     * checkea el fav anterior
+     * checkea si se ha añadido algo al fav, en ese caso modifica la variable
      */
-    fun checkAnteriorFav(){
+    private fun checkAnteriorFav(){
         _onChangeFav.value = !_onChangeFav.value
     }
 
-    fun checkAnteriorCarrito(){
+    /**
+     * checkea si se ha añadido algo o eliminado al carrito, en ese caso modifica la variable
+     */
+    private fun checkAnteriorCarrito(){
         _onChangeCarrito.value = !_onChangeCarrito.value
     }
     /**
@@ -241,7 +245,7 @@ class SouvenirsViewModel @Inject constructor(
      * @param souvenir souvenir
      */
     fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
-        fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
+        //fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorFav()
@@ -295,7 +299,7 @@ class SouvenirsViewModel @Inject constructor(
      * @param souvenir souvenir
      */
     fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
-        fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
+        //fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorFav()
@@ -349,7 +353,7 @@ class SouvenirsViewModel @Inject constructor(
      */
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
-        fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
+        //fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorCarrito()
@@ -402,7 +406,7 @@ class SouvenirsViewModel @Inject constructor(
      */
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
-        fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
+        //fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorCarrito()
@@ -656,7 +660,7 @@ class SouvenirsViewModel @Inject constructor(
      * muestra todos los souvenirs que se han pedido
      * esto lo ve el administrador
      */
-    fun fetchSouvenirsPedido(){
+    private fun fetchSouvenirsPedido(){
         firestore.collection("Pedidos")
             .addSnapshotListener{querySnapshot, error->
                 if(error != null){
@@ -706,7 +710,7 @@ class SouvenirsViewModel @Inject constructor(
      * checkea si el souvenir esta guardado en fav o en el carrito
      * @param souvenir
      */
-    fun CheckSouvenirIsSaved(souvenir: Souvenir){
+    fun checkSouvenirIsSaved(souvenir: Souvenir){
         var souvenirGuardadoFav = false
         var souvenirGuardadoCarrito = false
         //comprueba si el souvenir esta en los souvenirs favoritos
