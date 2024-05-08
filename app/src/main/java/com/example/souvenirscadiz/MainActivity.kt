@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.core.app.NotificationCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.navigation.NavManager
@@ -63,6 +64,9 @@ class MainActivity : ComponentActivity() {
 
                     createChannel()
 
+                    createSimpleNotification()
+
+
                 }
             }
         }
@@ -70,6 +74,30 @@ class MainActivity : ComponentActivity() {
     }
 
     //NOTIFICACIONES
+
+    fun createSimpleNotification() {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val flag = PendingIntent.FLAG_IMMUTABLE
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, flag)
+
+        val notification = NotificationCompat.Builder(this, MY_CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_delete)
+            .setContentTitle("My title")
+            .setContentText("Souvenir nuevos")
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("Has recibido nuevos souvenirs")
+            )
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        val manager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.notify(NOTIFICATION_ID, notification)
+    }
 
     /**
      * notificacion que se activa con el tiempo
@@ -103,7 +131,7 @@ class MainActivity : ComponentActivity() {
                 "MySuperChannel",
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
-                description = "SUSCRIBETE"
+                description = "NOTIFICACION DE SOUVENIRS"
             }
 
             val notificationManager: NotificationManager =
@@ -112,6 +140,8 @@ class MainActivity : ComponentActivity() {
             notificationManager.createNotificationChannel(channel)
         }
     }
+
+
 
     //LECTURA DE ARCHIVOS
     /**

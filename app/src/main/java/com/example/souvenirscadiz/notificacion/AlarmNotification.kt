@@ -13,13 +13,9 @@ class AlarmNotification: BroadcastReceiver() {
         const val NOTIFICATION_ID = 1
     }
 
-
-
     override fun onReceive(context: Context, p1: Intent?) {
         createSimpleNotification(context)
     }
-
-
 
     private fun createSimpleNotification(context: Context) {
         val intent = Intent(context, MainActivity::class.java).apply {

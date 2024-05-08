@@ -122,14 +122,14 @@ fun FavoriteButton(
                         souvenir.guardadoFav = true
                         souvenirsViewModel.saveSouvenirInFav({
                             Toast
-                                .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
+                                .makeText(context, "Souvenir guardado en favoritos", Toast.LENGTH_SHORT)
                                 .show()
                         }, souvenir)
                     } else {
                         souvenir.guardadoFav = false
                         souvenirsViewModel.deleteSouvenirInFav({
                             Toast
-                                .makeText(context, "Souvenir eliminado", Toast.LENGTH_SHORT)
+                                .makeText(context, "Souvenir eliminado de favoritos", Toast.LENGTH_SHORT)
                                 .show()
                         }, souvenir)
                     }

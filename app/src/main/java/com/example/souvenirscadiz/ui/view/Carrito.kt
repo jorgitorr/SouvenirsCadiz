@@ -80,6 +80,9 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
     val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
     val context = LocalContext.current
 
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
     //si no hay souvenirs en el carrito
     if(souvenirCarrito.isNotEmpty()){
         Button(onClick = {
@@ -129,6 +132,7 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
         }
     }
 }
+
 
 /**
  * Muestra los souvenirs guardados en fav
