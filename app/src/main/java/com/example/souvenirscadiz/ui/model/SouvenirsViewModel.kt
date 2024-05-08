@@ -83,6 +83,11 @@ class SouvenirsViewModel @Inject constructor(
     private var _onChangeCarrito = MutableStateFlow(false)
     var onChangeCarrito = _onChangeCarrito
 
+    init {
+        getSouvenirs()
+        fetchSouvenirsFav()
+        fetchSouvenirsCarrito()
+    }
 
     /**
      * checkea si se ha añadido algo al fav, en ese caso modifica la variable
@@ -105,11 +110,6 @@ class SouvenirsViewModel @Inject constructor(
         if (index == _visibleItemCount.value - 1 && _visibleItemCount.value < _souvenirs.value.size) {
             _visibleItemCount.value += 5
         }
-    }
-
-
-    init {
-        getSouvenirs()
     }
 
     /**
@@ -387,11 +387,6 @@ class SouvenirsViewModel @Inject constructor(
                         }.addOnFailureListener{
                             Log.d("Save error","Error al guardar")
                         }
-                }else{
-                    //si el souvenir ya está en la BDD lo borra
-                    deleteSouvenirInCarrito ({
-                        Log.d("Souvenir_borrado","Souvenir Borrado")
-                    },souvenir)
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
@@ -440,11 +435,6 @@ class SouvenirsViewModel @Inject constructor(
                         }.addOnFailureListener{
                             Log.d("Save error","Error al guardar")
                         }
-                }else{
-                    //si el souvenir ya está en la BDD lo borra
-                    deleteSouvenirInCarrito ({
-                        Log.d("Souvenir_borrado","Souvenir Borrado")
-                    },souvenir)
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")

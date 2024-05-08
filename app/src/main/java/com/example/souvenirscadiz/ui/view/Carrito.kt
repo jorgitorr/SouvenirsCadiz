@@ -141,6 +141,9 @@ fun SouvenirsSavedCarrito(navController: NavController, souvenirsViewModel: Souv
     val showDialog = remember { mutableStateOf(true) } //muestra el dialogo
     val compositionEmptyBasket by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty_basket))
 
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
 
     if(souvenirSaved.isEmpty()){
         LottieAnimation(composition = compositionEmptyBasket)

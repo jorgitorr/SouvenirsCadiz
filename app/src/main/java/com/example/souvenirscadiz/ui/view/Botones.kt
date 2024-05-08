@@ -61,7 +61,6 @@ fun FavoriteButton(
                 .clickable {
                     if (!souvenir.guardadoFav) {
                         souvenir.guardadoFav = true
-
                         souvenirsViewModel.saveSouvenirInFav({
                             Toast
                                 .makeText(
@@ -73,7 +72,6 @@ fun FavoriteButton(
                         }, souvenir)
                     } else {
                         souvenir.guardadoFav = false
-
                         souvenirsViewModel.deleteSouvenirInFav({
                             Toast
                                 .makeText(
@@ -122,7 +120,6 @@ fun FavoriteButton(
                 .clickable {
                     if (!souvenir.guardadoFav) {
                         souvenir.guardadoFav = true
-                        //si el souvenir no esta guardado
                         souvenirsViewModel.saveSouvenirInFav({
                             Toast
                                 .makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT)
@@ -235,7 +232,6 @@ fun ShopingCartButton(
                 .clickable {
                     if (!souvenir.guardadoCarrito) {
                         souvenir.guardadoCarrito = true
-
                         souvenirsViewModel.saveSouvenirInCarrito({
                             Toast
                                 .makeText(
@@ -247,7 +243,6 @@ fun ShopingCartButton(
                         }, souvenir)
                     } else {
                         souvenir.guardadoCarrito = false
-
                         souvenirsViewModel.deleteSouvenirInCarrito({
                             Toast
                                 .makeText(
@@ -292,8 +287,7 @@ fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: SouvenirSta
                         Toast.makeText(context,
                             "Has eliminado un souvenir del carrito",
                             Toast.LENGTH_SHORT).show()
-                    }, souvenir
-                )
+                    }, souvenir)
             }
         )
     }

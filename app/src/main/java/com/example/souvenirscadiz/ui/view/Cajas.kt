@@ -16,14 +16,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -204,7 +202,8 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
                         overflow = TextOverflow.Ellipsis,
                         color = RaisanBlack,
                         textAlign = TextAlign.End,
-                        modifier = Modifier.padding(start = 4.dp, end = 8.dp)
+                        modifier = Modifier
+                            .padding(start = 4.dp, end = 8.dp)
                             .weight(1f)
                     )
                 }
@@ -228,6 +227,10 @@ fun CajaCarrito(
     url: Int,
     souvenirsViewModel: SouvenirsViewModel
 ) {
+
+    LaunchedEffect(souvenir.guardadoCarrito){
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
     val context = LocalContext.current
     var cantidadSouvenir by remember { mutableStateOf("") }
 
