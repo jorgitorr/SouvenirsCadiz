@@ -2,6 +2,7 @@ package com.example.souvenirscadiz.ui.view
 
 import android.media.MediaPlayer
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
+import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
@@ -70,14 +72,13 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.angry_start_sound)
     val soundPlayed = remember { mutableStateOf(false) } // Variable para rastrear si el sonido ya se ha reproducido
+    val showDialog = remember { mutableStateOf(true) } //muestra el dialogo
+    val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()//parametro que contiene los metodos guardados
+    val compositionAngryStart by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.angry_start)) //animacion de la estrella
 
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav()
     }
-
-    val showDialog = remember { mutableStateOf(true) } //muestra el dialogo
-    val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()//parametro que contiene los metodos guardados
-    val compositionAngryStart by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.angry_start)) //animacion de la estrella
 
     if(souvenirSaved.isEmpty()){ //si no hay souvenirs guardados
         LottieAnimation(composition = compositionAngryStart)
@@ -96,13 +97,14 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
                 title = {
                     Text(text = "Alerta",
                         fontFamily = KiwiMaru,
-                        color = MaterialTheme.colorScheme.tertiaryContainer)
+                        color = if(isSystemInDarkTheme()) Silver else RaisanBlack
+                    )
                 },
                 text = {
                     Text(
                         text = "NO TIENES ELEMENTOS GUARDADOS EN FAVORITOS",
                         fontFamily = KiwiMaru,
-                        color = MaterialTheme.colorScheme.tertiaryContainer
+                        color = if(isSystemInDarkTheme()) Silver else RaisanBlack
                     )
                 },
                 confirmButton = {
@@ -112,7 +114,8 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
                         }
                     ) {
                         Text("Aceptar",
-                            fontFamily = KiwiMaru)
+                            fontFamily = KiwiMaru,
+                            color = if(isSystemInDarkTheme()) Silver else RaisanBlack)
                     }
                 }
             )

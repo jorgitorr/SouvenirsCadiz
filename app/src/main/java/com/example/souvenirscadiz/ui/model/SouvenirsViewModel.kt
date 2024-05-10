@@ -59,6 +59,16 @@ class SouvenirsViewModel @Inject constructor(
     private var _onChangeCarrito = MutableStateFlow(false)
     var onChangeCarrito = _onChangeCarrito
 
+    private var _showDialogFav = MutableStateFlow(true)
+    val showDialogFav = _showDialogFav
+    private var _showDialogCarrito = MutableStateFlow(true)
+    val showDialogCarrito = _showDialogCarrito
+
+    private var _soundPlayedFav = MutableStateFlow(true)
+    val soundPlayerFav = _soundPlayedFav
+    private var _soundPlayerCarrito = MutableStateFlow(true)
+    val soundPlayedCarrito = _soundPlayerCarrito
+
     init {
         getSouvenirs()
         fetchSouvenirsFav()

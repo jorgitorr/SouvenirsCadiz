@@ -94,11 +94,11 @@ fun FavoriteButton(
     souvenirsViewModel: SouvenirsViewModel
 ) {
     val context = LocalContext.current
+    val soundEffect = MediaPlayer.create(context, R.raw.like_sound)
+
     LaunchedEffect(souvenir.guardadoFav){
         souvenirsViewModel.fetchSouvenirsFav()
     }
-
-    val soundEffect = MediaPlayer.create(context, R.raw.like_sound)
 
     IconToggleButton(
         checked = souvenir.guardadoFav,

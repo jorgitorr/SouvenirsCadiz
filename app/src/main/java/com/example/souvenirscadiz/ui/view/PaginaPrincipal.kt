@@ -148,7 +148,6 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
     val visibleItemCount by souvenirsViewModel.visibleItemCount.collectAsState()
 
-
     // si no ha seleccionado ningún tipo de souvenirs, muestra todos los souvenirs
     if (souvenirs.isEmpty()) {
         LazyColumn {

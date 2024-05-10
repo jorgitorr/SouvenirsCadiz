@@ -84,6 +84,7 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsCarrito()
     }
+
     //si no hay souvenirs en el carrito
     if(souvenirCarrito.isNotEmpty()){
         Button(onClick = {

@@ -63,6 +63,7 @@ import com.example.souvenirscadiz.ui.theme.White
 @Composable
 fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(60.dp)
