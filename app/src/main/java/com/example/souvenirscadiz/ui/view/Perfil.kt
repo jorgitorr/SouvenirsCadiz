@@ -432,6 +432,7 @@ fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController
 
 /**
  * Inicio de sesion con google
+ * @param souvenirsViewModel viewmodel de souvenirs
  * @param loginViewModel viewmodel del login
  * @param navController navegacion
  */

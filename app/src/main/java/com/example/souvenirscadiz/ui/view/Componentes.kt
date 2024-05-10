@@ -141,7 +141,6 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
 fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
     val souvenirsCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
-    val onChange by souvenirsViewModel.onChangeCarrito.collectAsState()
 
     Box(modifier = Modifier
         .fillMaxWidth()

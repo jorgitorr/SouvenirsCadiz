@@ -1,7 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
@@ -28,9 +29,7 @@ import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
-import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
-import com.example.souvenirscadiz.ui.theme.White
 
 @Composable
 fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
@@ -68,6 +67,10 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
  */
 @Composable
 fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    val context = LocalContext.current
+    val soundEffect = MediaPlayer.create(context, R.raw.angry_start_sound)
+    val soundPlayed = remember { mutableStateOf(false) } // Variable para rastrear si el sonido ya se ha reproducido
+
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav()
     }
@@ -78,6 +81,11 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
 
     if(souvenirSaved.isEmpty()){ //si no hay souvenirs guardados
         LottieAnimation(composition = compositionAngryStart)
+
+        if(!soundPlayed.value){
+            soundEffect.start()
+            soundPlayed.value = true
+        }
 
         //muestra el AlertDialog
         if (showDialog.value) {
@@ -109,7 +117,6 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
                 }
             )
         }
-
     }else{
         LazyColumn{
             items(souvenirSaved){ souvenir ->

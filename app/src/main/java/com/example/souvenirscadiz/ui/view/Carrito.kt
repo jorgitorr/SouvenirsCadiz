@@ -1,5 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.media.MediaPlayer
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -144,15 +145,27 @@ fun SouvenirsSavedCarrito(navController: NavController, souvenirsViewModel: Souv
     val souvenirSaved by souvenirsViewModel.souvenirCarrito.collectAsState()//parametro que contiene los metodos guardados
     val showDialog = remember { mutableStateOf(true) } //muestra el dialogo
     val compositionEmptyBasket by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty_basket))
+    val context = LocalContext.current
+    val soundEffect = MediaPlayer.create(context, R.raw.empty_basket_sound)
+    val soundPlayed = remember { mutableStateOf(false) } // Variable para rastrear si el sonido ya se ha reproducido
 
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsCarrito()
     }
 
+    //si el sonido no ha sido ejecutado se ejecuta
     if(souvenirSaved.isEmpty()){
+
+        if(!soundPlayed.value){
+            soundEffect.start()
+            soundPlayed.value = true
+        }
+
         LottieAnimation(composition = compositionEmptyBasket)
+
         //muestra el AlertDialog
         if (showDialog.value) {
+
             AlertDialog(
                 onDismissRequest = {
                     showDialog.value = false
