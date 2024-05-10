@@ -8,7 +8,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.example.souvenirscadiz.MainActivity
 
-class AlarmNotification: BroadcastReceiver() {
+class CarritoNotification: BroadcastReceiver() {
     companion object{
         const val NOTIFICATION_ID = 1
     }
@@ -27,17 +27,19 @@ class AlarmNotification: BroadcastReceiver() {
 
         val notification = NotificationCompat.Builder(context, MainActivity.MY_CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_delete)
-            .setContentTitle("My title")
-            .setContentText("Souvenir nuevos")
+            .setContentTitle("SOUVENIRS CADIZ")
+            .setContentText("Tienes souvenirs pendientes en el carrito")
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("Has recibido nuevos souvenirs")
+                    .bigText("Tiene souvenirs pendientes en el carrito")
             )
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        manager.notify(NOTIFICATION_ID, notification)
+        manager.notify(NOTIFICATION_ID,notification)
     }
+
+
 }

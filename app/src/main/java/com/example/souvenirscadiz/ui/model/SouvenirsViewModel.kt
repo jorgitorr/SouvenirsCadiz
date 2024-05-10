@@ -27,27 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SouvenirsViewModel @Inject constructor(
-    //aqui van los casos de uso
 ):ViewModel(){
-
-    //poner un contador de productos que tiene en el carrito el usuario
-    //para poder añadirla al icono shop
-    /**
-     * @param query es una variable que se usa en el buscador para saber que estamos buscando
-     * @param active es una variable para saber si el buscador está activo
-     * @param _souvenirs variable privada  que contiene una lista de souvenirs
-     * @param souvenir variable que se comparte en el resto de páginas
-     * @param _souvenirsTipo variable privada que tiene los souvenirs de ese tipo
-     * @param souvenirsTipo variable que comparte con las paginas
-     * @param actualSouvenir variable que convierte el souvenir pulsado
-     * @param _souvenirsSaved souvenirs guardados
-     * @param souvenirSaved variable publica que muestra los souvenirs guardados
-     * @param auth autorizacion de firebase
-     * @param firestore permite guardar en la base de datos
-     * @param _onChangeFav revisa el ultimo elemento en fav y si se ha añadido uno o se
-     * a eliminado cambia la variable
-     *
-     */
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
     val selectedItem = MutableStateFlow("Principal")
@@ -63,10 +43,8 @@ class SouvenirsViewModel @Inject constructor(
 
     private var _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirFav: StateFlow<List<SouvenirState>> =  _souvenirFav
-
     private var _souvenirCarrito = MutableStateFlow<List<SouvenirState>>(emptyList())
     var souvenirCarrito: StateFlow<List<SouvenirState>> =  _souvenirCarrito
-
     private val _souvenirPedidos = MutableStateFlow<List<PedidoState>>(emptyList())
     val souvenirPedidos: StateFlow<List<PedidoState>> =  _souvenirPedidos
 
@@ -76,10 +54,8 @@ class SouvenirsViewModel @Inject constructor(
 
     private var _visibleItemCount = MutableStateFlow(5)
     var visibleItemCount = _visibleItemCount
-
     private var _onChangeFav = MutableStateFlow(false)
     var onChangeFav = _onChangeFav
-
     private var _onChangeCarrito = MutableStateFlow(false)
     var onChangeCarrito = _onChangeCarrito
 
@@ -131,8 +107,6 @@ class SouvenirsViewModel @Inject constructor(
 
     /**
      * le da el tipo del enumerado
-     * @param souvenir souvenir al cual le añadimos el tipo
-     * @param palabra contiene el tipo
      */
     fun setTipo(){
         for(souvenir in _souvenirs.value){
@@ -677,24 +651,6 @@ class SouvenirsViewModel @Inject constructor(
         _souvenirCarrito = MutableStateFlow(emptyList())
         souvenirCarrito = _souvenirCarrito
     }
-
-    /**
-     * @return obtiene el numero de souvenirs pedidos
-     */
-    fun getNumberSouvenirsPedidos(): Int{
-        viewModelScope.launch { fetchSouvenirsPedido() }
-        return souvenirPedidos.value.size
-    }
-
-
-    /**
-     * @return obtiene el numero de souvenirs en el carrito
-     */
-    fun getNumberSouvenirsInCarrito(): Int{
-        viewModelScope.launch { fetchSouvenirsCarrito() }
-        return souvenirCarrito.value.size
-    }
-
 
     /**
      * checkea si el souvenir esta guardado en fav o en el carrito
