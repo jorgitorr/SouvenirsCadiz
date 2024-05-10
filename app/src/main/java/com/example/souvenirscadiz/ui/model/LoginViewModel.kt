@@ -26,9 +26,7 @@ import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-    //inyectar los casos de uso
-): ViewModel(){
+class LoginViewModel @Inject constructor(): ViewModel(){
     /**
      * @param auth autorización para acceder a la base de datos
      * @param firestore proporciona acceso a los servicios de firebase

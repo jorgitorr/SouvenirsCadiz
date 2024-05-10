@@ -26,8 +26,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SouvenirsViewModel @Inject constructor(
-):ViewModel(){
+class SouvenirsViewModel @Inject constructor():ViewModel(){
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
     val selectedItem = MutableStateFlow("Principal")
@@ -59,7 +58,7 @@ class SouvenirsViewModel @Inject constructor(
     private var _onChangeCarrito = MutableStateFlow(false)
     var onChangeCarrito = _onChangeCarrito
 
-    private var _showDialogFav = MutableStateFlow(true)
+    /*private var _showDialogFav = MutableStateFlow(true)
     val showDialogFav = _showDialogFav
     private var _showDialogCarrito = MutableStateFlow(true)
     val showDialogCarrito = _showDialogCarrito
@@ -67,7 +66,7 @@ class SouvenirsViewModel @Inject constructor(
     private var _soundPlayedFav = MutableStateFlow(true)
     val soundPlayerFav = _soundPlayedFav
     private var _soundPlayerCarrito = MutableStateFlow(true)
-    val soundPlayedCarrito = _soundPlayerCarrito
+    val soundPlayedCarrito = _soundPlayerCarrito*/
 
     init {
         getSouvenirs()
