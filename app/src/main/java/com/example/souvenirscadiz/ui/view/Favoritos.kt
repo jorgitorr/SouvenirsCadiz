@@ -10,15 +10,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -70,11 +67,9 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
 @Composable
 fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val context = LocalContext.current
+    val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()
     val soundEffect = MediaPlayer.create(context, R.raw.angry_start_sound)
-    val soundPlayed = remember { mutableStateOf(false) } // Variable para rastrear si el sonido ya se ha reproducido
-    val showDialog = remember { mutableStateOf(true) } //muestra el dialogo
-    val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()//parametro que contiene los metodos guardados
-    val compositionAngryStart by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.angry_start)) //animacion de la estrella
+    val compositionAngryStart by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.angry_start))
 
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav()
@@ -83,16 +78,16 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
     if(souvenirSaved.isEmpty()){ //si no hay souvenirs guardados
         LottieAnimation(composition = compositionAngryStart)
 
-        if(!soundPlayed.value){
+        if(souvenirsViewModel.soundPlayedFav){
             soundEffect.start()
-            soundPlayed.value = true
+            souvenirsViewModel.soundPlayedFav = false
         }
 
         //muestra el AlertDialog
-        if (showDialog.value) {
+        if (souvenirsViewModel.showDialogFav) {
             AlertDialog(
                 onDismissRequest = {
-                    showDialog.value = false
+                    souvenirsViewModel.showDialogFav = false
                 },
                 title = {
                     Text(text = "Alerta",
@@ -110,7 +105,7 @@ fun SouvenirSavedFav(navController: NavController, souvenirsViewModel: Souvenirs
                 confirmButton = {
                     Button(
                         onClick = {
-                            showDialog.value = false
+                            souvenirsViewModel.showDialogFav = false
                         }
                     ) {
                         Text("Aceptar",

@@ -80,6 +80,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
 fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){
     val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
     val context = LocalContext.current
+    val soundEffect = MediaPlayer.create(context, R.raw.pedido_sound)
 
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsCarrito()
@@ -88,14 +89,17 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
     //si no hay souvenirs en el carrito
     if(souvenirCarrito.isNotEmpty()){
         Button(onClick = {
-            //solo queda introducir la cantidad de cada uno
             souvenirsViewModel.saveSouvenirInPedido {
                 Toast.makeText(context,
                     "Souvenirs Pedidos",
                     Toast.LENGTH_SHORT).show()
             }
-            //vaciar souvenirs del carrito
-            souvenirsViewModel.vaciarSouvenirsCarrito() },
+            souvenirsViewModel.deleteSouvenirInCarritoFromUser()
+            souvenirsViewModel.vaciarSouvenirsCarrito()
+
+            soundEffect.start()
+                         //tengo que eliminar los souvenirs de ese usuario de la BDD
+            },
 
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(Redwood)) {
@@ -104,7 +108,6 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
             )
         }
     }else{
-        //si el tamaño de souvenirs fav es diferente diferente
         if (loginViewModel.showAlert) {
             // Mostrar un diálogo si el usuario no ha iniciado sesión
             AlertDialog(
@@ -144,32 +147,29 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
 @Composable
 fun SouvenirsSavedCarrito(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
     val souvenirSaved by souvenirsViewModel.souvenirCarrito.collectAsState()//parametro que contiene los metodos guardados
-    val showDialog = remember { mutableStateOf(true) } //muestra el dialogo
     val compositionEmptyBasket by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty_basket))
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.empty_basket_sound)
-    val soundPlayed = remember { mutableStateOf(false) } // Variable para rastrear si el sonido ya se ha reproducido
 
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsCarrito()
     }
 
-    //si el sonido no ha sido ejecutado se ejecuta
     if(souvenirSaved.isEmpty()){
 
-        if(!soundPlayed.value){
+        if(souvenirsViewModel.soundPlayedCarrito){
             soundEffect.start()
-            soundPlayed.value = true
+            souvenirsViewModel.soundPlayedCarrito = false
         }
 
         LottieAnimation(composition = compositionEmptyBasket)
 
         //muestra el AlertDialog
-        if (showDialog.value) {
+        if (souvenirsViewModel.showDialogCarrito) {
 
             AlertDialog(
                 onDismissRequest = {
-                    showDialog.value = false
+                    souvenirsViewModel.showDialogCarrito = false
                 },
                 title = {
                     Text(text = "Alerta",
@@ -185,7 +185,7 @@ fun SouvenirsSavedCarrito(navController: NavController, souvenirsViewModel: Souv
                 confirmButton = {
                     Button(
                         onClick = {
-                            showDialog.value = false
+                            souvenirsViewModel.showDialogCarrito = false
                         }
                     ) {
                         Text("Aceptar",

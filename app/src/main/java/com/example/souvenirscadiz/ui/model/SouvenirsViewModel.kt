@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -58,21 +59,19 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private var _onChangeCarrito = MutableStateFlow(false)
     var onChangeCarrito = _onChangeCarrito
 
-    /*private var _showDialogFav = MutableStateFlow(true)
-    val showDialogFav = _showDialogFav
-    private var _showDialogCarrito = MutableStateFlow(true)
-    val showDialogCarrito = _showDialogCarrito
+    var showDialogFav by mutableStateOf(true)
+    var showDialogCarrito by mutableStateOf(true)
 
-    private var _soundPlayedFav = MutableStateFlow(true)
-    val soundPlayerFav = _soundPlayedFav
-    private var _soundPlayerCarrito = MutableStateFlow(true)
-    val soundPlayedCarrito = _soundPlayerCarrito*/
+    var soundPlayedFav by mutableStateOf(true)
+    var soundPlayedCarrito by mutableStateOf(true)
 
     init {
         getSouvenirs()
         fetchSouvenirsFav()
         fetchSouvenirsCarrito()
     }
+
+
 
     /**
      * checkea si se ha añadido algo al fav, en ese caso modifica la variable
@@ -118,30 +117,32 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * le da el tipo del enumerado
      */
     fun setTipo(){
-        for(souvenir in _souvenirs.value){
-            when {
-                souvenir.nombre.contains("Llav") -> souvenir.tipo = Tipo.LLAVERO
-                souvenir.nombre.contains("Iman") -> souvenir.tipo = Tipo.IMAN
-                souvenir.nombre.contains("Abridor") -> souvenir.tipo = Tipo.ABRIDOR
-                souvenir.nombre.contains("Pins") -> souvenir.tipo = Tipo.PINS
-                souvenir.nombre.contains("Cortauñas") -> souvenir.tipo = Tipo.CORTAUNIAS
-                souvenir.nombre.contains("Cucharilla") -> souvenir.tipo = Tipo.CUCHARILLA
-                souvenir.nombre.contains("Campana") -> souvenir.tipo = Tipo.CAMPANA
-                souvenir.nombre.contains("Salvamanteles") -> souvenir.tipo = Tipo.SALVAMANTELES
-                souvenir.nombre.contains("Posa") -> souvenir.tipo = Tipo.POSA
-                souvenir.nombre.contains("Set") -> souvenir.tipo = Tipo.SET
-                souvenir.nombre.contains("Parche") -> souvenir.tipo = Tipo.PARCHE
-                souvenir.nombre.contains("Adhes.") -> souvenir.tipo = Tipo.ADHESIVO
-                souvenir.nombre.contains("Pastillero") -> souvenir.tipo = Tipo.PASTILLERO
-                souvenir.nombre.contains("Espejo") -> souvenir.tipo = Tipo.ESPEJO
-                souvenir.nombre.contains("Cubremascarilla") -> souvenir.tipo = Tipo.CUBRE_MASCARILLA
-                souvenir.nombre.contains("Dedal") -> souvenir.tipo = Tipo.DEDAL
-                souvenir.nombre.contains("Pisapapeles") -> souvenir.tipo = Tipo.PISAPAPELES
-                souvenir.nombre.contains("Abanico") -> souvenir.tipo = Tipo.ABANICO
-                souvenir.nombre.contains("Estuche") -> souvenir.tipo = Tipo.ESTUCHE
-                souvenir.nombre.contains("Bola") -> souvenir.tipo = Tipo.BOLA
-                souvenir.nombre.contains("Plato") -> souvenir.tipo = Tipo.PLATO
-                souvenir.nombre.contains("Figura") -> souvenir.tipo = Tipo.FIGURA
+        viewModelScope.launch {
+            for(souvenir in _souvenirs.value){
+                when {
+                    souvenir.nombre.contains("Llav") -> souvenir.tipo = Tipo.LLAVERO
+                    souvenir.nombre.contains("Iman") -> souvenir.tipo = Tipo.IMAN
+                    souvenir.nombre.contains("Abridor") -> souvenir.tipo = Tipo.ABRIDOR
+                    souvenir.nombre.contains("Pins") -> souvenir.tipo = Tipo.PINS
+                    souvenir.nombre.contains("Cortauñas") -> souvenir.tipo = Tipo.CORTAUNIAS
+                    souvenir.nombre.contains("Cucharilla") -> souvenir.tipo = Tipo.CUCHARILLA
+                    souvenir.nombre.contains("Campana") -> souvenir.tipo = Tipo.CAMPANA
+                    souvenir.nombre.contains("Salvamanteles") -> souvenir.tipo = Tipo.SALVAMANTELES
+                    souvenir.nombre.contains("Posa") -> souvenir.tipo = Tipo.POSA
+                    souvenir.nombre.contains("Set") -> souvenir.tipo = Tipo.SET
+                    souvenir.nombre.contains("Parche") -> souvenir.tipo = Tipo.PARCHE
+                    souvenir.nombre.contains("Adhes.") -> souvenir.tipo = Tipo.ADHESIVO
+                    souvenir.nombre.contains("Pastillero") -> souvenir.tipo = Tipo.PASTILLERO
+                    souvenir.nombre.contains("Espejo") -> souvenir.tipo = Tipo.ESPEJO
+                    souvenir.nombre.contains("Cubremascarilla") -> souvenir.tipo = Tipo.CUBRE_MASCARILLA
+                    souvenir.nombre.contains("Dedal") -> souvenir.tipo = Tipo.DEDAL
+                    souvenir.nombre.contains("Pisapapeles") -> souvenir.tipo = Tipo.PISAPAPELES
+                    souvenir.nombre.contains("Abanico") -> souvenir.tipo = Tipo.ABANICO
+                    souvenir.nombre.contains("Estuche") -> souvenir.tipo = Tipo.ESTUCHE
+                    souvenir.nombre.contains("Bola") -> souvenir.tipo = Tipo.BOLA
+                    souvenir.nombre.contains("Plato") -> souvenir.tipo = Tipo.PLATO
+                    souvenir.nombre.contains("Figura") -> souvenir.tipo = Tipo.FIGURA
+                }
             }
         }
     }
@@ -153,14 +154,16 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @return _souvenirTipo
      */
     fun getByTipo(tipo: Tipo){
-        val list: MutableList<Souvenir> = mutableListOf()
-        _souvenirsTipo.value = emptyList()//limpiamos los valores que pueda tener
-        for(souvenir in souvenirs.value){
-            if(souvenir.tipo == tipo){
-                list.add(souvenir)
+        viewModelScope.launch {
+            val list: MutableList<Souvenir> = mutableListOf()
+            _souvenirsTipo.value = emptyList()//limpiamos los valores que pueda tener
+            for(souvenir in souvenirs.value){
+                if(souvenir.tipo == tipo){
+                    list.add(souvenir)
+                }
             }
+            _souvenirsTipo.value = list
         }
-        _souvenirsTipo.value = list
     }
 
 
@@ -282,7 +285,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param souvenir souvenir
      */
     fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
-        //fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorFav()
@@ -336,7 +338,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
-        //fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorCarrito()
@@ -384,7 +385,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
-        //fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorCarrito()
@@ -584,24 +584,26 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * devuelve todos los souvenirs guardados en la lista de favoritos
      */
     fun fetchSouvenirsFav(){
-        firestore.collection("Favoritos")
-            .whereEqualTo("emailUser",email.toString())
-            .addSnapshotListener{querySnapshot, error->
-                if(error != null){
-                    Log.d("Error SL","Error SS")
-                    return@addSnapshotListener
-                }
-                val souvenirsList = mutableListOf<SouvenirState>()
-                if(querySnapshot != null){
-                    for(souvenir in querySnapshot){
-                        val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
-                        Log.d("Souvenir",souvenirObj.url.toString())
-                        souvenirObj.guardadoFav = true
-                        souvenirsList.add(souvenirObj)
+        viewModelScope.launch {
+            firestore.collection("Favoritos")
+                .whereEqualTo("emailUser",email.toString())
+                .addSnapshotListener{querySnapshot, error->
+                    if(error != null){
+                        Log.d("Error SL","Error SS")
+                        return@addSnapshotListener
                     }
+                    val souvenirsList = mutableListOf<SouvenirState>()
+                    if(querySnapshot != null){
+                        for(souvenir in querySnapshot){
+                            val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
+                            Log.d("Souvenir",souvenirObj.url.toString())
+                            souvenirObj.guardadoFav = true
+                            souvenirsList.add(souvenirObj)
+                        }
+                    }
+                    _souvenirFav.value = souvenirsList
                 }
-                _souvenirFav.value = souvenirsList
-            }
+        }
     }
 
 
@@ -609,23 +611,26 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * Devuelve los souvenirs guardados en la lista de carrito
      */
     fun fetchSouvenirsCarrito(){
-        val souvenirsList = mutableListOf<SouvenirState>()
+        viewModelScope.launch {
+            val souvenirsList = mutableListOf<SouvenirState>()
 
-        firestore.collection("Carrito")
-            .whereEqualTo("emailUser",email.toString())
-            .addSnapshotListener{querySnapshot, error->
-                if(error != null){
-                    return@addSnapshotListener
-                }
-                if(querySnapshot != null){
-                    for(souvenir in querySnapshot){
-                        val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
-                        souvenirObj.guardadoCarrito = true
-                        souvenirsList.add(souvenirObj)
+            firestore.collection("Carrito")
+                .whereEqualTo("emailUser",email.toString())
+                .addSnapshotListener{querySnapshot, error->
+                    if(error != null){
+                        return@addSnapshotListener
                     }
+                    if(querySnapshot != null){
+                        for(souvenir in querySnapshot){
+                            val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
+                            souvenirObj.guardadoCarrito = true
+                            souvenirsList.add(souvenirObj)
+                        }
+                    }
+                    _souvenirCarrito.value = souvenirsList
                 }
-                _souvenirCarrito.value = souvenirsList
-            }
+
+        }
     }
 
 
@@ -634,31 +639,60 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * esto lo ve el administrador
      */
     private fun fetchSouvenirsPedido(){
-        firestore.collection("Pedidos")
-            .addSnapshotListener{querySnapshot, error->
-                if(error != null){
-                    Log.d("Error SL","Error SS")
-                    return@addSnapshotListener
-                }
-                val souvenirsList = mutableListOf<PedidoState>()
-                if(querySnapshot != null){
-                    for(souvenir in querySnapshot){
-                        val souvenirObj = souvenir.toObject(PedidoState::class.java).copy()
-                        souvenirsList.add(souvenirObj)
+        viewModelScope.launch {
+            firestore.collection("Pedidos")
+                .addSnapshotListener{querySnapshot, error->
+                    if(error != null){
+                        Log.d("Error SL","Error SS")
+                        return@addSnapshotListener
                     }
+                    val souvenirsList = mutableListOf<PedidoState>()
+                    if(querySnapshot != null){
+                        for(souvenir in querySnapshot){
+                            val souvenirObj = souvenir.toObject(PedidoState::class.java).copy()
+                            souvenirsList.add(souvenirObj)
+                        }
+                    }
+                    _souvenirPedidos.value = souvenirsList
                 }
-                _souvenirPedidos.value = souvenirsList
-            }
+        }
     }
 
 
 
     /**
-     * Permite vaciar los souvenirs del carrito una vez pedidos
+     * Vacia los souvenirs del carrito, se realiza cuando los souvenirs son pedidos
      */
     fun vaciarSouvenirsCarrito(){
-        _souvenirCarrito = MutableStateFlow(emptyList())
-        souvenirCarrito = _souvenirCarrito
+        viewModelScope.launch {
+            _souvenirCarrito.value = emptyList()
+        }
+    }
+
+
+    /**
+     * Elimina todos los souvenirs que tenga el usuario en el carrito
+     */
+    fun deleteSouvenirInCarritoFromUser () {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                checkAnteriorCarrito()
+                firestore.collection("Carrito")
+                    .whereEqualTo("emailUser", email)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
+            }
+        }
     }
 
     /**
@@ -666,30 +700,33 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param souvenir
      */
     fun checkSouvenirIsSaved(souvenir: Souvenir){
-        var souvenirGuardadoFav = false
-        var souvenirGuardadoCarrito = false
-        //comprueba si el souvenir esta en los souvenirs favoritos
-        for(souvenirG in _souvenirFav.value){
-            if(souvenir.referencia==souvenirG.referencia){
-                souvenir.guardadoFav = true
-                souvenirGuardadoFav = true
+        viewModelScope.launch {
+            var souvenirGuardadoFav = false
+            var souvenirGuardadoCarrito = false
+            //comprueba si el souvenir esta en los souvenirs favoritos
+            for(souvenirG in _souvenirFav.value){
+                if(souvenir.referencia==souvenirG.referencia){
+                    souvenir.guardadoFav = true
+                    souvenirGuardadoFav = true
+                }
             }
-        }
 
-        //comprueba si el souvenir esta en los souvenirs del carrito
-        for(souvenirC in _souvenirCarrito.value){
-            if(souvenirC.referencia == souvenir.referencia){
-                souvenir.guardadoCarrito = true
-                souvenirGuardadoCarrito = true
+            //comprueba si el souvenir esta en los souvenirs del carrito
+            for(souvenirC in _souvenirCarrito.value){
+                if(souvenirC.referencia == souvenir.referencia){
+                    souvenir.guardadoCarrito = true
+                    souvenirGuardadoCarrito = true
+                }
             }
-        }
 
-        if(!souvenirGuardadoFav){
-            souvenir.guardadoFav = false
-        }
+            if(!souvenirGuardadoFav){
+                souvenir.guardadoFav = false
+            }
 
-        if(!souvenirGuardadoCarrito){
-            souvenir.guardadoCarrito = false
+            if(!souvenirGuardadoCarrito){
+                souvenir.guardadoCarrito = false
+            }
+
         }
     }
 

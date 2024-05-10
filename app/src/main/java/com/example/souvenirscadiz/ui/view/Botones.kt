@@ -43,7 +43,6 @@ fun FavoriteButton(
         checked = souvenir.guardadoFav,
         onCheckedChange = {
             souvenir.guardadoFav != souvenir.guardadoFav
-            soundEffect.start()
         }
     ) {
         Icon(
