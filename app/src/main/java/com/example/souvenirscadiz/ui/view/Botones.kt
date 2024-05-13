@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
@@ -19,11 +21,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.souvenirscadiz.R
+import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
+
+
+
+
+
+@Composable
+fun AcceptButton(
+    souvenir: PedidoState,
+    souvenirsViewModel: SouvenirsViewModel
+) {
+    val context = LocalContext.current
+
+    LaunchedEffect(souvenir.pedidoAceptado){
+        souvenirsViewModel.fetchSouvenirsPedido()
+    }
+
+    IconToggleButton(
+        checked = souvenir.pedidoAceptado,
+        onCheckedChange = {
+            souvenir.pedidoAceptado = !souvenir.pedidoAceptado
+        }
+    ) {
+        Icon(
+            tint = if (!souvenir.pedidoAceptado) RaisanBlack else Redwood,
+            imageVector = if (souvenir.pedidoAceptado) Icons.Default.AddCircleOutline else Icons.Default.AddCircle,
+            contentDescription = "Favorite Icon",
+            modifier = Modifier
+                .size(30.dp)
+                .clickable {
+                    souvenir.pedidoAceptado = !souvenir.pedidoAceptado
+                }
+        )
+    }
+
+}
+
+
 
 /**
  * PERTENECE A LA PÁGINA PRINCIPAL

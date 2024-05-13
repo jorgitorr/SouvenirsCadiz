@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -24,6 +23,10 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
 fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsPedido()
+    }
+
     Scaffold(
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
@@ -38,7 +41,7 @@ fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            //SouvenirsPedido(navController, souvenirsViewModel)
+            SouvenirsPedido(navController, souvenirsViewModel)
         }
     }
 }
@@ -50,22 +53,21 @@ fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController
  */
 @Composable
 fun SouvenirsPedido(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-    LaunchedEffect(true){
-        souvenirsViewModel.fetchSouvenirsPedido()
-    }
 
-    val souvenirsPedidos by souvenirsViewModel.souvenirPedidos.collectAsState()//parametro que contiene los metodos guardados
-    LazyRow{
-        items(souvenirsPedidos.distinctBy { it.emailUser }){ souvenir ->
-            Log.d("emailUser", souvenir.emailUser)
-            Log.d("souvenir",souvenir.url.toString() + " " + souvenir.referencia)
-            Text(
-                text = souvenir.emailUser,
-                fontFamily = KiwiMaru)
-            Spacer(modifier = Modifier.padding(2.dp))
-            CajaPedido(
-                navController = navController,
-                souvenir = souvenir)
+    val souvenirsPedidos by souvenirsViewModel.souvenirPedidos.collectAsState()
+    Log.d("pedidos",souvenirsPedidos.size.toString())
+
+    if(souvenirsPedidos.isEmpty()){
+        Text(text = "No hay ningún pedido",
+            fontFamily = KiwiMaru)
+    }else{
+        LazyRow{
+            items(souvenirsPedidos){ souvenir ->
+                CajaPedido(
+                    navController,
+                    souvenir,
+                    souvenirsViewModel)
+            }
         }
     }
 }

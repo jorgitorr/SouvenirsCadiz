@@ -613,7 +613,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     fun fetchSouvenirsCarrito(){
         viewModelScope.launch {
             val souvenirsList = mutableListOf<SouvenirState>()
-
             firestore.collection("Carrito")
                 .whereEqualTo("emailUser",email.toString())
                 .addSnapshotListener{querySnapshot, error->
@@ -640,13 +639,13 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
    fun fetchSouvenirsPedido(){
         viewModelScope.launch {
+            val souvenirsList = mutableListOf<PedidoState>()
             firestore.collection("Pedidos")
                 .addSnapshotListener{querySnapshot, error->
                     if(error != null){
                         Log.d("Error SL","Error SS")
                         return@addSnapshotListener
                     }
-                    val souvenirsList = mutableListOf<PedidoState>()
                     if(querySnapshot != null){
                         for(souvenir in querySnapshot){
                             val souvenirObj = souvenir.toObject(PedidoState::class.java).copy()

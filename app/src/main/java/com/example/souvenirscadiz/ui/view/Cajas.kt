@@ -324,6 +324,7 @@ fun CajaCarrito(
 fun CajaPedido(
     navController: NavController,
     souvenir: PedidoState,
+    souvenirsViewModel: SouvenirsViewModel
 ) {
     Box(
         modifier = Modifier
@@ -354,7 +355,6 @@ fun CajaPedido(
                 Text(
                     text = souvenir.nombre,
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
                     color = RaisanBlack,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -369,13 +369,14 @@ fun CajaPedido(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 Text(
-                    text = "${souvenir.cantidad}",
+                    text = "Cantidad: ${souvenir.cantidad}",
                     fontSize = 14.sp,
                     color = RaisanBlack,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
+                AcceptButton(souvenir, souvenirsViewModel)
             }
         }
     }
