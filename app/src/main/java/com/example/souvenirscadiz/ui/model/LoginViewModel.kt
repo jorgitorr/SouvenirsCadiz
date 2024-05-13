@@ -8,10 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.User
-import com.example.souvenirscadiz.data.util.Constant.Companion.CONTRASENIA_ADMIN
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
@@ -48,7 +46,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     var userName by mutableStateOf("")
         private set
 
-    var esAdmin by mutableStateOf(false)
+    private var esAdmin by mutableStateOf(false)
 
 
     /**
@@ -237,10 +235,10 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
     /**
      * Comprueba si eres admin
-     * @return esAdmin variable que devuelve true si eres admin o false si no
+     * @return esAdmin variable que devuelve true si el usuario actual tiene el correo del admin
      */
     fun checkAdmin():Boolean{
-        if(password==CONTRASENIA_ADMIN && email == EMAIL_ADMIN){
+        if(auth.currentUser?.email == EMAIL_ADMIN){
             esAdmin = true
         }
         return esAdmin

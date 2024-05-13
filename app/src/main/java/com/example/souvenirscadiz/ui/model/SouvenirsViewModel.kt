@@ -638,7 +638,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * muestra todos los souvenirs que se han pedido
      * esto lo ve el administrador
      */
-    private fun fetchSouvenirsPedido(){
+   fun fetchSouvenirsPedido(){
         viewModelScope.launch {
             firestore.collection("Pedidos")
                 .addSnapshotListener{querySnapshot, error->
