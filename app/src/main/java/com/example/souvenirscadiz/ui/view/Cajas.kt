@@ -358,6 +358,7 @@ fun CajaPedido(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
+
                 Text(
                     text = souvenir.nombre,
                     fontSize = 16.sp,
