@@ -238,7 +238,7 @@ fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: Souve
         Text(text = "No hay ningún pedido",
             fontFamily = KiwiMaru)
     }else{
-        LazyRow{
+        LazyColumn{
             items(souvenirsPedidos){ souvenir ->
                 CajaPedido(
                     navController,
@@ -258,7 +258,7 @@ fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel, s
         Text(text = "No hay usuarios registrados",
             fontFamily = KiwiMaru)
     }else{
-        LazyRow{
+        LazyColumn{
             items(users){ user ->
                 CajaUsuarios(
                     user,
