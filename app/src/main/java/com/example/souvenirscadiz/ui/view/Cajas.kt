@@ -324,12 +324,12 @@ fun CajaCarrito(
 /**
  * Caja del carrito
  * @param navController navegacion
- * @param souvenir souvenirState
+ * @param pedido souvenirState
  */
 @Composable
 fun CajaPedido(
     navController: NavController,
-    souvenir: PedidoState,
+    pedido: PedidoState,
     souvenirsViewModel: SouvenirsViewModel
 ) {
     Box(
@@ -337,7 +337,7 @@ fun CajaPedido(
             .fillMaxWidth()
             .background(Silver, shape = RoundedCornerShape(5.dp))
             .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
-            .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+            .clickable { navController.navigate("SouvenirDetail/${pedido.referencia}") }
             .padding(8.dp)
     ) {
         Column(
@@ -350,8 +350,8 @@ fun CajaPedido(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = souvenir.emailUser,
-                    fontSize = 16.sp,
+                    text = pedido.emailUser,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = RaisanBlack,
                     maxLines = 1,
@@ -360,7 +360,7 @@ fun CajaPedido(
                 )
 
                 Text(
-                    text = souvenir.nombre,
+                    text = pedido.nombre,
                     fontSize = 16.sp,
                     color = RaisanBlack,
                     maxLines = 1,
@@ -368,7 +368,7 @@ fun CajaPedido(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 Text(
-                    text = "Ref: ${souvenir.referencia}",
+                    text = "Ref: ${pedido.referencia}",
                     fontSize = 14.sp,
                     color = RaisanBlack,
                     maxLines = 1,
@@ -376,14 +376,17 @@ fun CajaPedido(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 Text(
-                    text = "Cantidad: ${souvenir.cantidad}",
+                    text = "Cantidad: ${pedido.cantidad}",
                     fontSize = 14.sp,
                     color = RaisanBlack,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
-                AcceptButton(souvenir, souvenirsViewModel)
+                Row {
+                    AcceptButton(pedido, souvenirsViewModel)
+                    CancelButton(pedido, souvenirsViewModel)
+                }
             }
         }
     }
@@ -432,6 +435,9 @@ fun CajaUsuarios(user:UserState,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
+                EliminarButton(
+                    user,
+                    souvenirsViewModel)
             }
         }
     }

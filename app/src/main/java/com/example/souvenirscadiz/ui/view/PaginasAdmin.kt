@@ -27,7 +27,7 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
             HeaderAdmin(navController, souvenirsViewModel)
         },
         bottomBar = {
-            Footer(navController,souvenirsViewModel, loginViewModel)
+            FooterAdmin(navController,souvenirsViewModel, loginViewModel)
         }, containerColor = Silver
     ) { innerPadding ->
         Column(

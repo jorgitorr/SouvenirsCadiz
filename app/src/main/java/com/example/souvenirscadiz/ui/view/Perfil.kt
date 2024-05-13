@@ -88,8 +88,19 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
     }
 
     Scaffold(
-        topBar = { Header(navController, souvenirsViewModel) },
-        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) }
+        topBar = {
+            if(loginViewModel.checkAdmin()){
+                HeaderAdmin(navController, souvenirsViewModel)
+            }else{
+                Header(navController, souvenirsViewModel)
+            } },
+        bottomBar = {
+            if(loginViewModel.checkAdmin()){
+                FooterAdmin(navController, souvenirsViewModel, loginViewModel)
+            }else{
+                Footer(navController, souvenirsViewModel, loginViewModel)
+            }
+            }
         ,containerColor = Silver
     ) { innerPadding ->
         Column(

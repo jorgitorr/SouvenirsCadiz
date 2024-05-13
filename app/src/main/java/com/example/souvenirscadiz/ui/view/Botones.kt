@@ -3,67 +3,45 @@ package com.example.souvenirscadiz.ui.view
 import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.RemoveShoppingCart
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
-import com.example.souvenirscadiz.data.model.UserState
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
 
-
-
-
-
-@Composable
-fun AcceptButton(
-    souvenir: PedidoState,
-    souvenirsViewModel: SouvenirsViewModel
-) {
-    val context = LocalContext.current
-
-    LaunchedEffect(souvenir.pedidoAceptado){
-        souvenirsViewModel.fetchSouvenirsPedido()
-    }
-
-    IconToggleButton(
-        checked = souvenir.pedidoAceptado,
-        onCheckedChange = {
-            souvenir.pedidoAceptado = !souvenir.pedidoAceptado
-        }
-    ) {
-        Icon(
-            tint = if (!souvenir.pedidoAceptado) RaisanBlack else Redwood,
-            imageVector = if (souvenir.pedidoAceptado) Icons.Default.AddCircleOutline else Icons.Default.AddCircle,
-            contentDescription = "Favorite Icon",
-            modifier = Modifier
-                .size(30.dp)
-                .clickable {
-                    souvenir.pedidoAceptado = !souvenir.pedidoAceptado
-                }
-        )
-    }
-
-}
 
 
 
@@ -331,6 +309,75 @@ fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: SouvenirSta
         )
     }
 
+}
+
+
+/**
+ * Muestra el botón de pedir en el caso de que se pueda mostrar o el mensaje de alerta
+ * @param souvenirsViewModel viewmodel de souvenirs
+ * @param loginViewModel viewmodel del login
+ * @param navController navegacion
+ */
+@Composable
+fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){
+    val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
+    val context = LocalContext.current
+    val soundEffect = MediaPlayer.create(context, R.raw.pedido_sound)
+
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
+
+    //si no hay souvenirs en el carrito
+    if(souvenirCarrito.isNotEmpty()){
+        Button(onClick = {
+            souvenirsViewModel.saveSouvenirInPedido {
+                Toast.makeText(context,
+                    "Souvenirs Pedidos",
+                    Toast.LENGTH_SHORT).show()
+            }
+            souvenirsViewModel.deleteSouvenirInCarritoFromUser()
+            souvenirsViewModel.vaciarSouvenirsCarrito()
+
+            soundEffect.start()
+            //tengo que eliminar los souvenirs de ese usuario de la BDD
+        },
+
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(Redwood)) {
+            Text(text = "PEDIR",
+                fontFamily = KiwiMaru
+            )
+        }
+    }else{
+        if (loginViewModel.showAlert) {
+            // Mostrar un diálogo si el usuario no ha iniciado sesión
+            AlertDialog(
+                onDismissRequest = { /* No hacer nada en el cierre del diálogo */ },
+                title = {
+                    Text(
+                        text = "No has iniciado sesión para ver tus elementos en el carrito",
+                        fontFamily = KiwiMaru,
+                        color = RaisanBlack,
+                        fontSize = 15.sp
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            navController.navigate("InicioSesion")
+                        }
+                    ) {
+                        Text(
+                            text = "Ir a Inicio de Sesión",
+                            fontFamily = KiwiMaru,
+                            color = Redwood
+                        )
+                    }
+                }
+            )
+        }
+    }
 }
 
 

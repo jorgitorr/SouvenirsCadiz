@@ -266,7 +266,6 @@ fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel, s
                     souvenirsViewModel,
                     navController
                 )
-                //EliminarButton(loginViewModel, user)
             }
         }
     }

@@ -7,5 +7,6 @@ data class PedidoState(
     var url:Int = 0,
     var tipo:Tipo = Tipo.LLAVERO,
     var cantidad:String = "",
-    var pedidoAceptado:Boolean = false
+    var pedidoAceptado:Boolean = false,
+    var pedidoCancelado: Boolean = false
 )

@@ -31,7 +31,11 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             }
         },
         bottomBar = {
-            Footer(navController, souvenirsViewModel, loginViewModel)
+            if(loginViewModel.checkAdmin()){
+                FooterAdmin(navController, souvenirsViewModel, loginViewModel)
+            }else{
+                Footer(navController, souvenirsViewModel, loginViewModel)
+            }
         }, containerColor = Silver
     ) { innerPadding ->
         Column(
