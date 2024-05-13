@@ -69,7 +69,7 @@ fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             SearchUsuarios(loginViewModel, navController)
-            //CajaUsuarios(loginViewModel, navController)
+            UsuariosList(navController, loginViewModel, souvenirsViewModel)
         }
     }
 }

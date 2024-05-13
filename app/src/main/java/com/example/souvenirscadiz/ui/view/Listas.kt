@@ -224,12 +224,12 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
 
 
 /**
- * Muestra los souvenirs guardados en fav
+ * Muestra los souvenirs guardados en pedido
  * @param navController navegacion
  * @param souvenirsViewModel viewmodel de souvenirs
  */
 @Composable
-fun SouvenirsPedido(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
 
     val souvenirsPedidos by souvenirsViewModel.souvenirPedidos.collectAsState()
     Log.d("pedidos",souvenirsPedidos.size.toString())
@@ -244,6 +244,29 @@ fun SouvenirsPedido(navController: NavController, souvenirsViewModel: SouvenirsV
                     navController,
                     souvenir,
                     souvenirsViewModel)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel){
+    val users by loginViewModel.users.collectAsState()
+
+    if(users.isEmpty()){
+        Text(text = "No hay usuarios registrados",
+            fontFamily = KiwiMaru)
+    }else{
+        LazyRow{
+            items(users){ user ->
+                CajaUsuarios(
+                    user,
+                    loginViewModel,
+                    souvenirsViewModel,
+                    navController
+                )
+                //EliminarButton(loginViewModel, user)
             }
         }
     }
