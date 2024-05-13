@@ -23,8 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -65,154 +63,10 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            SouvenirsSavedCarrito(navController, souvenirsViewModel, loginViewModel) //souvenirs en el carrito
-        }
-    }
-}
-
-/**
- * Muestra el botón de pedir en el caso de que se pueda mostrar o el mensaje de alerta
- * @param souvenirsViewModel viewmodel de souvenirs
- * @param loginViewModel viewmodel del login
- * @param navController navegacion
- */
-@Composable
-fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){
-    val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
-    val context = LocalContext.current
-    val soundEffect = MediaPlayer.create(context, R.raw.pedido_sound)
-
-    LaunchedEffect(true){
-        souvenirsViewModel.fetchSouvenirsCarrito()
-    }
-
-    //si no hay souvenirs en el carrito
-    if(souvenirCarrito.isNotEmpty()){
-        Button(onClick = {
-            souvenirsViewModel.saveSouvenirInPedido {
-                Toast.makeText(context,
-                    "Souvenirs Pedidos",
-                    Toast.LENGTH_SHORT).show()
-            }
-            souvenirsViewModel.deleteSouvenirInCarritoFromUser()
-            souvenirsViewModel.vaciarSouvenirsCarrito()
-
-            soundEffect.start()
-                         //tengo que eliminar los souvenirs de ese usuario de la BDD
-            },
-
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(Redwood)) {
-            Text(text = "PEDIR",
-                fontFamily = KiwiMaru
-            )
-        }
-    }else{
-        if (loginViewModel.showAlert) {
-            // Mostrar un diálogo si el usuario no ha iniciado sesión
-            AlertDialog(
-                onDismissRequest = { /* No hacer nada en el cierre del diálogo */ },
-                title = {
-                    Text(
-                        text = "No has iniciado sesión para ver tus elementos en el carrito",
-                        fontFamily = KiwiMaru,
-                        color = RaisanBlack,
-                        fontSize = 15.sp
-                    )
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            navController.navigate("InicioSesion")
-                        }
-                    ) {
-                        Text(
-                            text = "Ir a Inicio de Sesión",
-                            fontFamily = KiwiMaru,
-                            color = Redwood
-                        )
-                    }
-                }
-            )
+            SouvenirsListCarrito(navController, souvenirsViewModel, loginViewModel) //souvenirs en el carrito
         }
     }
 }
 
 
-/**
- * Muestra los souvenirs guardados en fav
- * @param navController navegacion
- * @param souvenirsViewModel viewmodel de souvenirs
- */
-@Composable
-fun SouvenirsSavedCarrito(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
-    val souvenirSaved by souvenirsViewModel.souvenirCarrito.collectAsState()//parametro que contiene los metodos guardados
-    val compositionEmptyBasket by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty_basket))
-    val context = LocalContext.current
-    val soundEffect = MediaPlayer.create(context, R.raw.empty_basket_sound)
-
-    LaunchedEffect(true){
-        souvenirsViewModel.fetchSouvenirsCarrito()
-    }
-
-    if(souvenirSaved.isEmpty()){
-
-        if(souvenirsViewModel.soundPlayedCarrito){
-            soundEffect.start()
-            souvenirsViewModel.soundPlayedCarrito = false
-        }
-
-        LottieAnimation(composition = compositionEmptyBasket)
-
-        //muestra el AlertDialog
-        if (souvenirsViewModel.showDialogCarrito) {
-
-            AlertDialog(
-                onDismissRequest = {
-                    souvenirsViewModel.showDialogCarrito = false
-                },
-                title = {
-                    Text(text = "Alerta",
-                        fontFamily = KiwiMaru,
-                        color = if(isSystemInDarkTheme()) Silver else RaisanBlack)
-                },
-                text = {
-                    Text(
-                        text = "NO TIENES ELEMENTOS GUARDADOS EN EL CARRITO",
-                        fontFamily = KiwiMaru,
-                        color = if(isSystemInDarkTheme()) Silver else RaisanBlack)
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            souvenirsViewModel.showDialogCarrito = false
-                        }
-                    ) {
-                        Text("Aceptar",
-                            fontFamily = KiwiMaru,
-                            color = if(isSystemInDarkTheme()) Silver else RaisanBlack)
-                    }
-                }
-            )
-        }
-    }else{
-        LazyColumn{
-            items(souvenirSaved){ souvenir ->
-                Log.d("SOUVENIRS GUARDADOS",souvenir.nombre)
-                val url = "img${souvenir.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)
-
-                CajaCarrito(navController = navController,
-                    souvenir = souvenir,
-                    url = resourceId,
-                    souvenirsViewModel = souvenirsViewModel)
-            }
-            item {
-                //boton de pedir todos los souvenirs
-                Spacer(modifier = Modifier.height(50.dp))
-                ButtonPedirOrMsg(souvenirsViewModel, loginViewModel, navController)
-            }
-        }
-    }
-}
 

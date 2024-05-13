@@ -1,6 +1,8 @@
 package com.example.souvenirscadiz.ui.view
 
 
+import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,19 +25,25 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarColors
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,6 +58,7 @@ import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.KleeOne
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
+import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.White
 
@@ -322,6 +331,75 @@ fun EnumaradoSouvenirs(souvenirsViewModel: SouvenirsViewModel){
                 color = RaisanBlack,
                 fontSize = 16.sp,
                 fontFamily = KleeOne
+            )
+        }
+    }
+}
+
+
+/**
+ * Muestra el botón de pedir en el caso de que se pueda mostrar o el mensaje de alerta
+ * @param souvenirsViewModel viewmodel de souvenirs
+ * @param loginViewModel viewmodel del login
+ * @param navController navegacion
+ */
+@Composable
+fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){
+    val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
+    val context = LocalContext.current
+    val soundEffect = MediaPlayer.create(context, R.raw.pedido_sound)
+
+    LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
+
+    //si no hay souvenirs en el carrito
+    if(souvenirCarrito.isNotEmpty()){
+        Button(onClick = {
+            souvenirsViewModel.saveSouvenirInPedido {
+                Toast.makeText(context,
+                    "Souvenirs Pedidos",
+                    Toast.LENGTH_SHORT).show()
+            }
+            souvenirsViewModel.deleteSouvenirInCarritoFromUser()
+            souvenirsViewModel.vaciarSouvenirsCarrito()
+
+            soundEffect.start()
+            //tengo que eliminar los souvenirs de ese usuario de la BDD
+        },
+
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(Redwood)) {
+            Text(text = "PEDIR",
+                fontFamily = KiwiMaru
+            )
+        }
+    }else{
+        if (loginViewModel.showAlert) {
+            // Mostrar un diálogo si el usuario no ha iniciado sesión
+            AlertDialog(
+                onDismissRequest = { /* No hacer nada en el cierre del diálogo */ },
+                title = {
+                    Text(
+                        text = "No has iniciado sesión para ver tus elementos en el carrito",
+                        fontFamily = KiwiMaru,
+                        color = RaisanBlack,
+                        fontSize = 15.sp
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            navController.navigate("InicioSesion")
+                        }
+                    ) {
+                        Text(
+                            text = "Ir a Inicio de Sesión",
+                            fontFamily = KiwiMaru,
+                            color = Redwood
+                        )
+                    }
+                }
             )
         }
     }

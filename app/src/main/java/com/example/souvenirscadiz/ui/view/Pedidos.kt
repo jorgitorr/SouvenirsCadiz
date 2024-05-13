@@ -46,29 +46,4 @@ fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController
     }
 }
 
-/**
- * Muestra los souvenirs guardados en fav
- * @param navController navegacion
- * @param souvenirsViewModel viewmodel de souvenirs
- */
-@Composable
-fun SouvenirsPedido(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-
-    val souvenirsPedidos by souvenirsViewModel.souvenirPedidos.collectAsState()
-    Log.d("pedidos",souvenirsPedidos.size.toString())
-
-    if(souvenirsPedidos.isEmpty()){
-        Text(text = "No hay ningún pedido",
-            fontFamily = KiwiMaru)
-    }else{
-        LazyRow{
-            items(souvenirsPedidos){ souvenir ->
-                CajaPedido(
-                    navController,
-                    souvenir,
-                    souvenirsViewModel)
-            }
-        }
-    }
-}
 

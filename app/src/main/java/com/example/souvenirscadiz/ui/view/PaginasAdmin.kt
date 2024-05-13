@@ -59,7 +59,7 @@ fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
             HeaderAdmin(navController, souvenirsViewModel)
         },
         bottomBar = {
-            Footer(navController,souvenirsViewModel, loginViewModel)
+            FooterAdmin(navController,souvenirsViewModel, loginViewModel)
         }, containerColor = Silver
     ) { innerPadding ->
         Column(
@@ -69,6 +69,7 @@ fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             SearchUsuarios(loginViewModel, navController)
+            //CajaUsuarios(loginViewModel, navController)
         }
     }
 }

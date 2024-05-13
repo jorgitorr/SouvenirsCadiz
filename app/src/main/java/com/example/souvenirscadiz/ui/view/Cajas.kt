@@ -44,6 +44,7 @@ import coil.request.ImageRequest
 import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
+import com.example.souvenirscadiz.data.model.UserState
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -382,6 +383,54 @@ fun CajaPedido(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 AcceptButton(souvenir, souvenirsViewModel)
+            }
+        }
+    }
+}
+
+@Composable
+fun CajaUsuarios(user:UserState,
+                 loginViewModel: LoginViewModel,
+                 souvenirsViewModel: SouvenirsViewModel,
+                 navController: NavController){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Silver, shape = RoundedCornerShape(5.dp))
+            .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
+            .clickable {
+                navController.navigate(
+                    "UsuarioDetail/"
+                )
+            }
+            .padding(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = user.email,
+                    fontSize = 14.sp,
+                    color = RaisanBlack,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+
+                Text(
+                    text = user.username,
+                    fontSize = 14.sp,
+                    color = RaisanBlack,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
             }
         }
     }

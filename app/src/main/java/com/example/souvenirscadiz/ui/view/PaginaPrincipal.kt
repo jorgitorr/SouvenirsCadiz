@@ -138,44 +138,6 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
 }
 
 
-/**
- * lista de souvenirs para la PÁGINA PRINCIPAL
- * Si la lista de souvenirs está vacía ya que no se a pulsado ninguno de los tipos de souvenirs
- * me coge la lista completa de souvenirs y me la muesra
- * si la lista (que contiene los souvenirs de un tipo) está vacía me la hace con todos los souvenirs
- * @param navController navegacion
- * @param souvenirsViewModel viewmodel de souvenirs
- */
-@Composable
-fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
-    val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState() // souvenirs de un tipo
-    val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
-    val visibleItemCount by souvenirsViewModel.visibleItemCount.collectAsState()
-
-    // si no ha seleccionado ningún tipo de souvenirs, muestra todos los souvenirs
-    if (souvenirs.isEmpty()) {
-        LazyColumn {
-            itemsIndexed(souvenirsPre.take(visibleItemCount)) { index, souvenirP ->
-                val url = "img${souvenirP.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                souvenirsViewModel.checkSouvenirIsSaved(souvenirP)
-                Caja(navController, souvenirP, resourceId, souvenirsViewModel, loginViewModel)
-                souvenirsViewModel.onListEndReached(index)
-            }
-        }
-    } else { // si hay un tipo seleccionado, muestra los souvenirs de ese tipo
-        LazyColumn {
-            itemsIndexed(souvenirs.take(visibleItemCount)) { index, souvenir ->
-                val url = "img${souvenir.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)
-                souvenirsViewModel.checkSouvenirIsSaved(souvenir)
-                Caja(navController, souvenir, resourceId, souvenirsViewModel, loginViewModel)
-                souvenirsViewModel.onListEndReached(index)
-            }
-        }
-    }
-}
-
 
 
 
