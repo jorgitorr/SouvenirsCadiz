@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.User
+import com.example.souvenirscadiz.data.model.UserState
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -19,6 +21,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
@@ -26,13 +29,20 @@ import kotlin.coroutines.cancellation.CancellationException
 @HiltViewModel
 class LoginViewModel @Inject constructor(): ViewModel(){
     /**
+     * @param query
+     * @param active
      * @param auth autorización para acceder a la base de datos
      * @param firestore proporciona acceso a los servicios de firebase
      * @param showAlert booleano que muestra el DialogAlert cuando está true y lo oculta en false
      * @param email email del usuario
      * @param password contraseña del usuario
      * @param username nombre del usuario
+     * @param _users
+     * @param users
      */
+
+    val query = MutableStateFlow("")
+    val active = MutableStateFlow(false)
 
     private val auth: FirebaseAuth by lazy { Firebase.auth } // es mejor está forma de inicializar ya que es de manera diferida
     private val firestore = Firebase.firestore
@@ -47,6 +57,9 @@ class LoginViewModel @Inject constructor(): ViewModel(){
         private set
 
     private var esAdmin by mutableStateOf(false)
+
+    private val _users = MutableStateFlow<List<UserState>>(emptyList())
+    val users = _users
 
 
     /**
@@ -217,6 +230,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
                             home()
                             email = userEmail!!
                             userName = nombreUser!!
+                            saveUser(nombreUser) //guarda el usuario en la BDD
                         }
                     }else{
                         val googleSignInClient = GoogleSignIn.getClient(context, GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -232,6 +246,31 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
     }
 
+    /**
+     * Te devuelve todos los usuarios de la BDD
+     */
+
+    fun fetchUsers(){
+        viewModelScope.launch {
+            firestore.collection("Users")
+                .addSnapshotListener{querySnapshot, error->
+                    if(error != null){
+                        Log.d("Error SL","Error SS")
+                        return@addSnapshotListener
+                    }
+                    val userList = mutableListOf<UserState>()
+                    if(querySnapshot != null){
+                        for(user in querySnapshot){
+                            val userState = user.toObject(UserState::class.java).copy()
+                            if(!userList.contains(userState)){
+                                userList.add(userState)
+                            }
+                        }
+                    }
+                    _users.value = userList
+                }
+        }
+    }
 
     /**
      * Comprueba si eres admin
@@ -242,6 +281,24 @@ class LoginViewModel @Inject constructor(): ViewModel(){
             esAdmin = true
         }
         return esAdmin
+    }
+
+
+    /**
+     * Actualiza la consulta de búsqueda actual.
+     * @param newQuery La nueva cadena de texto de consulta para la búsqueda.
+     */
+    fun setQuery(newQuery: String) {
+        query.value = newQuery
+    }
+
+    /**
+     * Establece si la búsqueda está activa o no.
+     *
+     * @param newActive El nuevo estado booleano que indica si la búsqueda está activa.
+     */
+    fun setActive(newActive: Boolean) {
+        active.value = newActive
     }
 
 }

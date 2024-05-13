@@ -50,7 +50,11 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             }
         },
         bottomBar = {
-            Footer(navController,souvenirsViewModel, loginViewModel)
+            if(loginViewModel.checkAdmin()){
+                FooterAdmin(navController, souvenirsViewModel, loginViewModel)
+            }else{
+                Footer(navController, souvenirsViewModel, loginViewModel)
+            }
         }
     ) { innerPadding ->
         Column(
@@ -61,7 +65,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
         ) {
             Search(souvenirsViewModel, navController)//buscador
             EnumaradoSouvenirs(souvenirsViewModel)//todos los enumerados
-            SouvenirsList(navController, souvenirsViewModel)//lista de souvenirs
+            SouvenirsList(navController, souvenirsViewModel, loginViewModel)//lista de souvenirs
         }
     }
 }
@@ -143,7 +147,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
  * @param souvenirsViewModel viewmodel de souvenirs
  */
 @Composable
-fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel) {
+fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState() // souvenirs de un tipo
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
     val visibleItemCount by souvenirsViewModel.visibleItemCount.collectAsState()
@@ -155,7 +159,7 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
                 val url = "img${souvenirP.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
                 souvenirsViewModel.checkSouvenirIsSaved(souvenirP)
-                Caja(navController, souvenirP, resourceId, souvenirsViewModel)
+                Caja(navController, souvenirP, resourceId, souvenirsViewModel, loginViewModel)
                 souvenirsViewModel.onListEndReached(index)
             }
         }
@@ -165,7 +169,7 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
                 val url = "img${souvenir.url}"
                 val resourceId = souvenirsViewModel.getResourceIdByName(url)
                 souvenirsViewModel.checkSouvenirIsSaved(souvenir)
-                Caja(navController, souvenir, resourceId, souvenirsViewModel)
+                Caja(navController, souvenir, resourceId, souvenirsViewModel, loginViewModel)
                 souvenirsViewModel.onListEndReached(index)
             }
         }

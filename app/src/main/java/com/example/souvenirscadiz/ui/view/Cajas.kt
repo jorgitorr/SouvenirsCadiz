@@ -44,6 +44,7 @@ import coil.request.ImageRequest
 import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
+import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
@@ -128,7 +129,8 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
  * @param url de la imagen que queremos mostrar
  */
 @Composable
-fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel){
+fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel,
+         loginViewModel: LoginViewModel){
 
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav()
@@ -158,16 +160,19 @@ fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsVie
                         .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
                 )
 
-                if(onChangeFav.value){
-                    FavoriteButton(souvenir, souvenirsViewModel)
-                }else{
-                    FavoriteButton(souvenir, souvenirsViewModel)
-                }
 
-                if(onChangeCarrito.value){
-                    ShopingCartButton(souvenir, souvenirsViewModel)
-                }else{
-                    ShopingCartButton(souvenir, souvenirsViewModel)
+                if(!loginViewModel.checkAdmin()){
+                    if(onChangeFav.value){
+                        FavoriteButton(souvenir, souvenirsViewModel)
+                    }else{
+                        FavoriteButton(souvenir, souvenirsViewModel)
+                    }
+
+                    if(onChangeCarrito.value){
+                        ShopingCartButton(souvenir, souvenirsViewModel)
+                    }else{
+                        ShopingCartButton(souvenir, souvenirsViewModel)
+                    }
                 }
             }
 
