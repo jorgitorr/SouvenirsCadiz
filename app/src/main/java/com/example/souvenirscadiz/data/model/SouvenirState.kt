@@ -10,4 +10,5 @@ data class SouvenirState(
     var guardadoFav:Boolean = false,
     var cantidad: String = "",
     var guardadoCarrito:Boolean = false
+    //añadir stock
 )

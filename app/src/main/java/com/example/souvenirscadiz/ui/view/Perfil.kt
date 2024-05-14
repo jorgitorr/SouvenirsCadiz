@@ -511,7 +511,6 @@ fun ProfileImage(imageStorageViewModel: ImageStorageViewModel) {
     ) { uri: Uri? ->
         uri?.let {
             imageUri.value = it.toString()
-            imageStorageViewModel.saveImageToFirebaseStorage(context, it)
         }
     }
 

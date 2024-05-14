@@ -8,4 +8,5 @@ data class Souvenir(
     var precio:Double = 2.99,
     var guardadoFav:Boolean = false,
     var guardadoCarrito:Boolean = false
+    //añadir stock
 )
