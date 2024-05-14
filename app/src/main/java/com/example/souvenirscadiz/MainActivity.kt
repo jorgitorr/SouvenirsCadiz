@@ -21,13 +21,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.notificacion.CarritoNotification
 import com.example.souvenirscadiz.notificacion.CarritoNotification.Companion.NOTIFICATION_ID
 import com.example.souvenirscadiz.notificacion.PedidosNotification
-import com.example.souvenirscadiz.ui.model.ImageStorageViewModel
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.SouvenirsCadizTheme
@@ -43,7 +41,6 @@ import java.util.Calendar
 class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel = LoginViewModel()
     private val souvenirsViewModel:SouvenirsViewModel = SouvenirsViewModel()
-    private val imageStorageViewModel:ImageStorageViewModel = ImageStorageViewModel()
 
     companion object {
         const val MY_CHANNEL_ID = "myChannel"
@@ -61,13 +58,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    readCSV()
-                    SouvenirsAddImages(souvenirsViewModel)
-                    NavManager(souvenirsViewModel, loginViewModel, imageStorageViewModel)
+                    NavManager(souvenirsViewModel, loginViewModel)
 
-                    createChannel()
+                    /*createChannel()
                     CarritoNotification()
-                    PedidosNotification()
+                    PedidosNotification()*/
                 }
             }
         }
@@ -153,52 +148,5 @@ class MainActivity : ComponentActivity() {
 
 
 
-    //LECTURA DE ARCHIVOS
-    /**
-     * Se encarga de leer el CSV que contiene la referencia de los souvenirs
-     * y el nombre
-     */
-    @Composable
-    private fun readCSV() :MutableList<Souvenir>{
-        val souvenirList = mutableListOf<Souvenir>()
-        var line :String?
-        try{
-            val input = resources.openRawResource(R.raw.souvenirs) //lee el archivo csv
-            val br = BufferedReader(InputStreamReader(input,
-                Charset.forName("UTF-8")
-            ))
-
-            while (true) {
-                line = br.readLine()
-                if (line.isNullOrEmpty()) break
-                val palabra = line.split(",")
-                val souvenir = Souvenir()
-                souvenir.referencia = palabra[0]
-                souvenir.nombre = palabra[1]
-                souvenirList.add(souvenir)
-            }
-        }catch (_: IOException){
-            Log.d("Error de lectura","Error")
-        }
-        return souvenirList
-    }
-
-
-    @SuppressLint("StateFlowValueCalledInComposition")
-    @Composable
-    fun SouvenirsAddImages(souvenirsViewModel: SouvenirsViewModel) {
-        val souvenirList = readCSV()
-        val souvenirImg = souvenirsViewModel.souvenirs.collectAsState().value
-
-        souvenirImg.mapIndexed { index, souvenir ->
-            souvenir.apply {
-                val additionalInfo = souvenirList.getOrNull(index)
-                additionalInfo?.let {
-                    souvenir.nombre = it.nombre
-                    souvenir.referencia = it.referencia
-                }
-            }
-        }
-    }
 
 }

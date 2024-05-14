@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.data.model.UserState
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN

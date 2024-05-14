@@ -10,11 +10,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.PedidoState
-import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.data.model.Tipo
-import com.example.souvenirscadiz.data.util.Constant.Companion.MAX_SOUVENIRS
-import com.example.souvenirscadiz.data.util.Constant.Companion.MIN_SOUVENIRS
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -32,13 +29,13 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     val active = MutableStateFlow(false)
     val selectedItem = MutableStateFlow("Principal")
 
-    private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
+    private val _souvenirs = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirs = _souvenirs
 
-    private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
+    private val _souvenirsTipo = MutableStateFlow<List<SouvenirState>>(emptyList())
     var souvenirsTipo = _souvenirsTipo
 
-    private val _actualSouvenir by mutableStateOf(Souvenir())
+    private val _actualSouvenir by mutableStateOf(SouvenirState())
     private var actualSouvenir = _actualSouvenir
 
     private var _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
@@ -66,11 +63,17 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var soundPlayedCarrito by mutableStateOf(true)
 
     init {
-        getSouvenirs()
+        //fetchSouvenirs()
         fetchSouvenirsFav()
         fetchSouvenirsCarrito()
     }
 
+    /**
+     * Hace la llamada a la base de datos de firestore para recuperar todos los souvenirs
+     */
+    private fun fetchSouvenirs() {
+
+    }
 
 
     /**
@@ -96,57 +99,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         }
     }
 
-    /**
-     * obtiene todos los souvenirs
-     */
-    private fun getSouvenirs(){
-        viewModelScope.launch {
-            val list: MutableList<Souvenir> = mutableListOf()
-            for(a in MIN_SOUVENIRS..MAX_SOUVENIRS){
-                val souvenir = Souvenir()
-                souvenir.url = a
-                list.add(souvenir)
-            }
-
-            _souvenirs.value = list
-        }
-    }
-
-
-    /**
-     * le da el tipo del enumerado
-     */
-    fun setTipo(){
-        viewModelScope.launch {
-            for(souvenir in _souvenirs.value){
-                when {
-                    souvenir.nombre.contains("Llav") -> souvenir.tipo = Tipo.LLAVERO
-                    souvenir.nombre.contains("Iman") -> souvenir.tipo = Tipo.IMAN
-                    souvenir.nombre.contains("Abridor") -> souvenir.tipo = Tipo.ABRIDOR
-                    souvenir.nombre.contains("Pins") -> souvenir.tipo = Tipo.PINS
-                    souvenir.nombre.contains("Cortauñas") -> souvenir.tipo = Tipo.CORTAUNIAS
-                    souvenir.nombre.contains("Cucharilla") -> souvenir.tipo = Tipo.CUCHARILLA
-                    souvenir.nombre.contains("Campana") -> souvenir.tipo = Tipo.CAMPANA
-                    souvenir.nombre.contains("Salvamanteles") -> souvenir.tipo = Tipo.SALVAMANTELES
-                    souvenir.nombre.contains("Posa") -> souvenir.tipo = Tipo.POSA
-                    souvenir.nombre.contains("Set") -> souvenir.tipo = Tipo.SET
-                    souvenir.nombre.contains("Parche") -> souvenir.tipo = Tipo.PARCHE
-                    souvenir.nombre.contains("Adhes.") -> souvenir.tipo = Tipo.ADHESIVO
-                    souvenir.nombre.contains("Pastillero") -> souvenir.tipo = Tipo.PASTILLERO
-                    souvenir.nombre.contains("Espejo") -> souvenir.tipo = Tipo.ESPEJO
-                    souvenir.nombre.contains("Cubremascarilla") -> souvenir.tipo = Tipo.CUBRE_MASCARILLA
-                    souvenir.nombre.contains("Dedal") -> souvenir.tipo = Tipo.DEDAL
-                    souvenir.nombre.contains("Pisapapeles") -> souvenir.tipo = Tipo.PISAPAPELES
-                    souvenir.nombre.contains("Abanico") -> souvenir.tipo = Tipo.ABANICO
-                    souvenir.nombre.contains("Estuche") -> souvenir.tipo = Tipo.ESTUCHE
-                    souvenir.nombre.contains("Bola") -> souvenir.tipo = Tipo.BOLA
-                    souvenir.nombre.contains("Plato") -> souvenir.tipo = Tipo.PLATO
-                    souvenir.nombre.contains("Figura") -> souvenir.tipo = Tipo.FIGURA
-                }
-            }
-        }
-    }
-
 
     /**
      * devuelve los souvenirs de un tipo
@@ -155,10 +107,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
     fun getByTipo(tipo: Tipo){
         viewModelScope.launch {
-            val list: MutableList<Souvenir> = mutableListOf()
+            val list: MutableList<SouvenirState> = mutableListOf()
             _souvenirsTipo.value = emptyList()//limpiamos los valores que pueda tener
             for(souvenir in souvenirs.value){
-                if(souvenir.tipo == tipo){
+                if(souvenir.tipo == tipo.valor){
                     list.add(souvenir)
                 }
             }
@@ -172,7 +124,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param referencia referencia del souvenir
      * @return actualSouvenir devuelve el souvenir actual
      */
-    fun getByReference(referencia:String):Souvenir{
+    fun getByReference(referencia:String):SouvenirState{
         for(souvenir in _souvenirs.value){
             if(souvenir.referencia==referencia){
                 actualSouvenir = souvenir
@@ -230,7 +182,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param onSuccess lambda para que hace el método el caso de lograrlo
      * @param souvenir souvenir
      */
-    fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
+    fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
         //fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
@@ -270,107 +222,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     deleteSouvenirInFav ({
                         Log.d("Souvenir_borrado","Souvenir Borrado")
                     },souvenir)
-                }
-            }catch (e:Exception){
-                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
-            }
-        }
-    }
-
-
-    /**
-     * Guardar souvenir desde la pantalla principal, para ello le paso el souvenir
-     * en vez de recuperarlo en el viewModel
-     * @param onSuccess lambda para que hace el método el caso de lograrlo
-     * @param souvenir souvenir
-     */
-    fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
-        var esIgual = false //variable que comprueba si el souvenir está ya
-        viewModelScope.launch (Dispatchers.IO){
-            checkAnteriorFav()
-            try {
-                val newSouvenir = hashMapOf(
-                    "referencia" to souvenir.referencia,
-                    "nombre" to souvenir.nombre,
-                    "url" to souvenir.url,
-                    "tipo" to souvenir.tipo,
-                    "precio" to souvenir.precio,
-                    "favorito" to souvenir.guardadoFav,
-                    "emailUser" to email.toString()
-                )
-
-                //recorre la lista de souvenirs favoritos
-                for(souvenirF in _souvenirFav.value){
-                    //si el souvenir en fav es igual al souvenir que quiere guardar
-                    if(souvenirF.referencia==souvenir.referencia){
-                        //la variable es igual es true
-                        esIgual = true
-                    }
-                }
-
-                //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
-                if(!esIgual){
-                    firestore.collection("Favoritos")
-                        .add(newSouvenir)
-                        .addOnSuccessListener {
-                            onSuccess()
-                            Log.d("Error save","Se guardó el souvenir")
-                        }.addOnFailureListener{
-                            Log.d("Save error","Error al guardar")
-                        }
-                }else{
-                    //si el souvenir ya está en la BDD lo borra
-                    deleteSouvenirInFav ({
-                        Log.d("Souvenir_borrado","Souvenir Borrado")
-                    },souvenir)
-                }
-            }catch (e:Exception){
-                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
-            }
-        }
-    }
-
-
-
-    /**
-     * Guarda souvenir en carritoç
-     * @param onSuccess lambda para que hace el método al ser logrado
-     */
-
-    fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
-        var esIgual = false //variable que comprueba si el souvenir está ya
-        viewModelScope.launch (Dispatchers.IO){
-            checkAnteriorCarrito()
-            try {
-                val newSouvenir = hashMapOf(
-                    "referencia" to souvenir.referencia,
-                    "nombre" to souvenir.nombre,
-                    "url" to souvenir.url,
-                    "tipo" to souvenir.tipo,
-                    "precio" to souvenir.precio,
-                    "carrito" to souvenir.guardadoCarrito,
-                    "emailUser" to email.toString()
-                )
-
-                //recorre la lista de souvenirs favoritos
-                for(souvenirC in _souvenirCarrito.value){
-                    //si el souvenir en fav es igual al souvenir que quiere guardar
-                    if(souvenirC.referencia==souvenir.referencia){
-                        //la variable es igual es true
-                        esIgual = true
-                    }
-                }
-
-                //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
-                if(!esIgual){
-                    firestore.collection("Carrito")
-                        .add(newSouvenir)
-                        .addOnSuccessListener {
-                            onSuccess()
-                            Log.d("Error save","Se guardó el souvenir")
-                        }.addOnFailureListener{
-                            Log.d("Save error","Error al guardar")
-                        }
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
@@ -464,34 +315,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         }
     }
 
-    /**
-     * Borra el souvenir con su objeto
-     * @param onSuccess si es satisfactorio
-     * @param souvenir el souvenir
-     */
-    fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: Souvenir) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                checkAnteriorFav()
-                firestore.collection("Favoritos")
-                    .whereEqualTo("referencia", souvenir.referencia)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        for (document in documents) {
-                            document.reference.delete()
-                            onSuccess()
-                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
-                    }
-            } catch (e: Exception) {
-                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
-            }
-        }
-    }
-
 
     /**
      * Borra el souvenir con su objeto
@@ -503,34 +326,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             try {
                 checkAnteriorFav()
                 firestore.collection("Favoritos")
-                    .whereEqualTo("referencia", souvenir.referencia)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        for (document in documents) {
-                            document.reference.delete()
-                            onSuccess()
-                            Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
-                    }
-            } catch (e: Exception) {
-                Log.d("Error al eliminar souvenir de favoritos", "Error al eliminar souvenir de favoritos")
-            }
-        }
-    }
-
-    /**
-     * elimina el souvenir del carrito
-     * @param onSuccess
-     * @param souvenir
-     */
-    fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: Souvenir) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                checkAnteriorCarrito()
-                firestore.collection("Carrito")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .get()
                     .addOnSuccessListener { documents ->
@@ -698,7 +493,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * checkea si el souvenir esta guardado en fav o en el carrito
      * @param souvenir
      */
-    fun checkSouvenirIsSaved(souvenir: Souvenir){
+    fun checkSouvenirIsSaved(souvenir: SouvenirState){
         viewModelScope.launch {
             var souvenirGuardadoFav = false
             var souvenirGuardadoCarrito = false

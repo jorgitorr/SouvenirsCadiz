@@ -56,8 +56,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.util.Constant.Companion.TOKEN
-import com.example.souvenirscadiz.data.util.Storage
-import com.example.souvenirscadiz.ui.model.ImageStorageViewModel
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -80,8 +78,7 @@ import com.google.firebase.auth.GoogleAuthProvider
  * @param navController navegacion
  */
 @Composable
-fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel,
-           imageStorageViewModel: ImageStorageViewModel){
+fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val context = LocalContext.current
 
     LaunchedEffect(true){
@@ -115,7 +112,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
         ) {
 
             //imagen de perfil
-            ProfileImage(imageStorageViewModel)
+            ProfileImage()
 
             //user
             Text(text = loginViewModel.userName,
@@ -500,7 +497,7 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
 
 
 @Composable
-fun ProfileImage(imageStorageViewModel: ImageStorageViewModel) {
+fun ProfileImage() {
     val context = LocalContext.current
     val imageUri = rememberSaveable { mutableStateOf("") }
     val painter = rememberAsyncImagePainter(

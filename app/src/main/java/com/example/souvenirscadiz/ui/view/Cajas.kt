@@ -42,7 +42,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.souvenirscadiz.data.model.PedidoState
-import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.data.model.UserState
 import com.example.souvenirscadiz.ui.model.LoginViewModel
@@ -130,7 +129,7 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
  * @param url de la imagen que queremos mostrar
  */
 @Composable
-fun Caja(navController: NavController, souvenir: Souvenir, url:Int, souvenirsViewModel: SouvenirsViewModel,
+fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel,
          loginViewModel: LoginViewModel){
 
     LaunchedEffect(true){
