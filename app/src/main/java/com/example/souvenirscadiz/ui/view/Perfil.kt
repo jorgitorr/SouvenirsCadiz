@@ -99,8 +99,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
                 FooterAdmin(navController, souvenirsViewModel, loginViewModel)
             }else{
                 Footer(navController, souvenirsViewModel, loginViewModel)
-            }
-            }
+            } }
         ,containerColor = Silver
     ) { innerPadding ->
         Column(
@@ -136,7 +135,8 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             }
 
             //boton para cerra sesion
-            Button(onClick = { loginViewModel.signOut()
+            Button(onClick = {
+                loginViewModel.signOut()
                 navController.navigate("Principal")
                 souvenirsViewModel.setSelectedItem("Principal")
                 //hacer que al cerrar sesion me cierre sesion en google
