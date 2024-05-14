@@ -56,6 +56,8 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.util.Constant.Companion.TOKEN
+import com.example.souvenirscadiz.data.util.Storage
+import com.example.souvenirscadiz.ui.model.ImageStorageViewModel
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -78,7 +80,8 @@ import com.google.firebase.auth.GoogleAuthProvider
  * @param navController navegacion
  */
 @Composable
-fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel,
+           imageStorageViewModel: ImageStorageViewModel){
     val context = LocalContext.current
 
     LaunchedEffect(true){
@@ -112,7 +115,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
         ) {
 
             //imagen de perfil
-            ProfileImage()
+            ProfileImage(imageStorageViewModel)
 
             //user
             Text(text = loginViewModel.userName,
@@ -496,11 +499,9 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
 }
 
 
-/**
- * Añade imagen de perfil
- */
 @Composable
-fun ProfileImage() {
+fun ProfileImage(imageStorageViewModel: ImageStorageViewModel) {
+    val context = LocalContext.current
     val imageUri = rememberSaveable { mutableStateOf("") }
     val painter = rememberAsyncImagePainter(
         imageUri.value.ifEmpty { R.drawable.imagen_perfil_pre }
@@ -508,7 +509,10 @@ fun ProfileImage() {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        uri?.let { imageUri.value = it.toString() }
+        uri?.let {
+            imageUri.value = it.toString()
+            imageStorageViewModel.saveImageToFirebaseStorage(context, it)
+        }
     }
 
     Column(
@@ -535,6 +539,8 @@ fun ProfileImage() {
         }
     }
 }
+
+
 
 
 

@@ -27,6 +27,7 @@ import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.notificacion.CarritoNotification
 import com.example.souvenirscadiz.notificacion.CarritoNotification.Companion.NOTIFICATION_ID
 import com.example.souvenirscadiz.notificacion.PedidosNotification
+import com.example.souvenirscadiz.ui.model.ImageStorageViewModel
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.SouvenirsCadizTheme
@@ -42,6 +43,7 @@ import java.util.Calendar
 class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel = LoginViewModel()
     private val souvenirsViewModel:SouvenirsViewModel = SouvenirsViewModel()
+    private val imageStorageViewModel:ImageStorageViewModel = ImageStorageViewModel()
 
     companion object {
         const val MY_CHANNEL_ID = "myChannel"
@@ -61,7 +63,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     readCSV()
                     SouvenirsAddImages(souvenirsViewModel)
-                    NavManager(souvenirsViewModel, loginViewModel)
+                    NavManager(souvenirsViewModel, loginViewModel, imageStorageViewModel)
 
                     createChannel()
                     CarritoNotification()

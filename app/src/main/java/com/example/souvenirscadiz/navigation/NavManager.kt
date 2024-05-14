@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.souvenirscadiz.ui.model.ImageStorageViewModel
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.view.AdminPrincipal
@@ -31,7 +32,7 @@ import com.example.souvenirscadiz.ui.view.Usuarios
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
+fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, imageStorageViewModel: ImageStorageViewModel){
     val navController = rememberNavController()
     
     NavHost(navController = navController, startDestination = "Principal"){
@@ -42,7 +43,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             Favoritos(souvenirsViewModel, navController, loginViewModel)
         }
         composable("Perfil"){
-            Perfil(loginViewModel, navController, souvenirsViewModel)
+            Perfil(loginViewModel, navController, souvenirsViewModel, imageStorageViewModel)
         }
         composable("Tienda"){
             Carrito(souvenirsViewModel, navController, loginViewModel)
