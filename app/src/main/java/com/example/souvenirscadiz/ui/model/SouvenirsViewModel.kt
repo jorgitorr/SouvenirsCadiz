@@ -55,8 +55,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private val firestore = Firebase.firestore
     private val email = auth.currentUser?.email
 
-    private var _visibleItemCount = MutableStateFlow(5)
-    var visibleItemCount = _visibleItemCount
     private var _onChangeFav = MutableStateFlow(false)
     var onChangeFav = _onChangeFav
     private var _onChangeCarrito = MutableStateFlow(false)
@@ -100,7 +98,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
     /**
-     * Hace la llamada a la base de datos de firestore para recuperar todos los souvenirs
+     * Hace la llamada a la base de datos de firestore para recuperar las imagenes de los souvenirs
+     * y se las añade a los souvenirs que ya están
      */
     private fun fetchImgSouvenirs(souvenirsList: List<SouvenirState>) {
         viewModelScope.launch {
@@ -112,13 +111,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 _souvenirs.value = updatedSouvenirsList
             } else {
                 Log.d("Error", "Number of URLs is less than the number of souvenirs")
-                // Handle the error appropriately
             }
         }
-    }
-
-    private fun asignarImgSouvenir(){
-
     }
 
 

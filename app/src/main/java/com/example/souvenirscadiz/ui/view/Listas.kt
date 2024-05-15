@@ -1,12 +1,10 @@
 package com.example.souvenirscadiz.ui.view
 
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialog
@@ -43,28 +41,21 @@ import com.example.souvenirscadiz.ui.theme.Silver
 fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState() // souvenirs de un tipo
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
-    val visibleItemCount by souvenirsViewModel.visibleItemCount.collectAsState()
+    //val visibleItemCount by souvenirsViewModel.visibleItemCount.collectAsState()
 
     // si no ha seleccionado ningún tipo de souvenirs, muestra todos los souvenirs
     if (souvenirs.isEmpty()) {
         LazyColumn {
-            //.take(visibleItemCount)
             itemsIndexed(souvenirsPre) { index, souvenirP ->
-                /*val url = "img${souvenirP.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)*/
                 souvenirsViewModel.checkSouvenirIsSaved(souvenirP)
                 Caja(navController, souvenirP, souvenirsViewModel, loginViewModel)
-                //souvenirsViewModel.onListEndReached(index)
             }
         }
     } else { // si hay un tipo seleccionado, muestra los souvenirs de ese tipo
         LazyColumn {
             itemsIndexed(souvenirs) { index, souvenir->
-                /*val url = "img${souvenirP.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)*/
                 souvenirsViewModel.checkSouvenirIsSaved(souvenir)
                 Caja(navController, souvenir, souvenirsViewModel, loginViewModel)
-                //souvenirsViewModel.onListEndReached(index)
             }
         }
     }
@@ -77,7 +68,7 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
  * @param souvenirsViewModel viewModel de los souvenirs
  */
 @Composable
-fun SouvenirsListFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+fun SouvenirsListFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
     val context = LocalContext.current
     val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()
     val soundEffect = MediaPlayer.create(context, R.raw.angry_start_sound)
@@ -131,13 +122,10 @@ fun SouvenirsListFav(navController: NavController, souvenirsViewModel: Souvenirs
     }else{
         LazyColumn{
             items(souvenirSaved){ souvenir ->
-                val url = "img${souvenir.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)
-
-                Caja(navController = navController,
-                    url = resourceId,
-                    souvenir = souvenir,
-                    souvenirsViewModel = souvenirsViewModel)
+                Caja(navController,
+                    souvenir,
+                    souvenirsViewModel,
+                    loginViewModel)
             }
         }
     }
@@ -205,14 +193,10 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
     }else{
         LazyColumn{
             items(souvenirSaved){ souvenir ->
-                Log.d("SOUVENIRS GUARDADOS",souvenir.nombre)
-                val url = "img${souvenir.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)
-
-                CajaCarrito(navController = navController,
-                    souvenir = souvenir,
-                    url = resourceId,
-                    souvenirsViewModel = souvenirsViewModel)
+                CajaCarrito(
+                    navController,
+                    souvenir,
+                    souvenirsViewModel)
             }
             item {
                 //boton de pedir todos los souvenirs
@@ -231,9 +215,7 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
  */
 @Composable
 fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-
     val souvenirsPedidos by souvenirsViewModel.souvenirPedidos.collectAsState()
-    Log.d("pedidos",souvenirsPedidos.size.toString())
 
     if(souvenirsPedidos.isEmpty()){
         Text(text = "No hay ningún pedido",

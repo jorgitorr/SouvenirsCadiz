@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +43,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import coil.Coil
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.example.souvenirscadiz.data.model.PedidoState
@@ -53,92 +55,16 @@ import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
 
-/**
- * Caja con State
- * para que me permita introducir un State
- * @param navController navegacion
- * @param souvenir contiene souvenirState que es el objeto de la base de datos
- * @param url contiene el numero de la url
- */
-@Composable
-fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel){
-    LaunchedEffect(souvenir.guardadoFav){
-        souvenirsViewModel.fetchSouvenirsFav()
-    }
-
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .background(Silver, shape = RoundedCornerShape(5.dp))
-        .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))){
-        Column(horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize()) {
-            Box(contentAlignment = Alignment.TopEnd){
-                AsyncImage(
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(url)
-                        .build(),
-                    contentDescription = souvenir.nombre,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
-
-                )
-                FavoriteButton(souvenir, souvenirsViewModel)
-                ShopingCartButton(souvenir, souvenirsViewModel)
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = souvenir.nombre,
-                    style = TextStyle(fontSize = 15.sp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 4.dp, end = 8.dp),
-                    color = RaisanBlack
-                )
-                Text(
-                    text = souvenir.referencia,
-                    style = TextStyle(fontSize = 15.sp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 4.dp, end = 8.dp),
-                    color = RaisanBlack
-                )
-                Text(
-                    text = "${souvenir.precio}€",
-                    style = TextStyle(fontSize = 15.sp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 3.dp, end = 4.dp),
-                    color = RaisanBlack
-                )
-            }
-        }
-    }
-
-}
-
 
 /**
  * Caja que contiene cada imagen del souvenir y su nombre, referencia y precio
+ * Caja para la pagina principal y para elementos en favoritos
  * @param navController navegacion
  * @param souvenir clase souvenir
  */
 @Composable
 fun Caja(navController: NavController, souvenir: SouvenirState, souvenirsViewModel: SouvenirsViewModel,
          loginViewModel: LoginViewModel){
-
-    LaunchedEffect(true){
-        souvenirsViewModel.fetchSouvenirs()
-        souvenirsViewModel.fetchSouvenirsFav()
-        souvenirsViewModel.fetchSouvenirsCarrito()
-    }
 
     val onChangeFav = souvenirsViewModel.onChangeFav.collectAsState()
     val onChangeCarrito = souvenirsViewModel.onChangeCarrito.collectAsState()
@@ -153,21 +79,13 @@ fun Caja(navController: NavController, souvenir: SouvenirState, souvenirsViewMod
             modifier = Modifier.fillMaxSize()) {
 
             Box(contentAlignment = Alignment.TopEnd){
-                /*Image(
-                    painter = painterResource(id = url),
-                    contentDescription = souvenir.nombre,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(345.dp)
-                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
-                )*/
-
-                Log.d("souvenir_url",souvenir.url)
-                AsyncImage(model = ImageRequest.Builder(LocalContext.current)
+                SubcomposeAsyncImage(model = ImageRequest.Builder(LocalContext.current)
                     .data(souvenir.url)
-                    .build()
-                    , contentDescription = souvenir.nombre,
+                    .build(),
+                    loading = {
+                        CircularProgressIndicator()
+                    },
+                    contentDescription = souvenir.nombre,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(345.dp)
@@ -243,7 +161,6 @@ fun Caja(navController: NavController, souvenir: SouvenirState, souvenirsViewMod
 fun CajaCarrito(
     navController: NavController,
     souvenir: SouvenirState,
-    url: Int,
     souvenirsViewModel: SouvenirsViewModel
 ) {
 
@@ -270,7 +187,7 @@ fun CajaCarrito(
                 // Imagen
                 AsyncImage(
                     model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(url)
+                        .data(souvenir.url)
                         .build(),
                     contentDescription = souvenir.nombre,
                     contentScale = ContentScale.Crop,
@@ -333,11 +250,11 @@ fun CajaCarrito(
 }
 
 
-
 /**
  * Caja del carrito
  * @param navController navegacion
- * @param pedido souvenirState
+ * @param pedido pedido
+ * @param souvenirsViewModel viewmodel de souvenir
  */
 @Composable
 fun CajaPedido(
