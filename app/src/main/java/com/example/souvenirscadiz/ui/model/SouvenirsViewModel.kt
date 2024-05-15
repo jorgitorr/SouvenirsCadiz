@@ -74,7 +74,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Te devuelve todos los souvenirs
+     * Te devuelve todos los souvenirs de la base de datos
      */
     fun fetchSouvenirs(){
         viewModelScope.launch {
@@ -129,15 +129,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private fun checkAnteriorCarrito(){
         _onChangeCarrito.value = !_onChangeCarrito.value
     }
-    /**
-     * funcion para cargar más souvenirs cuando se alcanza el final de la lista
-     * @param index es la ubicacion actual de la lista
-     */
-    /*fun onListEndReached(index: Int) {
-        if (index == _visibleItemCount.value - 1 && _visibleItemCount.value < _souvenirs.value.size) {
-            _visibleItemCount.value += 5
-        }
-    }*/
 
 
     /**

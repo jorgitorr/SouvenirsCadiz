@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -141,8 +142,14 @@ fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
         Row (modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
-            Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO",
-                modifier = Modifier.clickable { /*navController.navigate("Detalles")*/ })
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add",
+                tint = if(selectedItem=="Add") Cerulean else RaisanBlack,
+                modifier = Modifier.clickable {
+                    souvenirsViewModel.setSelectedItem("Add")
+                    //navController.navigate("AnadirSouvenir")
+                })
             Text(text = "ADMIN SOUVENIRS CADIZ",
                 fontFamily = KneWave
             )

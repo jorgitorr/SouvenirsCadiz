@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.data.model.UserState
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -131,13 +130,10 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     fun createUser(onSuccess: () -> Unit){
         viewModelScope.launch {
             try {
-                // DCS - Utiliza el servicio de autenticación de Firebase para registrar al usuario
-                // por email y contraseña
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            // DCS - Si se realiza con éxito, almacenamos el usuario en la colección "Users"
-                            saveUser(userName)//lama a la función guardar usuario y lo guarda
+                            saveUser(userName)
                             onSuccess()
                         } else {
                             Log.d("ERROR EN FIREBASE","Error al crear usuario")
@@ -160,7 +156,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
         val email = auth.currentUser?.email
 
         viewModelScope.launch(Dispatchers.IO) {
-            val user = User(
+            val user = UserState(
                 userId = id.toString(),
                 email = email.toString(),
                 username = username

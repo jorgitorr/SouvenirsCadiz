@@ -146,7 +146,7 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.empty_basket_sound)
 
-    LaunchedEffect(true){
+    LaunchedEffect(souvenirSaved.size){
         souvenirsViewModel.fetchSouvenirsCarrito()
     }
 

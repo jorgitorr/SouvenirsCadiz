@@ -111,8 +111,6 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            //imagen de perfil
-            ProfileImage()
 
             //user
             Text(text = loginViewModel.userName,
@@ -128,11 +126,11 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
 
 
             //boton para modificar el perfil
-            Button(onClick = { navController.navigate("ModificarPerfil") },
+            /*Button(onClick = { navController.navigate("ModificarPerfil") },
                 colors = ButtonDefaults.buttonColors(RaisanBlack)) {
                 Text(text = "Modificar",
                     style = TextStyle(color = Silver))
-            }
+            }*/
 
             //boton para cerra sesion
             Button(onClick = {
@@ -191,7 +189,7 @@ fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginVi
         Spacer(modifier = Modifier.height(16.dp))
         IntroducirContrasenia(loginViewModel)
         Spacer(modifier = Modifier.height(16.dp))
-        BotonAceptarInicio(loginViewModel, navController)
+        BotonAceptarInicio(loginViewModel, navController, souvenirsViewModel)
         Spacer(modifier = Modifier.height(16.dp))
         InicioSesionGoogle(souvenirsViewModel, loginViewModel, navController)
         Spacer(modifier = Modifier.height(16.dp))
@@ -251,7 +249,7 @@ fun Registro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewMo
         Spacer(modifier = Modifier.height(16.dp))
         IntroducirContrasenia(loginViewModel)
         Spacer(modifier = Modifier.height(16.dp))
-        BotonAceptarRegistro(loginViewModel, navController)
+        BotonAceptarRegistro(loginViewModel, navController, souvenirsViewModel)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "¿Tienes cuenta?", fontFamily = KiwiMaru)
         Spacer(modifier = Modifier.height(16.dp))
@@ -264,277 +262,8 @@ fun Registro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewMo
     }
 }
 
-/**
- * Introducir contraseña para crear un nuevo usuario
- * @param loginViewModel le pasamos el viewmodel para que ingrese y guarde la contraseña
- */
-@Composable
-fun IntroducirContrasenia(loginViewModel: LoginViewModel){
-    var hidden by remember { mutableStateOf(true) }
-    OutlinedTextField(
-        label = {Text(text = "Contraseña", color = RaisanBlack, fontFamily = KiwiMaru)},
-        value = loginViewModel.password,
-        onValueChange = { loginViewModel.changePassword(it) },
-        visualTransformation =
-        if (hidden) PasswordVisualTransformation() else VisualTransformation.None,//3
-        trailingIcon = {
-            IconButton(onClick = { hidden = !hidden }) {
-                val vector = if (hidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                val description = if (hidden) "Ocultar contraseña" else "Revelar contraseña" //6
-                Icon(imageVector = vector, contentDescription = description, tint = RaisanBlack)
-            }
-        },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-    )
-}
 
 
-/**
- * Introducir email para crear un nuevo usuario
- * @param loginViewModel le pasamos el viewmodel para que guarde el email introducido
- */
-@Composable
-fun IntroducirEmail(loginViewModel: LoginViewModel){
-    OutlinedTextField(
-        label = {Text(text = "Email", color = RaisanBlack, fontFamily = KiwiMaru)},
-        value = loginViewModel.email,
-        onValueChange = { loginViewModel.changeEmail(it) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-    )
-}
-
-
-
-/**
- * Componente que nos permite ingresar un nuevo usuario
- * @param loginViewModel le pasamos el viewmodel del login que guarda la informacion de este usuario nuevo
- * y la añade a la base de datos
- */
-@Composable
-fun IntroducirUsuario(loginViewModel: LoginViewModel){
-    OutlinedTextField(
-        label = {Text(text = "Usuario", color = RaisanBlack, fontFamily = KiwiMaru)},
-        value = loginViewModel.userName,
-        onValueChange = { loginViewModel.changeUserName(it) },
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-    )
-}
-
-
-/**
- * Boton de aceptar del registro
- * @param loginViewModel le pasamos el viewmodel del login
- * @param navController le pasamos el nav que nos lleva a donde queramos al darle a aceptar y
- * registrar un nuevo usuario en la base de datos
- */
-@Composable
-fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavController){
-    Button(
-        onClick = { loginViewModel.createUser { navController.navigate("Principal") } },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .padding(horizontal = 50.dp),
-        colors = ButtonDefaults.buttonColors(Redwood),
-        shape = CutCornerShape(1.dp)
-    ) {
-        Text(
-            text = "Log in",
-            fontFamily = KiwiMaru,
-            color = White
-        )
-    }
-}
-
-
-/**
- * Boton de inicio de sesion
- * @param loginViewModel le pasamos el viewmodel del login
- * @param navController le pasamos el nav que nos lleva a donde queramos al darle a aceptar y
- * registrar un nuevo usuario en la base de datos
- */
-@Composable
-fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavController){
-    Button(
-        onClick = { loginViewModel.login { navController.navigate("Principal") } },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .padding(horizontal = 50.dp),
-        colors = ButtonDefaults.buttonColors(Redwood),
-        shape = CutCornerShape(1.dp)
-    ) {
-        Text(
-            text = "Log in",
-            fontFamily = KiwiMaru,
-            color = White
-        )
-    }
-}
-
-
-
-@Composable
-fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-
-    Scaffold(
-        topBar = { Header(navController, souvenirsViewModel) },
-        bottomBar = { Footer(navController, souvenirsViewModel, loginViewModel) },
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(Silver),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            var contraseniaActual by remember { mutableStateOf("") }
-
-            //si introduce la contrasenia actual
-            if(loginViewModel.password==contraseniaActual){
-                //muestra una pantalla para poder cambiar el nombre
-                var nuevoNombreUsuario by remember { mutableStateOf("") }
-
-                OutlinedTextField(
-                    value = nuevoNombreUsuario,
-                    onValueChange = { nuevoNombreUsuario = it },
-                    label = { Text("Nuevo nombre de usuario") },
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-
-                loginViewModel.changeUserName(nuevoNombreUsuario)
-            }else{
-                //sigue preguntando por la contrasenia
-                Text(text = "Introduce la contrasenia actual")
-                OutlinedTextField(
-                    value = contraseniaActual,
-                    onValueChange = { contraseniaActual = it },
-                    label = { Text("Nuevo nombre de usuario") },
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-            }
-
-
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-
-            Spacer(modifier = Modifier.height(20.dp))
-            //boton para suprimir el perfil
-            Button(onClick = {  },
-                colors = ButtonDefaults.buttonColors(Redwood)) {
-                Text(text = "Suprimir",
-                    style = TextStyle(color = Silver))
-            }
-
-
-
-        }
-    }
-}
-
-
-/**
- * Inicio de sesion con google
- * @param souvenirsViewModel viewmodel de souvenirs
- * @param loginViewModel viewmodel del login
- * @param navController navegacion
- */
-@Composable
-fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){
-    val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts
-            .StartActivityForResult()){//nos abre un activity para hacer login de google
-        val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-        try{
-            val account = task.getResult(ApiException::class.java)
-            val credential = GoogleAuthProvider.getCredential(account.idToken,null)
-            loginViewModel.singInWithGoogleCredential(
-                credential, {
-                    navController.navigate("Principal")
-                    souvenirsViewModel.setSelectedItem("Principal")
-                    Toast.makeText(context,"Has iniciado sesión",Toast.LENGTH_LONG).show()
-                },
-                context)
-        }catch (e:Exception){
-            Log.e("InicioSesionGoogle", "Error al iniciar sesión con Google: ${e.message}", e)
-        }
-    }
-
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .padding(10.dp)
-        .clip(RoundedCornerShape(10.dp))
-        .clickable {
-            val opciones = GoogleSignInOptions
-                .Builder(
-                    GoogleSignInOptions.DEFAULT_SIGN_IN
-                )
-                .requestIdToken(TOKEN)
-                .requestEmail()
-                .build()
-            val googleSingInCliente = GoogleSignIn.getClient(context, opciones)
-            launcher.launch(googleSingInCliente.signInIntent)
-
-        },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center){
-
-        Text(text = "Login Google",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = KiwiMaru)
-    }
-}
-
-
-@Composable
-fun ProfileImage() {
-    val context = LocalContext.current
-    val imageUri = rememberSaveable { mutableStateOf("") }
-    val painter = rememberAsyncImagePainter(
-        imageUri.value.ifEmpty { R.drawable.imagen_perfil_pre }
-    )
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            imageUri.value = it.toString()
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Card(
-            shape = CircleShape,
-            modifier = Modifier
-                .padding(10.dp)
-                .size(100.dp)
-        ) {
-            Image(
-                painter = painter,
-                contentDescription = null,
-                modifier = Modifier
-                    .clip(CircleShape) // Aplicar un recorte circular al ImageView
-                    .fillMaxSize()
-                    .clickable { launcher.launch("image/*") },
-                contentScale = ContentScale.Crop
-            )
-        }
-    }
-}
 
 
 
