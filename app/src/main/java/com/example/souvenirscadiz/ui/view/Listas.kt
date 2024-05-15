@@ -41,6 +41,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
+
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState() // souvenirs de un tipo
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
     val visibleItemCount by souvenirsViewModel.visibleItemCount.collectAsState()

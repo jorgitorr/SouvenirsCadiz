@@ -150,7 +150,7 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
             modifier = Modifier.fillMaxSize()) {
 
             Box(contentAlignment = Alignment.TopEnd){
-                Image(
+                /*Image(
                     painter = painterResource(id = url),
                     contentDescription = souvenir.nombre,
                     contentScale = ContentScale.Crop,
@@ -158,7 +158,7 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
                         .fillMaxWidth()
                         .height(345.dp)
                         .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
-                )
+                )*/
 
 
                 if(!loginViewModel.checkAdmin()){

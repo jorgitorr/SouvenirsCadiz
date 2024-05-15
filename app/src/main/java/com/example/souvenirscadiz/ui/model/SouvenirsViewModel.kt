@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.data.model.Tipo
+import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -28,6 +29,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
     val selectedItem = MutableStateFlow("Principal")
+
+
+    private val imageRepository = CloudStorageManager()
+    private val _imageUrls = MutableStateFlow<List<String>>(emptyList())
+    val imageUrls: StateFlow<List<String>> = _imageUrls
 
     private val _souvenirs = MutableStateFlow<List<SouvenirState>>(emptyList())
     val souvenirs = _souvenirs
@@ -63,16 +69,46 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var soundPlayedCarrito by mutableStateOf(true)
 
     init {
-        //fetchSouvenirs()
+        fetchSouvenirs()
+        fetchImgSouvenirs()
         fetchSouvenirsFav()
         fetchSouvenirsCarrito()
+    }
+
+
+    /**
+     * Te devuelve todos los souvenirs
+     */
+    fun fetchSouvenirs(){
+        viewModelScope.launch {
+            firestore.collection("souvenirs")
+                .addSnapshotListener{querySnapshot, error->
+                    if(error != null){
+                        Log.d("Error SL","Error SS")
+                        return@addSnapshotListener
+                    }
+                    val souvenirsList = mutableListOf<SouvenirState>()
+                    if(querySnapshot != null){
+                        for(souvenir in querySnapshot){
+                            val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
+                            Log.d("Souvenir",souvenirObj.url.toString())
+                            souvenirsList.add(souvenirObj)
+                        }
+                    }
+                    _souvenirs.value = souvenirsList
+                    Log.d("souvenirsSize",_souvenirs.value.size.toString())
+                }
+        }
     }
 
     /**
      * Hace la llamada a la base de datos de firestore para recuperar todos los souvenirs
      */
-    private fun fetchSouvenirs() {
-
+    private fun fetchImgSouvenirs() {
+        viewModelScope.launch {
+            val urls = imageRepository.getSouvenirsImages()
+            _imageUrls.value = urls
+        }
     }
 
 

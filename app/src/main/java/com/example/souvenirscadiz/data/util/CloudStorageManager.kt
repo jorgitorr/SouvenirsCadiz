@@ -2,13 +2,14 @@ package com.example.souvenirscadiz.data.util
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
 
-class CloudStorageManager (context: Context){
+class CloudStorageManager {
     private val storage = Firebase.storage
     private val storageRef = storage.reference
 
