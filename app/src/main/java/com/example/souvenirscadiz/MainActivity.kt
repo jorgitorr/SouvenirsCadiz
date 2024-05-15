@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.notificacion.CarritoNotification
@@ -41,7 +42,7 @@ import java.util.Calendar
 class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel = LoginViewModel()
     private val souvenirsViewModel:SouvenirsViewModel = SouvenirsViewModel()
-
+    private val cloudStorageManager: CloudStorageManager = CloudStorageManager()
     companion object {
         const val MY_CHANNEL_ID = "myChannel"
     }
@@ -58,11 +59,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavManager(souvenirsViewModel, loginViewModel)
+                    NavManager(souvenirsViewModel, loginViewModel, cloudStorageManager)
 
-                    /*createChannel()
-                    CarritoNotification()
-                    PedidosNotification()*/
                 }
             }
         }

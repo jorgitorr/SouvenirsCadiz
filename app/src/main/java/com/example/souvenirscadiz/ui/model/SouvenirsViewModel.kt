@@ -15,6 +15,7 @@ import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -316,32 +318,37 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param onSuccess lambda que ocurre cuando se logra el método
      */
 
-    fun saveSouvenirInPedido(onSuccess:() -> Unit){
-        viewModelScope.launch (Dispatchers.IO){
+    fun saveSouvenirInPedido(onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                //se guardan todos los souvenirs de la lista de _souvenirCarrito
-                for(pedido in _souvenirCarrito.value){
-                    val newPedido = hashMapOf(
-                        "emailUser" to pedido.emailUser,
-                        "emailUser" to auth.currentUser?.email,
-                        "referencia" to pedido.referencia,
-                        "nombre" to pedido.nombre,
-                        "url" to pedido.url,
-                        "tipo" to pedido.tipo,
-                        "cantidad" to pedido.cantidad
+                // Crear un nuevo pedido
+                val newPedido = hashMapOf(
+                    "emailUser" to auth.currentUser?.email,
+                    "fecha" to FieldValue.serverTimestamp() // Agregar la fecha del pedido si es necesario
+                )
+
+                // Añadir el pedido a la colección "Pedidos"
+                val pedidoRef = firestore.collection("Pedidos").add(newPedido).await()
+
+                // Guardar cada souvenir dentro del pedido
+                for (souvenir in _souvenirCarrito.value) {
+                    val newSouvenir = hashMapOf(
+                        "referencia" to souvenir.referencia,
+                        "nombre" to souvenir.nombre,
+                        "url" to souvenir.url,
+                        "tipo" to souvenir.tipo,
+                        "cantidad" to souvenir.cantidad
                     )
 
-                    firestore.collection("Pedidos")
-                        .add(newPedido)
-                        .addOnSuccessListener {
-                            onSuccess()
-                            Log.d("Error save","Se guardó el pedido")
-                        }.addOnFailureListener{
-                            Log.d("Save error","Error al guardar pedido")
-                        }
+                    // Añadir el souvenir a la subcolección "Souvenirs" dentro del documento del pedido
+                    pedidoRef.collection("Souvenirs").add(newSouvenir)
                 }
-            }catch (e:Exception){
-                Log.d("Error al guardar souvenir","Error al guardar Pedido")
+
+                onSuccess()
+                Log.d("Save Success", "Pedido y souvenirs guardados exitosamente")
+
+            } catch (e: Exception) {
+                Log.d("Error al guardar souvenir", "Error al guardar Pedido: $e")
             }
         }
     }

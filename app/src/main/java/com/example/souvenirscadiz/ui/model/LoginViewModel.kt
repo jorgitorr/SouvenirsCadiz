@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.data.model.UserState
+import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -20,6 +22,7 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
@@ -45,6 +48,10 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     private val auth: FirebaseAuth by lazy { Firebase.auth } // es mejor está forma de inicializar ya que es de manera diferida
     private val firestore = Firebase.firestore
 
+    /*private val imageRepository = CloudStorageManager()
+    private val _imageUrls = MutableStateFlow<List<String>>(emptyList())
+    val imageUrls: StateFlow<List<String>> = _imageUrls*/
+
     var showAlert by mutableStateOf(false)
         private set
     var email by mutableStateOf("")
@@ -60,6 +67,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     val users = _users
 
 
+
     /**
      * cierra sesion
      */
@@ -72,6 +80,21 @@ class LoginViewModel @Inject constructor(): ViewModel(){
             if(e is CancellationException) throw e
         }
     }
+
+
+    /*private fun fetchImgProfile(userList: List<UserState>) {
+        viewModelScope.launch {
+            val urls = imageRepository.getProfileImages()
+            if (urls.size >= userList.size) {
+                val updatedUserList = userList.mapIndexed { index, user ->
+                    user.copy(imagen = urls.getOrNull(index) ?: "")
+                }
+                _users.value = updatedUserList
+            } else {
+                Log.d("Error", "Number of URLs is less than the number of souvenirs")
+            }
+        }
+    }*/
 
 
     /**
@@ -92,6 +115,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
                 val user = auth.currentUser
                 userName = user?.displayName.toString()
             }catch (e:Exception){
+
                 Log.d("Error de login","Error")
             }
         }
@@ -262,6 +286,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
                             }
                         }
                     }
+                    //fetchImgProfile(userList)
                     _users.value = userList
                 }
         }

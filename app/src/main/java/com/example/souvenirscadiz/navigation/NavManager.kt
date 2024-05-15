@@ -8,10 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.view.AdminPrincipal
-import com.example.souvenirscadiz.ui.view.AnadirSouvenir
 import com.example.souvenirscadiz.ui.view.DetallesLogo
 import com.example.souvenirscadiz.ui.view.Favoritos
 import com.example.souvenirscadiz.ui.view.InicioSesion
@@ -32,7 +32,7 @@ import com.example.souvenirscadiz.ui.view.Usuarios
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
+fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, cloudStorageManager:CloudStorageManager){
     val navController = rememberNavController()
     
     NavHost(navController = navController, startDestination = "Principal"){
@@ -43,7 +43,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             Favoritos(souvenirsViewModel, navController, loginViewModel)
         }
         composable("Perfil"){
-            Perfil(loginViewModel, navController, souvenirsViewModel)
+            Perfil(loginViewModel, navController, souvenirsViewModel, cloudStorageManager)
         }
         composable("Tienda"){
             Carrito(souvenirsViewModel, navController, loginViewModel)
@@ -67,7 +67,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             DetallesLogo(souvenirsViewModel, navController, loginViewModel)
         }
         composable("PrincipalAdmin"){
-            AdminPrincipal(souvenirsViewModel, navController, loginViewModel)
+            AdminPrincipal(souvenirsViewModel, navController, loginViewModel, cloudStorageManager)
         }
         composable("Pedidos"){
             Pedidos(souvenirsViewModel, navController, loginViewModel)
@@ -78,10 +78,6 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
         composable("UsuarioDetail"){
             //no esta terminado
             UsuarioDetail(loginViewModel, souvenirsViewModel, navController)
-        }
-        composable("AnadirSouvenir"){
-            //no esta terminado
-            AnadirSouvenir(loginViewModel, souvenirsViewModel, navController)
         }
 
     }

@@ -1,5 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
+
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -35,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Cerulean
@@ -140,14 +143,8 @@ fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
         Row (modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add",
-                tint = if(selectedItem=="Add") Cerulean else RaisanBlack,
-                modifier = Modifier.clickable {
-                    souvenirsViewModel.setSelectedItem("Add")
-                    navController.navigate("AnadirSouvenir")
-                })
+            Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO",
+                modifier = Modifier.clickable { navController.navigate("Detalles") })
             Text(text = "ADMIN SOUVENIRS CADIZ",
                 fontFamily = KneWave
             )
@@ -232,3 +229,4 @@ fun SearchUsuarios(loginViewModel: LoginViewModel, navController: NavController)
     }
 
 }
+
