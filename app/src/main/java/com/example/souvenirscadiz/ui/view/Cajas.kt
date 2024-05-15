@@ -185,10 +185,11 @@ fun CajaCarrito(
         ) {
             Box(contentAlignment = Alignment.TopEnd){
                 // Imagen
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = ImageRequest.Builder(context = LocalContext.current)
                         .data(souvenir.url)
                         .build(),
+                    loading = { CircularProgressIndicator()},
                     contentDescription = souvenir.nombre,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
