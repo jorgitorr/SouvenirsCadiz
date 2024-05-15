@@ -70,7 +70,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     init {
         fetchSouvenirs()
-        fetchImgSouvenirs()
         fetchSouvenirsFav()
         fetchSouvenirsCarrito()
     }
@@ -91,12 +90,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     if(querySnapshot != null){
                         for(souvenir in querySnapshot){
                             val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
-                            Log.d("Souvenir",souvenirObj.url.toString())
                             souvenirsList.add(souvenirObj)
                         }
                     }
+                    fetchImgSouvenirs(souvenirsList)
                     _souvenirs.value = souvenirsList
-                    Log.d("souvenirsSize",_souvenirs.value.size.toString())
                 }
         }
     }
@@ -104,11 +102,23 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     /**
      * Hace la llamada a la base de datos de firestore para recuperar todos los souvenirs
      */
-    private fun fetchImgSouvenirs() {
+    private fun fetchImgSouvenirs(souvenirsList: List<SouvenirState>) {
         viewModelScope.launch {
             val urls = imageRepository.getSouvenirsImages()
-            _imageUrls.value = urls
+            if (urls.size >= souvenirsList.size) {
+                val updatedSouvenirsList = souvenirsList.mapIndexed { index, souvenir ->
+                    souvenir.copy(url = urls.getOrNull(index) ?: "")
+                }
+                _souvenirs.value = updatedSouvenirsList
+            } else {
+                Log.d("Error", "Number of URLs is less than the number of souvenirs")
+                // Handle the error appropriately
+            }
         }
+    }
+
+    private fun asignarImgSouvenir(){
+
     }
 
 
@@ -129,11 +139,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * funcion para cargar más souvenirs cuando se alcanza el final de la lista
      * @param index es la ubicacion actual de la lista
      */
-    fun onListEndReached(index: Int) {
+    /*fun onListEndReached(index: Int) {
         if (index == _visibleItemCount.value - 1 && _visibleItemCount.value < _souvenirs.value.size) {
             _visibleItemCount.value += 5
         }
-    }
+    }*/
 
 
     /**

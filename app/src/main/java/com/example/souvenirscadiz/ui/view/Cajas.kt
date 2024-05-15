@@ -1,5 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,8 +40,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
+import coil.Coil
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import coil.transform.CircleCropTransformation
 import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.data.model.UserState
@@ -126,13 +129,13 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
  * Caja que contiene cada imagen del souvenir y su nombre, referencia y precio
  * @param navController navegacion
  * @param souvenir clase souvenir
- * @param url de la imagen que queremos mostrar
  */
 @Composable
-fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souvenirsViewModel: SouvenirsViewModel,
+fun Caja(navController: NavController, souvenir: SouvenirState, souvenirsViewModel: SouvenirsViewModel,
          loginViewModel: LoginViewModel){
 
     LaunchedEffect(true){
+        souvenirsViewModel.fetchSouvenirs()
         souvenirsViewModel.fetchSouvenirsFav()
         souvenirsViewModel.fetchSouvenirsCarrito()
     }
@@ -159,6 +162,17 @@ fun Caja(navController: NavController, souvenir: SouvenirState, url:Int, souveni
                         .height(345.dp)
                         .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
                 )*/
+
+                Log.d("souvenir_url",souvenir.url)
+                AsyncImage(model = ImageRequest.Builder(LocalContext.current)
+                    .data(souvenir.url)
+                    .build()
+                    , contentDescription = souvenir.nombre,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(345.dp)
+                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+                )
 
 
                 if(!loginViewModel.checkAdmin()){

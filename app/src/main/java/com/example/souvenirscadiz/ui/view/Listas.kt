@@ -41,7 +41,6 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
-
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState() // souvenirs de un tipo
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
     val visibleItemCount by souvenirsViewModel.visibleItemCount.collectAsState()
@@ -49,22 +48,23 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
     // si no ha seleccionado ningún tipo de souvenirs, muestra todos los souvenirs
     if (souvenirs.isEmpty()) {
         LazyColumn {
-            itemsIndexed(souvenirsPre.take(visibleItemCount)) { index, souvenirP ->
-                val url = "img${souvenirP.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)
+            //.take(visibleItemCount)
+            itemsIndexed(souvenirsPre) { index, souvenirP ->
+                /*val url = "img${souvenirP.url}"
+                val resourceId = souvenirsViewModel.getResourceIdByName(url)*/
                 souvenirsViewModel.checkSouvenirIsSaved(souvenirP)
-                Caja(navController, souvenirP, resourceId, souvenirsViewModel, loginViewModel)
-                souvenirsViewModel.onListEndReached(index)
+                Caja(navController, souvenirP, souvenirsViewModel, loginViewModel)
+                //souvenirsViewModel.onListEndReached(index)
             }
         }
     } else { // si hay un tipo seleccionado, muestra los souvenirs de ese tipo
         LazyColumn {
-            itemsIndexed(souvenirs.take(visibleItemCount)) { index, souvenir ->
-                val url = "img${souvenir.url}"
-                val resourceId = souvenirsViewModel.getResourceIdByName(url)
+            itemsIndexed(souvenirs) { index, souvenir->
+                /*val url = "img${souvenirP.url}"
+                val resourceId = souvenirsViewModel.getResourceIdByName(url)*/
                 souvenirsViewModel.checkSouvenirIsSaved(souvenir)
-                Caja(navController, souvenir, resourceId, souvenirsViewModel, loginViewModel)
-                souvenirsViewModel.onListEndReached(index)
+                Caja(navController, souvenir, souvenirsViewModel, loginViewModel)
+                //souvenirsViewModel.onListEndReached(index)
             }
         }
     }
