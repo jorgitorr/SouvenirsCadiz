@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.view.AdminPrincipal
+import com.example.souvenirscadiz.ui.view.AnadirSouvenir
 import com.example.souvenirscadiz.ui.view.DetallesLogo
 import com.example.souvenirscadiz.ui.view.Favoritos
 import com.example.souvenirscadiz.ui.view.InicioSesion
@@ -75,7 +76,12 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             Usuarios(souvenirsViewModel, navController, loginViewModel)
         }
         composable("UsuarioDetail"){
+            //no esta terminado
             UsuarioDetail(loginViewModel, souvenirsViewModel, navController)
+        }
+        composable("AnadirSouvenir"){
+            //no esta terminado
+            AnadirSouvenir(loginViewModel, souvenirsViewModel, navController)
         }
 
     }

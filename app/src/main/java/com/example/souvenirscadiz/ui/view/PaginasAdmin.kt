@@ -95,6 +95,27 @@ fun UsuarioDetail(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsV
     }
 }
 
+@Composable
+fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel, navController: NavController){
+    Scaffold(
+        topBar = {
+            HeaderAdmin(navController, souvenirsViewModel)
+        },
+        bottomBar = {
+            Footer(navController,souvenirsViewModel, loginViewModel)
+        }, containerColor = Silver
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .background(Silver),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+
+        }
+    }
+}
+
 
 
 

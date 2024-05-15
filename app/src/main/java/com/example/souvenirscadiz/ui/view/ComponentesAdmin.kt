@@ -1,6 +1,5 @@
 package com.example.souvenirscadiz.ui.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -36,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Cerulean
@@ -148,7 +146,7 @@ fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
                 tint = if(selectedItem=="Add") Cerulean else RaisanBlack,
                 modifier = Modifier.clickable {
                     souvenirsViewModel.setSelectedItem("Add")
-                    //navController.navigate("AnadirSouvenir")
+                    navController.navigate("AnadirSouvenir")
                 })
             Text(text = "ADMIN SOUVENIRS CADIZ",
                 fontFamily = KneWave
