@@ -32,7 +32,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     val active = MutableStateFlow(false)
     val selectedItem = MutableStateFlow("Principal")
 
-
     private val imageRepository = CloudStorageManager()
     private val _imageUrls = MutableStateFlow<List<String>>(emptyList())
     val imageUrls: StateFlow<List<String>> = _imageUrls
@@ -67,6 +66,12 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     var soundPlayedFav by mutableStateOf(true)
     var soundPlayedCarrito by mutableStateOf(true)
+
+    var _nombre = mutableStateOf("")
+    var _referencia = mutableStateOf("")
+    var _precio = mutableStateOf("")
+    var _tipo = mutableStateOf("")
+    var _stock = mutableStateOf("")
 
     init {
         fetchSouvenirs()
@@ -255,6 +260,37 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     deleteSouvenirInFav ({
                         Log.d("Souvenir_borrado","Souvenir Borrado")
                     },souvenir)
+                }
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
+            }
+        }
+    }
+
+
+
+    fun saveSouvenir(onSuccess:() -> Unit){ //otra forma de guardar el souvenir en fav
+        var esIgual = false//variable que comprueba si el souvenir está ya
+        viewModelScope.launch (Dispatchers.IO){
+            try {
+                val newSouvenir = hashMapOf(
+                    "referencia" to _referencia.value,
+                    "nombre" to _nombre.value,
+                    "url" to "",
+                    "tipo" to _tipo.value,
+                    "precio" to _precio.value,
+                )
+
+                //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
+                if(!esIgual){
+                    firestore.collection("nuevos_souvenirs")
+                        .add(newSouvenir)
+                        .addOnSuccessListener {
+                            onSuccess()
+                            Log.d("Error save","Se guardó nuevo souvenir")
+                        }.addOnFailureListener{
+                            Log.d("Save error","Error al guardar")
+                        }
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")

@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +44,7 @@ import androidx.compose.ui.layout.ContentScale
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
+import com.example.souvenirscadiz.data.model.SouvenirState
 import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.theme.White
@@ -115,6 +117,12 @@ fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
     }
 }
 
+/**
+ * Detalle de los usuarios
+ * @param loginViewModel viewmodel del login
+ * @param souvenirsViewModel viewmodel del login
+ * @param navController navegacion
+ */
 @Composable
 fun UsuarioDetail(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel, navController: NavController){
     Scaffold(
@@ -136,8 +144,16 @@ fun UsuarioDetail(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsV
     }
 }
 
+
+/**
+ * Permite añadir nuevos souvenirs
+ * @param loginViewModel viewmodel del login
+ * @param souvenirsViewModel viewmodel de souvenir
+ * @param navController navegacion
+ */
 @Composable
 fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel, navController: NavController){
+    var context = LocalContext.current
     Scaffold(
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
@@ -153,11 +169,10 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
 
-            var nombre by remember { mutableStateOf("") }
-            var referencia by remember { mutableStateOf("") }
-            var precio by remember { mutableStateOf("") }
-            var tipo by remember { mutableStateOf("") } //que te deje elegir entre varias opciones
-            var stock by remember { mutableStateOf("") }
+            var nombre by souvenirsViewModel._nombre
+            var referencia by souvenirsViewModel._referencia
+            var precio by souvenirsViewModel._precio
+            var stock by souvenirsViewModel._stock
 
             OutlinedTextField(
                 value = nombre,
@@ -165,8 +180,7 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                 label = { Text("Nombre del souvenir") },
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-
-
+            
             OutlinedTextField(
                 value = referencia,
                 onValueChange = { referencia = it },
@@ -189,7 +203,16 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
-            DropdownMenuBox()
+            DropdownMenuBox(souvenirsViewModel)
+
+            Button(onClick = {
+                souvenirsViewModel.saveSouvenir {
+                    Toast.makeText(context, "souvenir guardado", Toast.LENGTH_SHORT).show()
+                }
+            }) {
+                Text(text = "GUARDAR")
+            }
+            
         }
     }
 }
@@ -200,11 +223,12 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownMenuBox() {
+fun DropdownMenuBox(souvenirsViewModel:SouvenirsViewModel) {
     val context = LocalContext.current
     val coffeeDrinks = Tipo.entries.toTypedArray()
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(coffeeDrinks[0].valor) }
+    var tipo by souvenirsViewModel._tipo
 
     Box(
         modifier = Modifier
@@ -219,7 +243,7 @@ fun DropdownMenuBox() {
         ) {
             TextField(
                 value = selectedText,
-                onValueChange = {},
+                onValueChange = { tipo = selectedText},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 modifier = Modifier.menuAnchor()
@@ -234,6 +258,7 @@ fun DropdownMenuBox() {
                         text = { Text(text = item.valor, color = White) },
                         onClick = {
                             selectedText = item.valor
+                            tipo = selectedText
                             expanded = false
                             Toast.makeText(context, item.valor, Toast.LENGTH_SHORT).show()
                         }
