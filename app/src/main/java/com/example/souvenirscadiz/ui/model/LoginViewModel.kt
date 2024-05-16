@@ -1,9 +1,11 @@
 package com.example.souvenirscadiz.ui.model
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,11 +21,13 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -48,10 +52,6 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     private val auth: FirebaseAuth by lazy { Firebase.auth } // es mejor está forma de inicializar ya que es de manera diferida
     private val firestore = Firebase.firestore
 
-    /*private val imageRepository = CloudStorageManager()
-    private val _imageUrls = MutableStateFlow<List<String>>(emptyList())
-    val imageUrls: StateFlow<List<String>> = _imageUrls*/
-
     var showAlert by mutableStateOf(false)
         private set
     var email by mutableStateOf("")
@@ -63,10 +63,18 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
     private var esAdmin by mutableStateOf(false)
 
+    var selectedImageUri  = mutableStateOf<Uri?>(null)
+
     private val _users = MutableStateFlow<List<UserState>>(emptyList())
     val users = _users
 
+    private val _userState = MutableStateFlow<UserState?>(null)
+    val userState: StateFlow<UserState?> get() = _userState
 
+
+    init {
+        fetchImgProfile()
+    }
 
     /**
      * cierra sesion
@@ -82,20 +90,33 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
 
-    /*private fun fetchImgProfile(userList: List<UserState>) {
+    fun fetchImgProfile() {
         viewModelScope.launch {
-            val urls = imageRepository.getProfileImages()
-            if (urls.size >= userList.size) {
-                val updatedUserList = userList.mapIndexed { index, user ->
-                    user.copy(imagen = urls.getOrNull(index) ?: "")
+            try {
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                val uid = currentUser?.uid ?: throw IllegalStateException("Usuario no autenticado")
+
+                val storageRef = FirebaseStorage.getInstance().reference
+                val profileImageRef = storageRef.child("profile_images/$uid.jpg")
+
+                try {
+                    val downloadUrl = profileImageRef.downloadUrl.await()
+                    val updatedUser = UserState(imagen = downloadUrl.toString())
+                    _userState.value = updatedUser
+                } catch (e: Exception) {
+                    Log.d("Error", "No se encontró la imagen para el UID: $uid, ${e.message}")
+                    _userState.value = UserState(imagen = "")
                 }
-                _users.value = updatedUserList
-            } else {
-                Log.d("Error", "Number of URLs is less than the number of souvenirs")
+            } catch (e: Exception) {
+                Log.d("Error", "Error al obtener el UID del usuario actual: ${e.message}")
             }
         }
-    }*/
+    }
 
+
+    fun updateUserProfileImage(imageUrl: String) {
+        _userState.value = _userState.value?.copy(imagen = imageUrl)
+    }
 
     /**
      * obtiene el usuario actual
@@ -103,6 +124,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     fun getCurrentUser(): FirebaseUser?{
         return auth.currentUser
     }
+
 
 
     /**
@@ -286,7 +308,6 @@ class LoginViewModel @Inject constructor(): ViewModel(){
                             }
                         }
                     }
-                    //fetchImgProfile(userList)
                     _users.value = userList
                 }
         }

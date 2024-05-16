@@ -3,6 +3,7 @@ package com.example.souvenirscadiz.data.util
 import android.net.Uri
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
@@ -11,15 +12,13 @@ import kotlinx.coroutines.tasks.await
 class CloudStorageManager() {
     private val storage = Firebase.storage
     private val storageRef = storage.reference
-    private val loginViewModel = LoginViewModel()
-    private val userId = loginViewModel.getCurrentUser()?.uid
 
 
 
     /**
      * accede a un hijo de la referencia llamado souvenirs
      */
-    fun getImgStorageReferences():StorageReference{
+    private fun getImgStorageReferences():StorageReference{
         return storageRef.child("souvenirs")
     }
 
@@ -27,7 +26,7 @@ class CloudStorageManager() {
      * accede a un hijo de la referencia llamado profile_images
      * cada usurio tiene su propia imagen
      */
-    fun getProfileImagesReference():StorageReference{
+    private fun getProfileImagesReference():StorageReference{
         return storageRef.child("profile_images")
     }
 
@@ -66,18 +65,23 @@ class CloudStorageManager() {
     }
 
 
-    /**
-     * @return imagenes de perfil de los usuarios
-     */
-    suspend fun getProfileImages():List<String>{
-        val imageUrls = mutableListOf<String>()
-        val listResult: ListResult = getProfileImagesReference().listAll().await()
+    fun uploadImgProfile(uid: String, uri: Uri, callback: (Boolean, String) -> Unit) {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val profileImageRef = storageRef.child("profile_images/$uid.jpg")
 
-        for(item in listResult.items){
-            val url = item.downloadUrl.await().toString()
-            imageUrls.add(url)
-        }
-
-        return imageUrls
+        profileImageRef.putFile(uri)
+            .addOnSuccessListener {
+                profileImageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+                    callback(true, downloadUrl.toString())
+                }.addOnFailureListener {
+                    callback(false, "")
+                }
+            }
+            .addOnFailureListener {
+                callback(false, "")
+            }
     }
+
+
+
 }

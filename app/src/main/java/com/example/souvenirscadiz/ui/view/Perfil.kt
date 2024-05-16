@@ -23,10 +23,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
@@ -52,6 +56,7 @@ import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.Teal
+import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -62,24 +67,34 @@ import java.util.Date
  * muestra el nombre y el correo
  * @param loginViewModel viewmodel del login
  * @param navController navegacion
+ * @param souvenirsViewModel viewmodel de souvenir
+ * @param cloudStorageManager referencia a la base de datos de storage
+ *
  */
 @Composable
 fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel,
            cloudStorageManager:CloudStorageManager){
-    val context = LocalContext.current
 
-    var selectedImageUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
+    val context = LocalContext.current
+    var selectedImageUri by loginViewModel.selectedImageUri
+    val userState by loginViewModel.userState.collectAsState()
+
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
             selectedImageUri = uri
             uri?.let {
-                cloudStorageManager.uploadImgProfile("profile_images",uri)
+                cloudStorageManager.uploadImgProfile(loginViewModel.getCurrentUser()!!.uid, uri) { success, downloadUrl ->
+                    if (success) {
+                        loginViewModel.updateUserProfileImage(downloadUrl)
+                    } else {
+                        Toast.makeText(context, "Error al subir la imagen", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     )
+
 
 
     LaunchedEffect(true){
@@ -87,8 +102,6 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             Toast.makeText(context,"Has iniciado sesión ${loginViewModel.userName}",Toast.LENGTH_SHORT).show()
         }
     }
-
-
 
     Scaffold(
         topBar = {
@@ -121,13 +134,16 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
                     .size(100.dp)
                     .clickable {
                         singlePhotoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly,)
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         )
                     }
             ) {
-                AsyncImage(
-                    model = selectedImageUri,
+                SubcomposeAsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(userState?.imagen)
+                        .build(),
                     contentDescription = null,
+                    loading = { CircularProgressIndicator() },
                     modifier = Modifier.fillMaxWidth(),
                     contentScale = ContentScale.Crop
                 )
