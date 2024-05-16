@@ -12,6 +12,7 @@ import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.view.AdminPrincipal
+import com.example.souvenirscadiz.ui.view.AnadirSouvenir
 import com.example.souvenirscadiz.ui.view.DetallesLogo
 import com.example.souvenirscadiz.ui.view.Favoritos
 import com.example.souvenirscadiz.ui.view.InicioSesion
@@ -78,6 +79,9 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
         composable("UsuarioDetail"){
             //no esta terminado
             UsuarioDetail(loginViewModel, souvenirsViewModel, navController)
+        }
+        composable("AnadirSouvenir"){
+            AnadirSouvenir(loginViewModel, souvenirsViewModel, navController)
         }
 
     }

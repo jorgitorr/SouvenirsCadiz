@@ -143,8 +143,19 @@ fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
         Row (modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically){
-            Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO",
+            /*Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO",
                 modifier = Modifier.clickable { navController.navigate("Detalles") })
+            */
+
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "AnadirSouvenir",
+                tint = if(selectedItem=="AnadirSouvenir") Cerulean else RaisanBlack,
+                modifier = Modifier.clickable {
+                    souvenirsViewModel.setSelectedItem("AnadirSouvenir")
+                    navController.navigate("AnadirSouvenir")
+                })
+
             Text(text = "ADMIN SOUVENIRS CADIZ",
                 fontFamily = KneWave
             )
