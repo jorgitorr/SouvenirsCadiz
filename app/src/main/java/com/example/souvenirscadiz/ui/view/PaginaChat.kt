@@ -2,6 +2,7 @@ package com.example.souvenirscadiz.ui.view
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -75,7 +76,9 @@ fun Chat(souvenirsViewModel: SouvenirsViewModel, navController: NavController, l
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            HomeView(chatViewModel)
+            //HomeView(chatViewModel)
+            ChatAdmin(chatViewModel, loginViewModel)
+
         }
     }
 }
@@ -178,19 +181,34 @@ fun SingleMessage(message: String, isCurrentUser: Boolean) {
 
 
 @Composable
-fun ChatAdmin(chatViewModel: ChatViewModel){
-    val messages: List<Map<String, Any>> by chatViewModel.messages.collectAsState(initial = emptyList<Map<String, Any>>().toMutableList())
+fun ChatAdmin(chatViewModel: ChatViewModel, loginViewModel: LoginViewModel) {
+    val users by loginViewModel.users.collectAsState()
+    val selectedUser = remember { mutableStateOf(users.firstOrNull()) }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-        reverseLayout = true
-    ) {
-        items(messages) { message ->
-            Text(text = message[MESSAGE].toString())
-        }
+    LaunchedEffect(true){
+        loginViewModel.fetchUsers()
     }
 
+    Column(modifier = Modifier.fillMaxSize()) {
+        // User list
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            items(users) { user ->
+                Text(
+                    text = user.email,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { selectedUser.value = user }
+                        .padding(16.dp),
+                    style = TextStyle(fontWeight = if (selectedUser.value == user) FontWeight.Bold else FontWeight.Normal)
+                )
+            }
+        }
+    }
 }
+
+

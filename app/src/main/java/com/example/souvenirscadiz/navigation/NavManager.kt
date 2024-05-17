@@ -90,7 +90,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             Chat(souvenirsViewModel, navController, loginViewModel, chatViewModel)
         }
         composable("ChatAdmin"){
-            ChatAdmin(chatViewModel)
+            ChatAdmin(chatViewModel, loginViewModel)
         }
 
     }

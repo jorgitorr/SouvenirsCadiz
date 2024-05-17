@@ -1,6 +1,7 @@
 package com.example.souvenirscadiz.ui.model
 
 import androidx.lifecycle.ViewModel
+import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.data.util.Constant.Companion.IS_CURRENT_USER
 import com.example.souvenirscadiz.data.util.Constant.Companion.MESSAGE
 import com.example.souvenirscadiz.data.util.Constant.Companion.MESSAGES
@@ -10,8 +11,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel() : ViewModel() {
     /**
      * @param _message
      * @param message
@@ -24,8 +26,10 @@ class ChatViewModel : ViewModel() {
     private var _messages = MutableStateFlow(emptyList<Map<String, Any>>())
     val messages = _messages
 
+
     init {
         getMessages()
+        loadMessages()
     }
 
     /**
@@ -87,5 +91,20 @@ class ChatViewModel : ViewModel() {
      */
     private fun updateMessages(list: MutableList<Map<String, Any>>) {
         _messages.value = list.asReversed()
+    }
+
+
+    private fun loadMessages() {
+        // Load messages from a data source
+        _messages.value = listOf(
+            mapOf("user" to "User1", "message" to "Hello", "isCurrentUser" to false),
+            mapOf("user" to "User1", "message" to "Hi there", "isCurrentUser" to true),
+            mapOf("user" to "User2", "message" to "How are you?", "isCurrentUser" to false)
+        )
+    }
+
+    fun sendMessageToUser(user: String, message: String, onError: () -> Unit) {
+        // Add message to the list
+        _messages.value = _messages.value + mapOf("user" to user, "message" to message, "isCurrentUser" to true)
     }
 }
