@@ -248,7 +248,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param souvenir souvenir
      */
     fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
-        //fetchSouvenirsFav()//devuelve todos los souvenirsfav a la lista para comprobar si ya estan
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorFav()

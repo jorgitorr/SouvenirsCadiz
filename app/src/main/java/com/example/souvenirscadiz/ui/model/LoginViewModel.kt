@@ -342,6 +342,27 @@ class LoginViewModel @Inject constructor(): ViewModel(){
         active.value = newActive
     }
 
+    fun deleteUser(userState: UserState) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("Users")
+                    .whereEqualTo("userId",userState.userId)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            Log.d("Delete Success", "Se eliminó el usuario")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar usuario: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar usuario", "Error al eliminar usuario")
+            }
+        }
+    }
+
 }
 
 

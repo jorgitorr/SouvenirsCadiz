@@ -246,7 +246,6 @@ fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel, s
                 CajaUsuarios(
                     user,
                     loginViewModel,
-                    souvenirsViewModel,
                     navController
                 )
             }

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.souvenirscadiz.data.model.PedidoState
 import com.example.souvenirscadiz.data.model.UserState
+import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
@@ -93,12 +94,8 @@ fun AcceptButton(
 @Composable
 fun EliminarButton(
     userState: UserState,
-    souvenirsViewModel: SouvenirsViewModel
+    loginViewModel: LoginViewModel
 ) {
-
-    LaunchedEffect(userState){
-        souvenirsViewModel.fetchSouvenirsPedido()
-    }
 
     IconToggleButton(
         checked = userState.eliminado,
@@ -114,6 +111,7 @@ fun EliminarButton(
                 .size(30.dp)
                 .clickable {
                     userState.eliminado != userState.eliminado
+                    loginViewModel.deleteUser(userState)
                 }
         )
     }
