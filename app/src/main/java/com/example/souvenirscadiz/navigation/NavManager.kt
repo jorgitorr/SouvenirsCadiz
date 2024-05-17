@@ -81,7 +81,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             UsuarioDetail(loginViewModel, souvenirsViewModel, navController)
         }
         composable("AnadirSouvenir"){
-            AnadirSouvenir(loginViewModel, souvenirsViewModel, navController)
+            AnadirSouvenir(loginViewModel, souvenirsViewModel, navController, cloudStorageManager)
         }
 
     }

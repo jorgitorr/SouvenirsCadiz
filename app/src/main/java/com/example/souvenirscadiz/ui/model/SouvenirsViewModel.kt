@@ -1,6 +1,7 @@
 package com.example.souvenirscadiz.ui.model
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -72,11 +73,17 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var _precio = mutableStateOf("")
     var _tipo = mutableStateOf("")
     var _stock = mutableStateOf("")
+    var _url = mutableStateOf("")
+    var selectedImageUri  = mutableStateOf<Uri?>(null)
 
     init {
         fetchSouvenirs()
         fetchSouvenirsFav()
         fetchSouvenirsCarrito()
+    }
+
+    fun updateSouvenirImage(downloadUrl:String){
+        _url.value = downloadUrl
     }
 
 
@@ -268,6 +275,9 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
 
+    /**
+     * Permite guardar nuevos souvenir
+     */
 
     fun saveSouvenir(onSuccess:() -> Unit){ //otra forma de guardar el souvenir en fav
         var esIgual = false//variable que comprueba si el souvenir está ya
@@ -276,7 +286,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 val newSouvenir = hashMapOf(
                     "referencia" to _referencia.value,
                     "nombre" to _nombre.value,
-                    "url" to "",
+                    "url" to _url.value,
                     "tipo" to _tipo.value,
                     "precio" to _precio.value,
                 )
