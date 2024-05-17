@@ -62,7 +62,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     NavManager(souvenirsViewModel, loginViewModel, cloudStorageManager, chatViewModel)
-
                 }
             }
         }
