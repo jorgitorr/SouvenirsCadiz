@@ -271,7 +271,8 @@ class LoginViewModel @Inject constructor(): ViewModel(){
                             home()
                             email = userEmail!!
                             userName = nombreUser!!
-                            saveUser(nombreUser) //guarda el usuario en la BDD
+
+                            saveUser(nombreUser) // guarda el usuario en la BDD
                         }
                     }else{
                         val googleSignInClient = GoogleSignIn.getClient(context, GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -285,6 +286,21 @@ class LoginViewModel @Inject constructor(): ViewModel(){
                     "+ ${e.localizedMessage}")
         }
 
+    }
+
+
+
+    private fun checkIfUserExists(email: String, onResult: (Boolean) -> Unit) {
+        val usersRef = firestore.collection("Users")
+        usersRef.whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                onResult(!documents.isEmpty)
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Firestore Error", "Error checking user: ${exception.localizedMessage}")
+                onResult(false) // Consideramos que no existe si hay un error
+            }
     }
 
     /**

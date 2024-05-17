@@ -23,6 +23,7 @@ import com.example.souvenirscadiz.ui.view.Principal
 import com.example.souvenirscadiz.ui.view.Registro
 import com.example.souvenirscadiz.ui.view.SouvenirDetail
 import com.example.souvenirscadiz.ui.view.Carrito
+import com.example.souvenirscadiz.ui.view.Chat
 import com.example.souvenirscadiz.ui.view.UsuarioDetail
 import com.example.souvenirscadiz.ui.view.Usuarios
 
@@ -68,7 +69,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             DetallesLogo(souvenirsViewModel, navController, loginViewModel)
         }
         composable("PrincipalAdmin"){
-            AdminPrincipal(souvenirsViewModel, navController, loginViewModel, cloudStorageManager)
+            AdminPrincipal(souvenirsViewModel, navController, loginViewModel)
         }
         composable("Pedidos"){
             Pedidos(souvenirsViewModel, navController, loginViewModel)
@@ -82,6 +83,9 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
         }
         composable("AnadirSouvenir"){
             AnadirSouvenir(loginViewModel, souvenirsViewModel, navController, cloudStorageManager)
+        }
+        composable("Chat"){
+            Chat(souvenirsViewModel, navController, loginViewModel)
         }
 
     }

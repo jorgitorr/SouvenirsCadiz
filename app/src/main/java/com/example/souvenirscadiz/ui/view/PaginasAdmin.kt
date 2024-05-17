@@ -46,16 +46,8 @@ import com.example.souvenirscadiz.data.util.CloudStorageManager
  * @param loginViewModel viewmodel del login
  */
 @Composable
-fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel,
-                   cloudStorageManager:CloudStorageManager){
+fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(
-        floatingActionButton = { FloatingActionButton(
-            onClick = {
-
-        }) {
-            Icon(imageVector = Icons.Default.Add,
-                contentDescription = "Add souvenir")
-        }},
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
         },

@@ -266,7 +266,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 //recorre la lista de souvenirs favoritos
                 for(souvenirF in _souvenirFav.value){
                     //si el souvenir en fav es igual al souvenir que quiere guardar
-                    if(souvenirF.referencia==souvenir.referencia){
+                    if(souvenirF.referencia==souvenir.referencia || email==null){
                         //la variable es igual es true
                         esIgual = true
                     }
@@ -282,11 +282,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                         }.addOnFailureListener{
                             Log.d("Save error","Error al guardar")
                         }
-                }else{
-                    //si el souvenir ya está en la BDD lo borra
-                    deleteSouvenirInFav ({
-                        Log.d("Souvenir_borrado","Souvenir Borrado")
-                    },souvenir)
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")
