@@ -25,6 +25,7 @@ import com.example.souvenirscadiz.ui.view.Registro
 import com.example.souvenirscadiz.ui.view.SouvenirDetail
 import com.example.souvenirscadiz.ui.view.Carrito
 import com.example.souvenirscadiz.ui.view.Chat
+import com.example.souvenirscadiz.ui.view.ChatAdmin
 import com.example.souvenirscadiz.ui.view.UsuarioDetail
 import com.example.souvenirscadiz.ui.view.Usuarios
 
@@ -87,6 +88,9 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
         }
         composable("Chat"){
             Chat(souvenirsViewModel, navController, loginViewModel, chatViewModel)
+        }
+        composable("ChatAdmin"){
+            ChatAdmin(chatViewModel)
         }
 
     }

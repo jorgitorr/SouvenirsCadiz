@@ -24,7 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -48,6 +48,17 @@ import com.example.souvenirscadiz.data.util.CloudStorageManager
 @Composable
 fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(
+        floatingActionButton = { FloatingActionButton(
+            onClick = {
+            }) {
+            Icon(imageVector = Icons.AutoMirrored.Filled.Chat,
+                contentDescription = "ChatAdmin",
+                modifier = Modifier.clickable {
+                    navController.navigate("ChatAdmin")
+                    souvenirsViewModel.setSelectedItem("ChatAdmin")
+                })
+        }
+        },
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
         },
@@ -165,12 +176,21 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                     }
                 }
             }
-
-
         }
     )
 
     Scaffold(
+        floatingActionButton = { FloatingActionButton(
+            onClick = {
+            }) {
+            Icon(imageVector = Icons.AutoMirrored.Filled.Chat,
+                contentDescription = "Chat",
+                modifier = Modifier.clickable {
+                    navController.navigate("ChatAdmin")
+                    souvenirsViewModel.setSelectedItem("ChatAdmin")
+                })
+        }
+        },
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
         },

@@ -1,9 +1,5 @@
 package com.example.souvenirscadiz.ui.model
 
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.souvenirscadiz.data.util.Constant.Companion.IS_CURRENT_USER
 import com.example.souvenirscadiz.data.util.Constant.Companion.MESSAGE
@@ -16,15 +12,21 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ChatViewModel : ViewModel() {
-    init {
-        getMessages()
-    }
-
+    /**
+     * @param _message
+     * @param message
+     * @param _messages
+     * @param messages
+     */
     private val _message = MutableStateFlow("")
     val message  = _message
 
     private var _messages = MutableStateFlow(emptyList<Map<String, Any>>())
     val messages = _messages
+
+    init {
+        getMessages()
+    }
 
     /**
      * Update the message value as user types

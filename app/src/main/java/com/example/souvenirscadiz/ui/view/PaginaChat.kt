@@ -86,7 +86,7 @@ fun HomeView(chatViewModel: ChatViewModel) {
     var userMessages by remember { mutableStateOf("") }
     val message: String by chatViewModel.message.collectAsState(initial = "")
     val messages: List<Map<String, Any>> by chatViewModel.messages.collectAsState(initial = emptyList<Map<String, Any>>().toMutableList())
-    var context = LocalContext.current
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -174,4 +174,23 @@ fun SingleMessage(message: String, isCurrentUser: Boolean) {
             color = if (!isCurrentUser) Silver else Color.White
         )
     }
+}
+
+
+@Composable
+fun ChatAdmin(chatViewModel: ChatViewModel){
+    val messages: List<Map<String, Any>> by chatViewModel.messages.collectAsState(initial = emptyList<Map<String, Any>>().toMutableList())
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        reverseLayout = true
+    ) {
+        items(messages) { message ->
+            Text(text = message[MESSAGE].toString())
+        }
+    }
+
 }
