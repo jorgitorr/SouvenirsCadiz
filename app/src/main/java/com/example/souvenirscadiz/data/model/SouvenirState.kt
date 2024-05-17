@@ -8,7 +8,7 @@ data class SouvenirState(
     var cantidad: String = "",
     val nombre:String = "",
     val url:String = "", //antes era entero
-    val precio:Double = 2.99,
+    val precio:String = "2.99",
     val tipo: String = "",
     val emailUser:String = "",//puedo arreglarlo para que el usuario guarde el souvenir no que el souvenir guarde una referencia del usuario
     var guardadoFav:Boolean = false,

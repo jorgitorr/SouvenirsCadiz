@@ -219,7 +219,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 val newSouvenir = hashMapOf(
                     "referencia" to _referencia.value,
                     "nombre" to _nombre.value,
-                    "url" to _url.value
+                    "url" to _url.value,
+                    "precio" to _precio.value
                 )
                 //tengo que añadir el souvenir a la lista
                 //si el souvenir no es igual a uno de los anteriormente guardados lo guarda

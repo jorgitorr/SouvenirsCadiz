@@ -94,7 +94,7 @@ fun AcceptButton(
 @Composable
 fun EliminarButton(
     userState: UserState,
-    loginViewModel: LoginViewModel
+    loginViewModel:LoginViewModel
 ) {
 
     IconToggleButton(

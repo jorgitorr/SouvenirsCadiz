@@ -326,6 +326,7 @@ fun CajaPedido(
 @Composable
 fun CajaUsuarios(user:UserState,
                  loginViewModel: LoginViewModel,
+                 souvenirsViewModel: SouvenirsViewModel,
                  navController: NavController){
     Box(
         modifier = Modifier
