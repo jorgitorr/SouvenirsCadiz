@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.souvenirscadiz.data.model.PedidoState
-import com.example.souvenirscadiz.data.model.UserState
+import com.example.souvenirscadiz.data.model.Pedido
+import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
@@ -27,7 +27,7 @@ import com.example.souvenirscadiz.ui.theme.Redwood
  */
 @Composable
 fun CancelButton(
-    pedido: PedidoState,
+    pedido: Pedido,
     souvenirsViewModel: SouvenirsViewModel
 ) {
 
@@ -62,7 +62,7 @@ fun CancelButton(
  */
 @Composable
 fun AcceptButton(
-    pedido: PedidoState,
+    pedido: Pedido,
     souvenirsViewModel: SouvenirsViewModel
 ) {
 
@@ -93,7 +93,7 @@ fun AcceptButton(
 
 @Composable
 fun EliminarButton(
-    userState: UserState,
+    userState: User,
     loginViewModel:LoginViewModel
 ) {
 

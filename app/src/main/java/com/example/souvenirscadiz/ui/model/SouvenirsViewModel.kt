@@ -1,17 +1,14 @@
 package com.example.souvenirscadiz.ui.model
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.souvenirscadiz.data.model.PedidoState
-import com.example.souvenirscadiz.data.model.SouvenirState
+import com.example.souvenirscadiz.data.model.Pedido
+import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
@@ -37,21 +34,21 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private val _imageUrls = MutableStateFlow<List<String>>(emptyList())
     val imageUrls: StateFlow<List<String>> = _imageUrls
 
-    private val _souvenirs = MutableStateFlow<List<SouvenirState>>(emptyList())
+    private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
 
-    private val _souvenirsTipo = MutableStateFlow<List<SouvenirState>>(emptyList())
+    private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsTipo = _souvenirsTipo
 
-    private val _actualSouvenir by mutableStateOf(SouvenirState())
+    private val _actualSouvenir by mutableStateOf(Souvenir())
     private var actualSouvenir = _actualSouvenir
 
-    private var _souvenirFav = MutableStateFlow<List<SouvenirState>>(emptyList())
-    val souvenirFav: StateFlow<List<SouvenirState>> =  _souvenirFav
-    private var _souvenirCarrito = MutableStateFlow<List<SouvenirState>>(emptyList())
-    var souvenirCarrito: StateFlow<List<SouvenirState>> =  _souvenirCarrito
-    private val _souvenirPedidos = MutableStateFlow<List<PedidoState>>(emptyList())
-    val souvenirPedidos: StateFlow<List<PedidoState>> =  _souvenirPedidos
+    private var _souvenirFav = MutableStateFlow<List<Souvenir>>(emptyList())
+    val souvenirFav: StateFlow<List<Souvenir>> =  _souvenirFav
+    private var _souvenirCarrito = MutableStateFlow<List<Souvenir>>(emptyList())
+    var souvenirCarrito: StateFlow<List<Souvenir>> =  _souvenirCarrito
+    private val _souvenirPedidos = MutableStateFlow<List<Pedido>>(emptyList())
+    val souvenirPedidos: StateFlow<List<Pedido>> =  _souvenirPedidos
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
@@ -98,10 +95,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                         Log.d("Error SL","Error SS")
                         return@addSnapshotListener
                     }
-                    val souvenirsList = mutableListOf<SouvenirState>()
+                    val souvenirsList = mutableListOf<Souvenir>()
                     if(querySnapshot != null){
                         for(souvenir in querySnapshot){
-                            val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
+                            val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
                             souvenirsList.add(souvenirObj)
                         }
                     }
@@ -115,7 +112,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * Hace la llamada a la base de datos de firestore para recuperar las imagenes de los souvenirs
      * y se las añade a los souvenirs que ya están
      */
-    private fun fetchImgSouvenirs(souvenirsList: List<SouvenirState>) {
+    private fun fetchImgSouvenirs(souvenirsList: List<Souvenir>) {
         viewModelScope.launch {
             val urls = imageRepository.getSouvenirsImages()
             if (urls.size >= souvenirsList.size) {
@@ -152,7 +149,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
     fun getByTipo(tipo: Tipo){
         viewModelScope.launch {
-            val list: MutableList<SouvenirState> = mutableListOf()
+            val list: MutableList<Souvenir> = mutableListOf()
             _souvenirsTipo.value = emptyList()//limpiamos los valores que pueda tener
             for(souvenir in souvenirs.value){
                 if(souvenir.tipo == tipo.valor){
@@ -169,7 +166,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param referencia referencia del souvenir
      * @return actualSouvenir devuelve el souvenir actual
      */
-    fun getByReference(referencia:String):SouvenirState{
+    fun getByReference(referencia:String):Souvenir{
         for(souvenir in _souvenirs.value){
             if(souvenir.referencia==referencia){
                 actualSouvenir = souvenir
@@ -248,7 +245,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param onSuccess lambda para que hace el método el caso de lograrlo
      * @param souvenir souvenir
      */
-    fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
+    fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorFav()
@@ -295,7 +292,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param onSuccess lambda para que hace el método al ser logrado
      */
 
-    fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: SouvenirState){ //otra forma de guardar el souvenir en fav
+    fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorCarrito()
@@ -386,7 +383,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param onSuccess si es satisfactorio
      * @param souvenir el souvenir
      */
-    fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: SouvenirState) {
+    fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 checkAnteriorFav()
@@ -416,7 +413,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * @param onSuccess Toast
      * @param souvenir souvenirState
      */
-    fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: SouvenirState) {
+    fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 checkAnteriorCarrito()
@@ -452,10 +449,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                         Log.d("Error SL","Error SS")
                         return@addSnapshotListener
                     }
-                    val souvenirsList = mutableListOf<SouvenirState>()
+                    val souvenirsList = mutableListOf<Souvenir>()
                     if(querySnapshot != null){
                         for(souvenir in querySnapshot){
-                            val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
+                            val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
                             Log.d("Souvenir",souvenirObj.url.toString())
                             souvenirObj.guardadoFav = true
                             souvenirsList.add(souvenirObj)
@@ -472,7 +469,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
     fun fetchSouvenirsCarrito(){
         viewModelScope.launch {
-            val souvenirsList = mutableListOf<SouvenirState>()
+            val souvenirsList = mutableListOf<Souvenir>()
             firestore.collection("Carrito")
                 .whereEqualTo("emailUser",email.toString())
                 .addSnapshotListener{querySnapshot, error->
@@ -481,7 +478,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     }
                     if(querySnapshot != null){
                         for(souvenir in querySnapshot){
-                            val souvenirObj = souvenir.toObject(SouvenirState::class.java).copy()
+                            val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
                             souvenirObj.guardadoCarrito = true
                             souvenirsList.add(souvenirObj)
                         }
@@ -499,7 +496,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
    fun fetchSouvenirsPedido(){
         viewModelScope.launch {
-            val souvenirsList = mutableListOf<PedidoState>()
+            val souvenirsList = mutableListOf<Pedido>()
             firestore.collection("Pedidos")
                 .addSnapshotListener{querySnapshot, error->
                     if(error != null){
@@ -508,7 +505,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     }
                     if(querySnapshot != null){
                         for(souvenir in querySnapshot){
-                            val souvenirObj = souvenir.toObject(PedidoState::class.java).copy()
+                            val souvenirObj = souvenir.toObject(Pedido::class.java).copy()
                             souvenirsList.add(souvenirObj)
                         }
                     }
@@ -558,7 +555,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * checkea si el souvenir esta guardado en fav o en el carrito
      * @param souvenir
      */
-    fun checkSouvenirIsSaved(souvenir: SouvenirState){
+    fun checkSouvenirIsSaved(souvenir: Souvenir){
         viewModelScope.launch {
             var souvenirGuardadoFav = false
             var souvenirGuardadoCarrito = false

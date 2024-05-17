@@ -1,8 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,14 +38,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
-import coil.Coil
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import coil.transform.CircleCropTransformation
-import com.example.souvenirscadiz.data.model.PedidoState
-import com.example.souvenirscadiz.data.model.SouvenirState
-import com.example.souvenirscadiz.data.model.UserState
+import com.example.souvenirscadiz.data.model.Pedido
+import com.example.souvenirscadiz.data.model.Souvenir
+import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -63,7 +57,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param souvenir clase souvenir
  */
 @Composable
-fun Caja(navController: NavController, souvenir: SouvenirState, souvenirsViewModel: SouvenirsViewModel,
+fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel,
          loginViewModel: LoginViewModel){
 
     val onChangeFav = souvenirsViewModel.onChangeFav.collectAsState()
@@ -160,7 +154,7 @@ fun Caja(navController: NavController, souvenir: SouvenirState, souvenirsViewMod
 @Composable
 fun CajaCarrito(
     navController: NavController,
-    souvenir: SouvenirState,
+    souvenir: Souvenir,
     souvenirsViewModel: SouvenirsViewModel
 ) {
 
@@ -260,7 +254,7 @@ fun CajaCarrito(
 @Composable
 fun CajaPedido(
     navController: NavController,
-    pedido: PedidoState,
+    pedido: Pedido,
     souvenirsViewModel: SouvenirsViewModel
 ) {
     Box(
@@ -324,7 +318,7 @@ fun CajaPedido(
 }
 
 @Composable
-fun CajaUsuarios(user:UserState,
+fun CajaUsuarios(user:User,
                  loginViewModel: LoginViewModel,
                  souvenirsViewModel: SouvenirsViewModel,
                  navController: NavController){

@@ -1,9 +1,8 @@
 package com.example.souvenirscadiz.data.model
 
 
-import java.time.LocalDateTime
 
-data class PedidoState(
+data class Pedido(
     val emailUser:String = "",
     val referencia:String = "",
     var nombre:String = "",

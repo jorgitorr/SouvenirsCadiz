@@ -3,7 +3,7 @@ package com.example.souvenirscadiz.data.model
 /**
  * Es el souvenir que guardan los usuarios
  */
-data class SouvenirState(
+data class Souvenir(
     val referencia:String = "",
     var cantidad: String = "",
     val nombre:String = "",

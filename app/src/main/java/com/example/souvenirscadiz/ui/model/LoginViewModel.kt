@@ -5,13 +5,10 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.souvenirscadiz.data.model.SouvenirState
-import com.example.souvenirscadiz.data.model.UserState
-import com.example.souvenirscadiz.data.util.CloudStorageManager
+import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -65,11 +62,11 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
     var selectedImageUri  = mutableStateOf<Uri?>(null)
 
-    private val _users = MutableStateFlow<List<UserState>>(emptyList())
+    private val _users = MutableStateFlow<List<User>>(emptyList())
     val users = _users
 
-    private val _userState = MutableStateFlow<UserState?>(null)
-    val userState: StateFlow<UserState?> get() = _userState
+    private val _userState = MutableStateFlow<User?>(null)
+    val userState: StateFlow<User?> get() = _userState
 
 
     init {
@@ -101,11 +98,11 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
                 try {
                     val downloadUrl = profileImageRef.downloadUrl.await()
-                    val updatedUser = UserState(imagen = downloadUrl.toString())
+                    val updatedUser = User(imagen = downloadUrl.toString())
                     _userState.value = updatedUser
                 } catch (e: Exception) {
                     Log.d("Error", "No se encontró la imagen para el UID: $uid, ${e.message}")
-                    _userState.value = UserState(imagen = "")
+                    _userState.value = User(imagen = "")
                 }
             } catch (e: Exception) {
                 Log.d("Error", "Error al obtener el UID del usuario actual: ${e.message}")
@@ -202,7 +199,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
         val email = auth.currentUser?.email
 
         viewModelScope.launch(Dispatchers.IO) {
-            val user = UserState(
+            val user = User(
                 userId = id.toString(),
                 email = email.toString(),
                 username = username
@@ -315,10 +312,10 @@ class LoginViewModel @Inject constructor(): ViewModel(){
                         Log.d("Error SL","Error SS")
                         return@addSnapshotListener
                     }
-                    val userList = mutableListOf<UserState>()
+                    val userList = mutableListOf<User>()
                     if(querySnapshot != null){
                         for(user in querySnapshot){
-                            val userState = user.toObject(UserState::class.java).copy()
+                            val userState = user.toObject(User::class.java).copy()
                             if(!userList.contains(userState)){
                                 userList.add(userState)
                             }
@@ -358,7 +355,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
         active.value = newActive
     }
 
-    fun deleteUser(userState: UserState) {
+    fun deleteUser(userState: User) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 firestore.collection("Users")

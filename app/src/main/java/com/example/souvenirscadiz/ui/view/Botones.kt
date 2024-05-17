@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
-import com.example.souvenirscadiz.data.model.SouvenirState
+import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -47,7 +47,7 @@ import com.example.souvenirscadiz.ui.theme.Redwood
  */
 @Composable
 fun FavoriteButton(
-    souvenir: SouvenirState,
+    souvenir: Souvenir,
     souvenirsViewModel: SouvenirsViewModel
 ) {
     val context = LocalContext.current
@@ -102,7 +102,7 @@ fun FavoriteButton(
  */
 @Composable
 fun ShopingCartButton(
-    souvenir: SouvenirState,
+    souvenir: Souvenir,
     souvenirsViewModel: SouvenirsViewModel
 ) {
     val context = LocalContext.current
@@ -159,7 +159,7 @@ fun ShopingCartButton(
  * @param souvenir souvenirState recogido de la base de datos (Carrito)
  */
 @Composable
-fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: SouvenirState) {
+fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: Souvenir) {
     val context = LocalContext.current
 
     IconToggleButton(
