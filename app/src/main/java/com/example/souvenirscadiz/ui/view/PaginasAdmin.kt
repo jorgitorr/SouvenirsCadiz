@@ -150,6 +150,11 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
     var stock by souvenirsViewModel._stock
     var url by souvenirsViewModel._url
     var selectedImageUri by souvenirsViewModel.selectedImageUri
+    var souvenirAñadido = false
+
+    LaunchedEffect(souvenirAñadido){
+        souvenirsViewModel.fetchSouvenirs() //recorre la lista de souvenirs y añade el nuevo
+    }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -245,6 +250,7 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                 souvenirsViewModel.saveSouvenir {
                     Toast.makeText(context, "souvenir guardado", Toast.LENGTH_SHORT).show()
                 }
+                souvenirAñadido = true
             }) {
                 Text(text = "GUARDAR")
             }

@@ -70,8 +70,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     var _nombre = mutableStateOf("")
     var _referencia = mutableStateOf("")
-    var _precio = mutableStateOf("")
-    var _tipo = mutableStateOf("")
+    var _precio = mutableStateOf("2.99")//le damos un precio predeterminado
+    var _tipo = mutableStateOf("") //le damos el valor predeterminado de llavero
     var _stock = mutableStateOf("")
     var _url = mutableStateOf("")
     var selectedImageUri  = mutableStateOf<Uri?>(null)
@@ -209,15 +209,35 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Permite coger la imagen ya que lo convierte a un formato admitido
-     * @param url de la imagen
-     * @return la imagen para que pueda ser mostrada
+     * Permite guardar nuevos souvenir en la base de datos
      */
-    @SuppressLint("DiscouragedApi")
-    @Composable
-    fun getResourceIdByName(url: String): Int {
-        val context = LocalContext.current
-        return context.resources.getIdentifier(url, "drawable", context.packageName)
+
+    fun saveSouvenir(onSuccess:() -> Unit){ //otra forma de guardar el souvenir en fav
+        val esIgual = false//variable que comprueba si el souvenir está ya
+        viewModelScope.launch (Dispatchers.IO){
+            try {
+                val newSouvenir = hashMapOf(
+                    "referencia" to _referencia.value,
+                    "nombre" to _nombre.value,
+                    "url" to _url.value
+                )
+                //tengo que añadir el souvenir a la lista
+                //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
+                if(!esIgual){
+                    firestore.collection("souvenirs")
+                        .document(_souvenirs.value.size.toString())
+                        .set(newSouvenir)
+                        .addOnSuccessListener {
+                            onSuccess()
+                            Log.d("Error save","Se guardó nuevo souvenir")
+                        }.addOnFailureListener{
+                            Log.d("Save error","Error al guardar")
+                        }
+                }
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
+            }
+        }
     }
 
 
@@ -267,40 +287,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     deleteSouvenirInFav ({
                         Log.d("Souvenir_borrado","Souvenir Borrado")
                     },souvenir)
-                }
-            }catch (e:Exception){
-                Log.d("Error al guardar souvenir","Error al guardar Souvenir")
-            }
-        }
-    }
-
-
-    /**
-     * Permite guardar nuevos souvenir
-     */
-
-    fun saveSouvenir(onSuccess:() -> Unit){ //otra forma de guardar el souvenir en fav
-        var esIgual = false//variable que comprueba si el souvenir está ya
-        viewModelScope.launch (Dispatchers.IO){
-            try {
-                val newSouvenir = hashMapOf(
-                    "referencia" to _referencia.value,
-                    "nombre" to _nombre.value,
-                    "url" to _url.value,
-                    "tipo" to _tipo.value,
-                    "precio" to _precio.value,
-                )
-
-                //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
-                if(!esIgual){
-                    firestore.collection("nuevos_souvenirs")
-                        .add(newSouvenir)
-                        .addOnSuccessListener {
-                            onSuccess()
-                            Log.d("Error save","Se guardó nuevo souvenir")
-                        }.addOnFailureListener{
-                            Log.d("Save error","Error al guardar")
-                        }
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")

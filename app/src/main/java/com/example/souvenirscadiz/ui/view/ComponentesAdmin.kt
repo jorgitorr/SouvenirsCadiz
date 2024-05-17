@@ -255,9 +255,9 @@ fun SearchUsuarios(loginViewModel: LoginViewModel, navController: NavController)
 @Composable
 fun MenuTiposSouvenir(souvenirsViewModel:SouvenirsViewModel) {
     val context = LocalContext.current
-    val coffeeDrinks = Tipo.entries.toTypedArray()
+    val tiposSouvenir = Tipo.entries.toTypedArray()
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(coffeeDrinks[0].valor) }
+    var selectedText by remember { mutableStateOf(tiposSouvenir[0].valor) }
     var tipo by souvenirsViewModel._tipo
 
     Box(
@@ -283,7 +283,7 @@ fun MenuTiposSouvenir(souvenirsViewModel:SouvenirsViewModel) {
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                coffeeDrinks.forEach { item ->
+                tiposSouvenir.forEach { item ->
                     DropdownMenuItem(
                         text = { Text(text = item.valor, color = White) },
                         onClick = {
