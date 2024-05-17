@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.User
@@ -69,6 +71,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     val userState: StateFlow<User?> get() = _userState
 
 
+
     init {
         fetchImgProfile()
     }
@@ -127,14 +130,13 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     /**
      *
      */
-    fun fetchUser(onSuccess: () -> Unit){
+    fun fetchUser(){
         viewModelScope.launch {
             try {
                 email = auth.currentUser?.email.toString()
                 val user = auth.currentUser
                 userName = user?.displayName.toString()
             }catch (e:Exception){
-
                 Log.d("Error de login","Error")
             }
         }
@@ -375,6 +377,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
             }
         }
     }
+
 
 }
 

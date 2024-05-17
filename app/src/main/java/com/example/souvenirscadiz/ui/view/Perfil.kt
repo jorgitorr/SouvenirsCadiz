@@ -95,9 +95,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
     )
 
     LaunchedEffect(true){
-        loginViewModel.fetchUser {
-            Toast.makeText(context,"Has iniciado sesión ${loginViewModel.userName}",Toast.LENGTH_SHORT).show()
-        }
+        loginViewModel.fetchUser()
     }
 
     Scaffold(

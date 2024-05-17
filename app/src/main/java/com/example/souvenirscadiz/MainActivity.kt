@@ -27,6 +27,7 @@ import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.notificacion.CarritoNotification
 import com.example.souvenirscadiz.notificacion.CarritoNotification.Companion.NOTIFICATION_ID
 import com.example.souvenirscadiz.notificacion.PedidosNotification
+import com.example.souvenirscadiz.ui.model.ChatViewModel
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.SouvenirsCadizTheme
@@ -43,6 +44,7 @@ class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel = LoginViewModel()
     private val souvenirsViewModel:SouvenirsViewModel = SouvenirsViewModel()
     private val cloudStorageManager: CloudStorageManager = CloudStorageManager()
+    private val chatViewModel: ChatViewModel = ChatViewModel()
     companion object {
         const val MY_CHANNEL_ID = "myChannel"
     }
@@ -59,7 +61,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavManager(souvenirsViewModel, loginViewModel, cloudStorageManager)
+                    NavManager(souvenirsViewModel, loginViewModel, cloudStorageManager, chatViewModel)
 
                 }
             }
