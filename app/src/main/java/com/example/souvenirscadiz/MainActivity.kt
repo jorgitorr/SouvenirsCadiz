@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -27,15 +26,10 @@ import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.notificacion.CarritoNotification
 import com.example.souvenirscadiz.notificacion.CarritoNotification.Companion.NOTIFICATION_ID
 import com.example.souvenirscadiz.notificacion.PedidosNotification
-import com.example.souvenirscadiz.ui.model.ChatViewModel
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.SouvenirsCadizTheme
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.nio.charset.Charset
 import java.util.Calendar
 
 
@@ -44,7 +38,6 @@ class MainActivity : ComponentActivity() {
     private val loginViewModel: LoginViewModel = LoginViewModel()
     private val souvenirsViewModel:SouvenirsViewModel = SouvenirsViewModel()
     private val cloudStorageManager: CloudStorageManager = CloudStorageManager()
-    private val chatViewModel: ChatViewModel = ChatViewModel()
     companion object {
         const val MY_CHANNEL_ID = "myChannel"
     }
@@ -61,7 +54,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavManager(souvenirsViewModel, loginViewModel, cloudStorageManager, chatViewModel)
+                    NavManager(souvenirsViewModel, loginViewModel, cloudStorageManager)
                 }
             }
         }
@@ -123,29 +116,5 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
-
-
-    /**
-     * Crea canal de notificaciones
-     */
-    private fun createChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                MY_CHANNEL_ID,
-                "MySuperChannel",
-                NotificationManager.IMPORTANCE_DEFAULT
-            ).apply {
-                description = "SOUVENIRS CADIZ"
-            }
-
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
-
-
 
 }

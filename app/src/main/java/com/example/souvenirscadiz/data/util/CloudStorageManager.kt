@@ -9,34 +9,15 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
 
-class CloudStorageManager() {
+class CloudStorageManager {
     private val storage = Firebase.storage
     private val storageRef = storage.reference
-
-
 
     /**
      * accede a un hijo de la referencia llamado souvenirs
      */
     private fun getSouvenirImagesReference():StorageReference{
         return storageRef.child("souvenirs")
-    }
-
-    /**
-     * accede a un hijo de la referencia llamado profile_images
-     * cada usurio tiene su propia imagen
-     */
-    private fun getProfileImagesReference():StorageReference{
-        return storageRef.child("profile_images")
-    }
-
-
-    /**
-     * esta funcion nos permite subir
-     */
-    fun uploadSouvenir(fileName:String, filePath: Uri){
-        val fileRef = getSouvenirImagesReference().child(fileName)
-        fileRef.putFile(filePath)
     }
 
 

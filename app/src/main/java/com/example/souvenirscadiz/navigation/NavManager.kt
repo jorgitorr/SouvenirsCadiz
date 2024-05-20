@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.souvenirscadiz.data.util.CloudStorageManager
-import com.example.souvenirscadiz.ui.model.ChatViewModel
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.view.AdminPrincipal
@@ -34,7 +33,7 @@ import com.example.souvenirscadiz.ui.view.Usuarios
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, cloudStorageManager:CloudStorageManager, chatViewModel:ChatViewModel){
+fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, cloudStorageManager:CloudStorageManager){
     val navController = rememberNavController()
     
     NavHost(navController = navController, startDestination = "Principal"){
