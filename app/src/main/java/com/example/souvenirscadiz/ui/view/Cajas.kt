@@ -307,10 +307,7 @@ fun CajaPedido(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
-                Row {
-                    /*AcceptButton(pedido, souvenirsViewModel)
-                    CancelButton(pedido, souvenirsViewModel)*/
-                }
+
             }
         }
     }
@@ -319,7 +316,6 @@ fun CajaPedido(
 @Composable
 fun CajaUsuarios(user:User,
                  loginViewModel: LoginViewModel,
-                 souvenirsViewModel: SouvenirsViewModel,
                  navController: NavController){
     Box(
         modifier = Modifier

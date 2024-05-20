@@ -359,7 +359,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
         active.value = newActive
     }
 
-    fun deleteUser(userState: User) {
+    fun deleteUser(userState: User, delete:()->Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 firestore.collection("Users")

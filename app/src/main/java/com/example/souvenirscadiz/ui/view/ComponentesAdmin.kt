@@ -254,7 +254,7 @@ fun MenuTiposSouvenir(souvenirsViewModel:SouvenirsViewModel) {
     val tiposSouvenir = Tipo.entries.toTypedArray()
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(tiposSouvenir[0].valor) }
-    var tipo by souvenirsViewModel._tipo
+    var tipo by souvenirsViewModel.tipo
 
     Box(
         modifier = Modifier

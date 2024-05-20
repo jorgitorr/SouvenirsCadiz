@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -41,19 +40,18 @@ import com.example.souvenirscadiz.ui.theme.Silver
 fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState() // souvenirs de un tipo
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
-    //val visibleItemCount by souvenirsViewModel.visibleItemCount.collectAsState()
 
     // si no ha seleccionado ningún tipo de souvenirs, muestra todos los souvenirs
     if (souvenirs.isEmpty()) {
         LazyColumn {
-            itemsIndexed(souvenirsPre) { index, souvenirP ->
+            items(souvenirsPre) { souvenirP ->
                 souvenirsViewModel.checkSouvenirIsSaved(souvenirP)
                 Caja(navController, souvenirP, souvenirsViewModel, loginViewModel)
             }
         }
     } else { // si hay un tipo seleccionado, muestra los souvenirs de ese tipo
         LazyColumn {
-            itemsIndexed(souvenirs) { index, souvenir->
+            items(souvenirs) { souvenir->
                 souvenirsViewModel.checkSouvenirIsSaved(souvenir)
                 Caja(navController, souvenir, souvenirsViewModel, loginViewModel)
             }
@@ -245,7 +243,6 @@ fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel, s
                 CajaUsuarios(
                     user,
                     loginViewModel,
-                    souvenirsViewModel,
                     navController
                 )
             }

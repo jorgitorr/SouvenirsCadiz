@@ -206,7 +206,7 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
     //si no hay souvenirs en el carrito
     if(souvenirCarrito.isNotEmpty()){
         Button(onClick = {
-            souvenirsViewModel.saveSouvenirInPedido {
+            souvenirsViewModel.saveSouvenirInPedido2{
                 Toast.makeText(context,
                     "Souvenirs Pedidos",
                     Toast.LENGTH_SHORT).show()

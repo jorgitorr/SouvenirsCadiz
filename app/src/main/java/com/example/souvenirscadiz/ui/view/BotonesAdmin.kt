@@ -1,5 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -12,6 +13,7 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.User
@@ -97,6 +99,8 @@ fun EliminarButton(
     loginViewModel:LoginViewModel
 ) {
 
+    var context = LocalContext.current
+
     IconToggleButton(
         checked = userState.eliminado,
         onCheckedChange = {
@@ -111,7 +115,7 @@ fun EliminarButton(
                 .size(30.dp)
                 .clickable {
                     userState.eliminado != userState.eliminado
-                    loginViewModel.deleteUser(userState)
+
                 }
         )
     }

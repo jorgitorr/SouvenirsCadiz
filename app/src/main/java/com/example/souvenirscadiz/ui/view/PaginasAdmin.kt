@@ -147,11 +147,11 @@ fun UsuarioDetail(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsV
 @Composable
 fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel, navController: NavController, cloudStorageManager:CloudStorageManager){
     var context = LocalContext.current
-    var nombre by souvenirsViewModel._nombre
-    var referencia by souvenirsViewModel._referencia
-    var precio by souvenirsViewModel._precio
-    var stock by souvenirsViewModel._stock
-    var url by souvenirsViewModel._url
+    var nombre by souvenirsViewModel.nombre
+    var referencia by souvenirsViewModel.referencia
+    var precio by souvenirsViewModel.precio
+    var stock by souvenirsViewModel.stock
+    var url by souvenirsViewModel.url
     var selectedImageUri by souvenirsViewModel.selectedImageUri
     var souvenirAñadido = false
 

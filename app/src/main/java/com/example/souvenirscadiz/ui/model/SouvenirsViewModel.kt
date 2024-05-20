@@ -13,7 +13,6 @@ import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,8 +29,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     val selectedItem = MutableStateFlow("Principal")
 
     private val imageRepository = CloudStorageManager()
-    private val _imageUrls = MutableStateFlow<List<String>>(emptyList())
-    val imageUrls: StateFlow<List<String>> = _imageUrls
 
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
@@ -51,6 +47,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private val _souvenirPedidos = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirPedidos: StateFlow<List<Souvenir>> =  _souvenirPedidos
 
+
+
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
     private val email = auth.currentUser?.email
@@ -66,12 +64,12 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var soundPlayedFav by mutableStateOf(true)
     var soundPlayedCarrito by mutableStateOf(true)
 
-    var _nombre = mutableStateOf("")
-    var _referencia = mutableStateOf("")
-    var _precio = mutableStateOf("2.99")//le damos un precio predeterminado
-    var _tipo = mutableStateOf("") //le damos el valor predeterminado de llavero
-    var _stock = mutableStateOf("")
-    var _url = mutableStateOf("")
+    var nombre = mutableStateOf("")
+    var referencia = mutableStateOf("")
+    var precio = mutableStateOf("2.99")//le damos un precio predeterminado
+    var tipo = mutableStateOf("") //le damos el valor predeterminado de llavero
+    var stock = mutableStateOf("")
+    var url = mutableStateOf("")
     var selectedImageUri  = mutableStateOf<Uri?>(null)
 
     init {
@@ -81,7 +79,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
     fun updateSouvenirImage(downloadUrl:String){
-        _url.value = downloadUrl
+        url.value = downloadUrl
     }
 
 
@@ -215,10 +213,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         viewModelScope.launch (Dispatchers.IO){
             try {
                 val newSouvenir = hashMapOf(
-                    "referencia" to _referencia.value,
-                    "nombre" to _nombre.value,
-                    "url" to _url.value,
-                    "precio" to _precio.value
+                    "referencia" to referencia.value,
+                    "nombre" to nombre.value,
+                    "url" to url.value,
+                    "precio" to precio.value
                 )
                 //tengo que añadir el souvenir a la lista
                 //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
@@ -349,7 +347,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 for(souvenir in _souvenirCarrito.value){
                     val newPedido = hashMapOf(
                         "emailUser" to auth.currentUser?.email,
-                        //"fecha" to FieldValue.serverTimestamp(),
                         "referencia" to souvenir.referencia,
                         "nombre" to souvenir.nombre,
                         "url" to souvenir.url,
@@ -371,6 +368,37 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             }
         }
     }
+
+
+    /**
+     * Este souvenirs guarda el pedido
+     * y los souvenirs en un pedido
+     */
+    fun saveSouvenirInPedido2(onSuccess:() -> Unit){
+        viewModelScope.launch {
+            try {
+
+                val newPedido = hashMapOf(
+                    "emailUser" to auth.currentUser?.email,
+                    "fecha" to "actual",
+                    "souvenirs" to souvenirCarrito.value
+                )
+                //se guardan todos los souvenirs de la lista de _souvenirCarrito
+
+                firestore.collection("Pedidos")
+                    .add(newPedido)
+                    .addOnSuccessListener {
+                        onSuccess()
+                        Log.d("Error save","Se guardó el pedido")
+                    }.addOnFailureListener{
+                        Log.d("Save error","Error al guardar pedido")
+                    }
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Pedido")
+            }
+        }
+    }
+
 
 
     /**
@@ -448,7 +476,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     if(querySnapshot != null){
                         for(souvenir in querySnapshot){
                             val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
-                            Log.d("Souvenir",souvenirObj.url.toString())
+                            Log.d("Souvenir",souvenirObj.url)
                             souvenirObj.guardadoFav = true
                             souvenirsList.add(souvenirObj)
                         }
