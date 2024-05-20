@@ -6,8 +6,6 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.User
@@ -74,6 +72,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
     init {
         fetchImgProfile()
+        fetchUsers()
     }
 
     /**
@@ -151,46 +150,33 @@ class LoginViewModel @Inject constructor(): ViewModel(){
      * en este caso se le pasaria el nav que va a la página que nos interese
      * Dentro realiza una corrutina para iniciar sesion con un email y una contrasenia
      */
-    fun login(onSuccess: () -> Unit){
-        viewModelScope.launch {
-            try {
-                auth.signInWithEmailAndPassword(email,password)
-                    .addOnCompleteListener{task ->
-                        if(task.isSuccessful){
-                            onSuccess()
-                        }else{
-                            Log.d("ERROR DE FB","ERROR")
-                            showAlert = true
-                        }
-                    }
-            }catch (e:Exception){
-                Log.d("ERROR EN JETPACK", "ERROR: ${e.localizedMessage}")
+    fun login(onSuccess: () -> Unit) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onSuccess()
+                } else {
+                    Log.d("ERROR DE FB", "Error al iniciar sesión: ${task.exception?.localizedMessage}")
+                    showAlert = true
+                }
             }
-
-        }
     }
 
     /**
      * crea un usuario que se guarda en la base de datos
      * @param onSuccess se le pasa un nav que va a la pantalla de creacion de usuario
      */
-    fun createUser(onSuccess: () -> Unit){
-        viewModelScope.launch {
-            try {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            saveUser(userName)
-                            onSuccess()
-                        } else {
-                            Log.d("ERROR EN FIREBASE","Error al crear usuario")
-                            showAlert = true
-                        }
-                    }
-            } catch (e: Exception){
-                Log.d("ERROR CREAR USUARIO", "ERROR: ${e.localizedMessage}")
+    fun createUser(onSuccess: () -> Unit) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    saveUser(userName)
+                    onSuccess()
+                } else {
+                    Log.d("ERROR EN FIREBASE", "Error al crear usuario: ${task.exception?.localizedMessage}")
+                    showAlert = true
+                }
             }
-        }
     }
 
     /**
@@ -202,18 +188,18 @@ class LoginViewModel @Inject constructor(): ViewModel(){
         val id = auth.currentUser?.uid
         val email = auth.currentUser?.email
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val user = User(
-                userId = id.toString(),
-                email = email.toString(),
-                username = username
-            )
+
+        val user = User(
+            userId = id.toString(),
+            email = email.toString(),
+            username = username
+        )
             // DCS - Añade el usuario a la colección "Users" en la base de datos Firestore
-            firestore.collection("Users")
-                .add(user)
-                .addOnSuccessListener { Log.d("GUARDAR OK", "Se guardó el usuario correctamente en Firestore") }
-                .addOnFailureListener { Log.d("ERROR AL GUARDAR", "ERROR al guardar en Firestore") }
-        }
+        firestore.collection("Users")
+            .add(user)
+            .addOnSuccessListener { Log.d("GUARDAR OK", "Se guardó el usuario correctamente en Firestore") }
+            .addOnFailureListener { Log.d("ERROR AL GUARDAR", "ERROR al guardar en Firestore") }
+
     }
 
     /**
@@ -378,6 +364,20 @@ class LoginViewModel @Inject constructor(): ViewModel(){
                 Log.d("Error al eliminar usuario", "Error al eliminar usuario")
             }
         }
+    }
+
+
+    fun checkUserExists(email: String, onResult: (Boolean) -> Unit) {
+        firestore.collection("Users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { documents ->
+                onResult(!documents.isEmpty)
+            }
+            .addOnFailureListener { e ->
+                Log.d("ERROR CHECK USER", "Error al verificar usuario: ${e.localizedMessage}")
+                onResult(false)
+            }
     }
 
 

@@ -254,14 +254,13 @@ fun CajaCarrito(
 @Composable
 fun CajaPedido(
     navController: NavController,
-    pedido: Souvenir
+    pedido: Pedido
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Silver, shape = RoundedCornerShape(5.dp))
             .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
-            .clickable { navController.navigate("SouvenirDetail/${pedido.referencia}") }
             .padding(8.dp)
     ) {
         Column(
@@ -283,31 +282,61 @@ fun CajaPedido(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
 
-               Text(
-                    text = pedido.nombre,
-                    fontSize = 16.sp,
-                    color = RaisanBlack,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
-                Text(
-                    text = "Ref: ${pedido.referencia}",
-                    fontSize = 14.sp,
-                    color = RaisanBlack,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
-                Text(
-                    text = "Cantidad: ${pedido.cantidad}",
-                    fontSize = 14.sp,
-                    color = RaisanBlack,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
+                for(souvenir in pedido.souvenirs){
+                    Box(contentAlignment = Alignment.TopEnd){
+                        // Imagen
+                        SubcomposeAsyncImage(
+                            model = ImageRequest.Builder(context = LocalContext.current)
+                                .data(souvenir.url)
+                                .build(),
+                            loading = { CircularProgressIndicator()},
+                            contentDescription = souvenir.nombre,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
 
+                        )
+                    }
+
+                    Text(
+                        text = souvenir.referencia,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = RaisanBlack,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+
+                    Text(
+                        text = souvenir.nombre,
+                        fontSize = 20.sp,
+                        color = RaisanBlack,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+
+                    Text(
+                        text = souvenir.cantidad,
+                        fontSize = 20.sp,
+                        color = RaisanBlack,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+
+                    Text(
+                        text = souvenir.precio,
+                        fontSize = 20.sp,
+                        color = RaisanBlack,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -75,6 +76,8 @@ fun SouvenirsListFav(navController: NavController, souvenirsViewModel: Souvenirs
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav()
     }
+
+    Log.d("SouvenirSized",souvenirSaved.size.toString())
 
     if(souvenirSaved.isEmpty()){ //si no hay souvenirs guardados
         LottieAnimation(composition = compositionAngryStart)
@@ -220,10 +223,10 @@ fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: Souve
             fontFamily = KiwiMaru)
     }else{
         LazyColumn{
-            items(souvenirsPedidos){ souvenir ->
+            items(souvenirsPedidos){ pedido ->
                 CajaPedido(
                     navController,
-                    souvenir)
+                    pedido)
             }
         }
     }

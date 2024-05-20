@@ -127,10 +127,32 @@ fun IntroducirUsuario(loginViewModel: LoginViewModel){
  */
 @Composable
 fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    var context = LocalContext.current
     Button(
-        onClick = { loginViewModel.createUser {
-            navController.navigate("Principal")
-            souvenirsViewModel.setSelectedItem("Principal")} },
+        onClick = {
+            if(loginViewModel.password.length<6){
+                Toast.makeText(context,"La contraseña tiene que ser mayor de 6 carácteres", Toast.LENGTH_SHORT).show()
+            }
+            else if(loginViewModel.email.isEmpty()){
+                Toast.makeText(context,"No has introducido el email", Toast.LENGTH_SHORT).show()
+            }
+            else if(loginViewModel.password.isEmpty()){
+                Toast.makeText(context,"No has introducido la contraseña", Toast.LENGTH_SHORT).show()
+            }
+            else if(loginViewModel.userName.isEmpty()){
+                Toast.makeText(context,"No has introducido la contraseña", Toast.LENGTH_SHORT).show()
+            }else {
+                loginViewModel.checkUserExists(loginViewModel.email){
+                    exists ->
+                    if(exists){
+                        Toast.makeText(context,"Es un usario existente", Toast.LENGTH_SHORT).show()
+                    }else{
+                        loginViewModel.createUser {
+                            navController.navigate("Principal")
+                            souvenirsViewModel.setSelectedItem("Principal")}
+                    }
+                }
+            } },
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
@@ -139,7 +161,7 @@ fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavContr
         shape = CutCornerShape(1.dp)
     ) {
         Text(
-            text = "Log in",
+            text = "Registrarte",
             fontFamily = KiwiMaru,
             color = White
         )
@@ -156,7 +178,8 @@ fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavContr
 @Composable
 fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     Button(
-        onClick = { loginViewModel.login {
+        onClick = {
+            loginViewModel.login {
             navController.navigate("Principal")
             souvenirsViewModel.setSelectedItem("Principal")} },
         modifier = Modifier

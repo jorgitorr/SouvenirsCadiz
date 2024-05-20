@@ -48,17 +48,6 @@ import com.example.souvenirscadiz.data.util.CloudStorageManager
 @Composable
 fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(
-        floatingActionButton = { FloatingActionButton(
-            onClick = {
-            }) {
-            Icon(imageVector = Icons.AutoMirrored.Filled.Chat,
-                contentDescription = "ChatAdmin",
-                modifier = Modifier.clickable {
-                    navController.navigate("ChatAdmin")
-                    souvenirsViewModel.setSelectedItem("ChatAdmin")
-                })
-        }
-        },
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
         },

@@ -44,10 +44,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private var _souvenirCarrito = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirCarrito: StateFlow<List<Souvenir>> =  _souvenirCarrito
 
-    private val _souvenirPedidos = MutableStateFlow<List<Souvenir>>(emptyList())
-    val souvenirPedidos: StateFlow<List<Souvenir>> =  _souvenirPedidos
-
-
+    private val _souvenirPedidos = MutableStateFlow<List<Pedido>>(emptyList())
+    val souvenirPedidos: StateFlow<List<Pedido>> =  _souvenirPedidos
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
@@ -76,6 +74,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         fetchSouvenirs()
         fetchSouvenirsFav()
         fetchSouvenirsCarrito()
+        //fetchSouvenirsPedido()
     }
 
     fun updateSouvenirImage(downloadUrl:String){
@@ -346,7 +345,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 //se guardan todos los souvenirs de la lista de _souvenirCarrito
                 for(souvenir in _souvenirCarrito.value){
                     val newPedido = hashMapOf(
-                        "emailUser" to auth.currentUser?.email,
+                        "emailUser" to email,
                         "referencia" to souvenir.referencia,
                         "nombre" to souvenir.nombre,
                         "url" to souvenir.url,
@@ -375,13 +374,14 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * y los souvenirs en un pedido
      */
     fun saveSouvenirInPedido2(onSuccess:() -> Unit){
+
         viewModelScope.launch {
             try {
-
+                val email = auth.currentUser?.email
                 val newPedido = hashMapOf(
-                    "emailUser" to auth.currentUser?.email,
+                    "emailUser" to email,
                     "fecha" to "actual",
-                    "souvenirs" to souvenirCarrito.value
+                    "souvenirs" to _souvenirCarrito.value
                 )
                 //se guardan todos los souvenirs de la lista de _souvenirCarrito
 
@@ -517,9 +517,9 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * muestra todos los souvenirs que se han pedido
      * esto lo ve el administrador
      */
-   fun fetchSouvenirsPedido(){
+   /*fun fetchSouvenirsPedido(){
         viewModelScope.launch {
-            val souvenirsList = mutableListOf<Souvenir>()
+            val pedidosList = mutableListOf<Pedido>()
             firestore.collection("Pedidos")
                 .addSnapshotListener{querySnapshot, error->
                     if(error != null){
@@ -527,12 +527,32 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                         return@addSnapshotListener
                     }
                     if(querySnapshot != null){
-                        for(souvenir in querySnapshot){
-                            val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
-                            souvenirsList.add(souvenirObj)
+                        for(pedidos in querySnapshot){
+                            val souvenirObj = pedidos.toObject(Pedido::class.java).copy()
+                            pedidosList.add(souvenirObj)
                         }
                     }
-                    _souvenirPedidos.value = souvenirsList
+                    _souvenirPedidos.value = pedidosList
+                }
+        }
+    }*/
+
+    fun fetchSouvenirsPedido() {
+        viewModelScope.launch {
+            firestore.collection("Pedidos")
+                .addSnapshotListener { querySnapshot, error ->
+                    if (error != null) {
+                        Log.d("Error SL", "Error al obtener los datos: ${error.message}")
+                        return@addSnapshotListener
+                    }
+                    if (querySnapshot != null) {
+                        val pedidosList = querySnapshot.documents.mapNotNull { document ->
+                            document.toObject(Pedido::class.java)
+                        }
+                        _souvenirPedidos.value = pedidosList
+                    } else {
+                        Log.d("Error SL", "QuerySnapshot es nulo")
+                    }
                 }
         }
     }
