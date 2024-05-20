@@ -225,8 +225,7 @@ fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: Souve
             items(souvenirsPedidos){ souvenir ->
                 CajaPedido(
                     navController,
-                    souvenir,
-                    souvenirsViewModel)
+                    souvenir)
             }
         }
     }

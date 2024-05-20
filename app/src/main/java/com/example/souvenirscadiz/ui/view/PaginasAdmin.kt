@@ -180,17 +180,6 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
     )
 
     Scaffold(
-        floatingActionButton = { FloatingActionButton(
-            onClick = {
-            }) {
-            Icon(imageVector = Icons.AutoMirrored.Filled.Chat,
-                contentDescription = "Chat",
-                modifier = Modifier.clickable {
-                    navController.navigate("ChatAdmin")
-                    souvenirsViewModel.setSelectedItem("ChatAdmin")
-                })
-        }
-        },
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
         },

@@ -50,17 +50,6 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     }
 
     Scaffold(
-        floatingActionButton = { FloatingActionButton(
-            onClick = {
-            }) {
-                Icon(imageVector = Icons.AutoMirrored.Filled.Chat,
-                    contentDescription = "Chat",
-                    modifier = Modifier.clickable {
-                        navController.navigate("Chat")
-                        souvenirsViewModel.setSelectedItem("Chat")
-                    })
-            }
-        },
         topBar = {
             if(loginViewModel.checkAdmin()){
                 HeaderAdmin(navController, souvenirsViewModel) //tipo de header del administrador de la BDD

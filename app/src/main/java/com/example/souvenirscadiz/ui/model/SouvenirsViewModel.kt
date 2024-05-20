@@ -47,8 +47,9 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     val souvenirFav: StateFlow<List<Souvenir>> =  _souvenirFav
     private var _souvenirCarrito = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirCarrito: StateFlow<List<Souvenir>> =  _souvenirCarrito
-    private val _souvenirPedidos = MutableStateFlow<List<Pedido>>(emptyList())
-    val souvenirPedidos: StateFlow<List<Pedido>> =  _souvenirPedidos
+
+    private val _souvenirPedidos = MutableStateFlow<List<Souvenir>>(emptyList())
+    val souvenirPedidos: StateFlow<List<Souvenir>> =  _souvenirPedidos
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
@@ -257,7 +258,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     "tipo" to souvenir.tipo,
                     "precio" to souvenir.precio,
                     "favorito" to souvenir.guardadoFav,
-                    "emailUser" to email.toString()
+                    "emailUser" to auth.currentUser?.email
                 )
 
                 //recorre la lista de souvenirs favoritos
@@ -304,7 +305,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     "tipo" to souvenir.tipo,
                     "precio" to souvenir.precio,
                     "carrito" to souvenir.guardadoCarrito,
-                    "emailUser" to email.toString()
+                    "emailUser" to auth.currentUser?.email
                 )
 
                 //recorre la lista de souvenirs favoritos
@@ -341,22 +342,14 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * todos los que tenga el usuario guardado
      * @param onSuccess lambda que ocurre cuando se logra el método
      */
-
-    fun saveSouvenirInPedido(onSuccess: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun saveSouvenirInPedido(onSuccess:() -> Unit){
+        viewModelScope.launch {
             try {
-                // Crear un nuevo pedido
-                val newPedido = hashMapOf(
-                    "emailUser" to auth.currentUser?.email,
-                    "fecha" to FieldValue.serverTimestamp() // Agregar la fecha del pedido si es necesario
-                )
-
-                // Añadir el pedido a la colección "Pedidos"
-                val pedidoRef = firestore.collection("Pedidos").add(newPedido).await()
-
-                // Guardar cada souvenir dentro del pedido
-                for (souvenir in _souvenirCarrito.value) {
-                    val newSouvenir = hashMapOf(
+                //se guardan todos los souvenirs de la lista de _souvenirCarrito
+                for(souvenir in _souvenirCarrito.value){
+                    val newPedido = hashMapOf(
+                        "emailUser" to auth.currentUser?.email,
+                        //"fecha" to FieldValue.serverTimestamp(),
                         "referencia" to souvenir.referencia,
                         "nombre" to souvenir.nombre,
                         "url" to souvenir.url,
@@ -364,15 +357,17 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                         "cantidad" to souvenir.cantidad
                     )
 
-                    // Añadir el souvenir a la subcolección "Souvenirs" dentro del documento del pedido
-                    pedidoRef.collection("Souvenirs").add(newSouvenir)
+                    firestore.collection("Pedidos")
+                        .add(newPedido)
+                        .addOnSuccessListener {
+                            onSuccess()
+                            Log.d("Error save","Se guardó el pedido")
+                        }.addOnFailureListener{
+                            Log.d("Save error","Error al guardar pedido")
+                        }
                 }
-
-                onSuccess()
-                Log.d("Save Success", "Pedido y souvenirs guardados exitosamente")
-
-            } catch (e: Exception) {
-                Log.d("Error al guardar souvenir", "Error al guardar Pedido: $e")
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Pedido")
             }
         }
     }
@@ -496,7 +491,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
    fun fetchSouvenirsPedido(){
         viewModelScope.launch {
-            val souvenirsList = mutableListOf<Pedido>()
+            val souvenirsList = mutableListOf<Souvenir>()
             firestore.collection("Pedidos")
                 .addSnapshotListener{querySnapshot, error->
                     if(error != null){
@@ -505,7 +500,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     }
                     if(querySnapshot != null){
                         for(souvenir in querySnapshot){
-                            val souvenirObj = souvenir.toObject(Pedido::class.java).copy()
+                            val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
                             souvenirsList.add(souvenirObj)
                         }
                     }

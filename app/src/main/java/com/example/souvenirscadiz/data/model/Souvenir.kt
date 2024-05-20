@@ -1,5 +1,6 @@
 package com.example.souvenirscadiz.data.model
 
+
 /**
  * Es el souvenir que guardan los usuarios
  */

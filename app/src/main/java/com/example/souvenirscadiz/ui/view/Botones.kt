@@ -215,7 +215,6 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
             souvenirsViewModel.vaciarSouvenirsCarrito()
 
             soundEffect.start()
-            //tengo que eliminar los souvenirs de ese usuario de la BDD
         },
 
             modifier = Modifier.fillMaxWidth(),

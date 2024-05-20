@@ -254,8 +254,7 @@ fun CajaCarrito(
 @Composable
 fun CajaPedido(
     navController: NavController,
-    pedido: Pedido,
-    souvenirsViewModel: SouvenirsViewModel
+    pedido: Souvenir
 ) {
     Box(
         modifier = Modifier
@@ -284,7 +283,7 @@ fun CajaPedido(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
 
-                Text(
+               Text(
                     text = pedido.nombre,
                     fontSize = 16.sp,
                     color = RaisanBlack,
@@ -309,8 +308,8 @@ fun CajaPedido(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
                 Row {
-                    AcceptButton(pedido, souvenirsViewModel)
-                    CancelButton(pedido, souvenirsViewModel)
+                    /*AcceptButton(pedido, souvenirsViewModel)
+                    CancelButton(pedido, souvenirsViewModel)*/
                 }
             }
         }
