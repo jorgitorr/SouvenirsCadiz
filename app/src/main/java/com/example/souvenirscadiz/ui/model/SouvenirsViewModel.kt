@@ -74,7 +74,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         fetchSouvenirs()
         fetchSouvenirsFav()
         fetchSouvenirsCarrito()
-        //fetchSouvenirsPedido()
+        fetchSouvenirsPedido()
     }
 
     fun updateSouvenirImage(downloadUrl:String){

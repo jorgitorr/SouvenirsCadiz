@@ -300,9 +300,8 @@ fun CajaPedido(
                     }
 
                     Text(
-                        text = souvenir.referencia,
+                        text = "Referencia: ${souvenir.referencia}",
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
                         color = RaisanBlack,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -311,7 +310,7 @@ fun CajaPedido(
 
                     Text(
                         text = souvenir.nombre,
-                        fontSize = 20.sp,
+                        fontSize = 15.sp,
                         color = RaisanBlack,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -319,8 +318,8 @@ fun CajaPedido(
                     )
 
                     Text(
-                        text = souvenir.cantidad,
-                        fontSize = 20.sp,
+                        text = "Cantidad: ${souvenir.cantidad}",
+                        fontSize = 15.sp,
                         color = RaisanBlack,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -328,8 +327,8 @@ fun CajaPedido(
                     )
 
                     Text(
-                        text = souvenir.precio,
-                        fontSize = 20.sp,
+                        text = souvenir.precio+"€",
+                        fontSize = 15.sp,
                         color = RaisanBlack,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,

@@ -190,7 +190,7 @@ fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavControl
         shape = CutCornerShape(1.dp)
     ) {
         Text(
-            text = "Log in",
+            text = "Iniciar Sesión",
             fontFamily = KiwiMaru,
             color = White
         )

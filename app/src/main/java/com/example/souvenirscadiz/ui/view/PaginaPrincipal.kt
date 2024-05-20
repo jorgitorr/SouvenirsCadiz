@@ -44,6 +44,8 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+    val onChangeCarrito = souvenirsViewModel.onChangeCarrito.collectAsState()
+
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
         souvenirsViewModel.fetchSouvenirsCarrito() //devuelve los souvenirs guardados en carritos
@@ -54,7 +56,11 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             if(loginViewModel.checkAdmin()){
                 HeaderAdmin(navController, souvenirsViewModel) //tipo de header del administrador de la BDD
             }else{
-                Header(navController, souvenirsViewModel)
+                if(onChangeCarrito.value){
+                    Header(navController, souvenirsViewModel)
+                }else{
+                    Header(navController, souvenirsViewModel)
+                }
             }
         },
         bottomBar = {
