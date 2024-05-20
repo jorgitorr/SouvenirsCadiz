@@ -1,6 +1,5 @@
 package com.example.souvenirscadiz.ui.view
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -13,11 +12,9 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.User
-import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
@@ -60,7 +57,7 @@ fun CancelButton(
 /**
  * Boton de aceptar
  * @param pedido pedido state
- * @param viewmodel del souvenir
+ * @param souvenirsViewModel viewmodel del souvenir
  */
 @Composable
 fun AcceptButton(
@@ -95,11 +92,8 @@ fun AcceptButton(
 
 @Composable
 fun EliminarButton(
-    userState: User,
-    loginViewModel:LoginViewModel
+    userState: User
 ) {
-
-    var context = LocalContext.current
 
     IconToggleButton(
         checked = userState.eliminado,

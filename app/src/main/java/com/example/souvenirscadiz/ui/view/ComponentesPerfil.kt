@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.souvenirscadiz.ui.view
 
 import android.util.Log
@@ -127,7 +129,7 @@ fun IntroducirUsuario(loginViewModel: LoginViewModel){
  */
 @Composable
 fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
-    var context = LocalContext.current
+    val context = LocalContext.current
     Button(
         onClick = {
             if(loginViewModel.password.length<6){

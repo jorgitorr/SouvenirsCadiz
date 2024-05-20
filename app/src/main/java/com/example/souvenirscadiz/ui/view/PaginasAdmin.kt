@@ -23,13 +23,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
@@ -94,7 +90,7 @@ fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             SearchUsuarios(loginViewModel, navController)
-            UsuariosList(navController, loginViewModel, souvenirsViewModel)
+            UsuariosList(navController, loginViewModel)
         }
     }
 }
@@ -135,16 +131,16 @@ fun UsuarioDetail(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsV
  */
 @Composable
 fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel, navController: NavController, cloudStorageManager:CloudStorageManager){
-    var context = LocalContext.current
+    val context = LocalContext.current
     var nombre by souvenirsViewModel.nombre
     var referencia by souvenirsViewModel.referencia
     var precio by souvenirsViewModel.precio
     var stock by souvenirsViewModel.stock
     var url by souvenirsViewModel.url
     var selectedImageUri by souvenirsViewModel.selectedImageUri
-    var souvenirAñadido = false
+    var souvenirAniadido = false
 
-    LaunchedEffect(souvenirAñadido){
+    LaunchedEffect(souvenirAniadido){
         souvenirsViewModel.fetchSouvenirs() //recorre la lista de souvenirs y añade el nuevo
     }
 
@@ -240,7 +236,7 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                 souvenirsViewModel.saveSouvenir {
                     Toast.makeText(context, "souvenir guardado", Toast.LENGTH_SHORT).show()
                 }
-                souvenirAñadido = true
+                souvenirAniadido = true
             }) {
                 Text(text = "GUARDAR")
             }

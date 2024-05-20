@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -136,6 +135,8 @@ fun MyGoogleMaps(){
     }
 }
 
+
+/*
 /**
  * Permite hacer una llamada por tlf
  * @param customerPhone telefono
@@ -159,4 +160,4 @@ fun MakePhoneCall(customerPhone:String, context: Context) {
         e.printStackTrace()
         Toast.makeText(context, "Error making phone call", Toast.LENGTH_LONG).show()
     }
-}
+}*/

@@ -234,7 +234,7 @@ fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: Souve
 
 
 @Composable
-fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel){
+fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel){
     val users by loginViewModel.users.collectAsState()
 
     if(users.isEmpty()){
@@ -243,11 +243,7 @@ fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel, s
     }else{
         LazyColumn{
             items(users){ user ->
-                CajaUsuarios(
-                    user,
-                    loginViewModel,
-                    navController
-                )
+                CajaUsuarios(user, navController)
             }
         }
     }

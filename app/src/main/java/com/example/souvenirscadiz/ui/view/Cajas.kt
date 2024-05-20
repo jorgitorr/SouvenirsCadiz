@@ -148,7 +148,6 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
  * Caja del carrito
  * @param navController navegacion
  * @param souvenir souvenirState
- * @param url url del souvenir
  * @param souvenirsViewModel viewmodel del souvenir
  */
 @Composable
@@ -249,7 +248,6 @@ fun CajaCarrito(
  * Caja del carrito
  * @param navController navegacion
  * @param pedido pedido
- * @param souvenirsViewModel viewmodel de souvenir
  */
 @Composable
 fun CajaPedido(
@@ -343,7 +341,6 @@ fun CajaPedido(
 
 @Composable
 fun CajaUsuarios(user:User,
-                 loginViewModel: LoginViewModel,
                  navController: NavController){
     Box(
         modifier = Modifier
@@ -383,9 +380,8 @@ fun CajaUsuarios(user:User,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
-                EliminarButton(
-                    user,
-                    loginViewModel)
+                //botón que permite eliminar el usuario
+                EliminarButton(user)
             }
         }
     }
