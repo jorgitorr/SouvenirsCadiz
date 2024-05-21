@@ -1,14 +1,5 @@
 package com.example.souvenirscadiz.ui.view
 
-import android.Manifest
-import android.app.Activity
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
-import androidx.core.app.ActivityCompat
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -157,6 +157,9 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
                 loginViewModel.signOut()
                 navController.navigate("Principal")
                 souvenirsViewModel.setSelectedItem("Principal")
+                //vacia los souvenirs en las listas del usuario
+                souvenirsViewModel.vaciarSouvenirsFav()
+                souvenirsViewModel.vaciarSouvenirsCarrito()
             },
                 colors = ButtonDefaults.buttonColors(Teal)) {
                 Text(text = "Cerrar Sesion",

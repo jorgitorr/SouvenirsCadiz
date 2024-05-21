@@ -90,34 +90,7 @@ fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             SearchUsuarios(loginViewModel, navController)
-            UsuariosList(navController, loginViewModel)
-        }
-    }
-}
-
-/**
- * Detalle de los usuarios
- * @param loginViewModel viewmodel del login
- * @param souvenirsViewModel viewmodel del login
- * @param navController navegacion
- */
-@Composable
-fun UsuarioDetail(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel, navController: NavController){
-    Scaffold(
-        topBar = {
-            HeaderAdmin(navController, souvenirsViewModel)
-        },
-        bottomBar = {
-            Footer(navController,souvenirsViewModel, loginViewModel)
-        }, containerColor = Silver
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .background(Silver),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-
+            UsuariosList(loginViewModel)
         }
     }
 }
@@ -138,9 +111,8 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
     var stock by souvenirsViewModel.stock
     var url by souvenirsViewModel.url
     var selectedImageUri by souvenirsViewModel.selectedImageUri
-    var souvenirAniadido = false
 
-    LaunchedEffect(souvenirAniadido){
+    LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirs() //recorre la lista de souvenirs y añade el nuevo
     }
 
@@ -236,7 +208,6 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                 souvenirsViewModel.saveSouvenir {
                     Toast.makeText(context, "souvenir guardado", Toast.LENGTH_SHORT).show()
                 }
-                souvenirAniadido = true
             }) {
                 Text(text = "GUARDAR")
             }

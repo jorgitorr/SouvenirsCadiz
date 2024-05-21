@@ -18,10 +18,6 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 @Composable
 fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
-    LaunchedEffect(true){
-        souvenirsViewModel.fetchSouvenirsFav()
-    }
-
     Scaffold(
         topBar = {
             if(loginViewModel.checkAdmin()){

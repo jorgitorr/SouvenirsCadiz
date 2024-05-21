@@ -13,7 +13,7 @@ data class Souvenir(
     val precio:String = "2.99",
     val tipo: String = "",
     val emailUser:String = "",
-    var guardadoFav:Boolean = false,
-    var guardadoCarrito:Boolean = false,
+    var favorito:Boolean = false,
+    var carrito:Boolean = false,
     var stock:Int = 2000
 )

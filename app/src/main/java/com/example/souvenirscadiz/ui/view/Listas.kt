@@ -11,7 +11,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -41,6 +40,9 @@ import com.example.souvenirscadiz.ui.theme.Silver
 fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState() // souvenirs de un tipo
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
+
+    val onChangeFav by souvenirsViewModel.onChangeFav.collectAsState()
+    val onChangeCarrito by souvenirsViewModel.onChangeCarrito.collectAsState()
 
     // si no ha seleccionado ningún tipo de souvenirs, muestra todos los souvenirs
     if (souvenirs.isEmpty()) {
@@ -72,12 +74,6 @@ fun SouvenirsListFav(navController: NavController, souvenirsViewModel: Souvenirs
     val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()
     val soundEffect = MediaPlayer.create(context, R.raw.angry_start_sound)
     val compositionAngryStart by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.angry_start))
-
-    LaunchedEffect(true){
-        souvenirsViewModel.fetchSouvenirsFav()
-    }
-
-    Log.d("SouvenirSized",souvenirSaved.size.toString())
 
     if(souvenirSaved.isEmpty()){ //si no hay souvenirs guardados
         LottieAnimation(composition = compositionAngryStart)
@@ -123,6 +119,7 @@ fun SouvenirsListFav(navController: NavController, souvenirsViewModel: Souvenirs
     }else{
         LazyColumn{
             items(souvenirSaved){ souvenir ->
+                Log.d("favoritosssss",souvenir.favorito.toString())
                 Caja(navController,
                     souvenir,
                     souvenirsViewModel,
@@ -147,9 +144,6 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.empty_basket_sound)
 
-    LaunchedEffect(souvenirSaved.size){
-        souvenirsViewModel.fetchSouvenirsCarrito()
-    }
 
     if(souvenirSaved.isEmpty()){
 
@@ -200,7 +194,6 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
                     souvenirsViewModel)
             }
             item {
-                //boton de pedir todos los souvenirs
                 Spacer(modifier = Modifier.height(50.dp))
                 ButtonPedirOrMsg(souvenirsViewModel, loginViewModel, navController)
             }
@@ -234,7 +227,7 @@ fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: Souve
 
 
 @Composable
-fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel){
+fun UsuariosList(loginViewModel: LoginViewModel){
     val users by loginViewModel.users.collectAsState()
 
     if(users.isEmpty()){
@@ -243,7 +236,7 @@ fun UsuariosList(navController: NavController, loginViewModel: LoginViewModel){
     }else{
         LazyColumn{
             items(users){ user ->
-                CajaUsuarios(user, navController)
+                CajaUsuarios(user)
             }
         }
     }

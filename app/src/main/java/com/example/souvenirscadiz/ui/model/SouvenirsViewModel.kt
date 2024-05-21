@@ -20,6 +20,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,6 +45,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     private var _souvenirFav = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirFav: StateFlow<List<Souvenir>> =  _souvenirFav
+
     private var _souvenirCarrito = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirCarrito: StateFlow<List<Souvenir>> =  _souvenirCarrito
 
@@ -72,9 +77,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     init {
         fetchSouvenirs()
-        fetchSouvenirsFav()
-        fetchSouvenirsCarrito()
-        fetchSouvenirsPedido()
     }
 
     fun updateSouvenirImage(downloadUrl:String){
@@ -128,14 +130,14 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     /**
      * checkea si se ha añadido algo al fav, en ese caso modifica la variable
      */
-    private fun checkAnteriorFav(){
+    fun checkAnteriorFav(){
         _onChangeFav.value = !_onChangeFav.value
     }
 
     /**
      * checkea si se ha añadido algo o eliminado al carrito, en ese caso modifica la variable
      */
-    private fun checkAnteriorCarrito(){
+    fun checkAnteriorCarrito(){
         _onChangeCarrito.value = !_onChangeCarrito.value
     }
 
@@ -254,7 +256,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     "url" to souvenir.url,
                     "tipo" to souvenir.tipo,
                     "precio" to souvenir.precio,
-                    "favorito" to souvenir.guardadoFav,
+                    "favorito" to true,
+                    "carrito" to souvenir.carrito,//necesito saber los que estan guardados en carrito también
                     "emailUser" to auth.currentUser?.email
                 )
 
@@ -295,13 +298,14 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         viewModelScope.launch (Dispatchers.IO){
             checkAnteriorCarrito()
             try {
+                souvenir.carrito = true
                 val newSouvenir = hashMapOf(
                     "referencia" to souvenir.referencia,
                     "nombre" to souvenir.nombre,
                     "url" to souvenir.url,
                     "tipo" to souvenir.tipo,
                     "precio" to souvenir.precio,
-                    "carrito" to souvenir.guardadoCarrito,
+                    "carrito" to true,
                     "emailUser" to auth.currentUser?.email
                 )
 
@@ -335,52 +339,17 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Guarda souvenir en carrito y le pasa al administrador
-     * todos los que tenga el usuario guardado
-     * @param onSuccess lambda que ocurre cuando se logra el método
-     */
-    fun saveSouvenirInPedido(onSuccess:() -> Unit){
-        viewModelScope.launch {
-            try {
-                //se guardan todos los souvenirs de la lista de _souvenirCarrito
-                for(souvenir in _souvenirCarrito.value){
-                    val newPedido = hashMapOf(
-                        "emailUser" to email,
-                        "referencia" to souvenir.referencia,
-                        "nombre" to souvenir.nombre,
-                        "url" to souvenir.url,
-                        "tipo" to souvenir.tipo,
-                        "cantidad" to souvenir.cantidad
-                    )
-
-                    firestore.collection("Pedidos")
-                        .add(newPedido)
-                        .addOnSuccessListener {
-                            onSuccess()
-                            Log.d("Error save","Se guardó el pedido")
-                        }.addOnFailureListener{
-                            Log.d("Save error","Error al guardar pedido")
-                        }
-                }
-            }catch (e:Exception){
-                Log.d("Error al guardar souvenir","Error al guardar Pedido")
-            }
-        }
-    }
-
-
-    /**
      * Este souvenirs guarda el pedido
      * y los souvenirs en un pedido
      */
-    fun saveSouvenirInPedido2(onSuccess:() -> Unit){
+    fun saveSouvenirInPedido(onSuccess:() -> Unit){
 
         viewModelScope.launch {
             try {
                 val email = auth.currentUser?.email
                 val newPedido = hashMapOf(
                     "emailUser" to email,
-                    "fecha" to "actual",
+                    "fecha" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()).toString(),
                     "souvenirs" to _souvenirCarrito.value
                 )
                 //se guardan todos los souvenirs de la lista de _souvenirCarrito
@@ -465,24 +434,19 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
     fun fetchSouvenirsFav(){
         viewModelScope.launch {
-            firestore.collection("Favoritos")
-                .whereEqualTo("emailUser",email.toString())
-                .addSnapshotListener{querySnapshot, error->
-                    if(error != null){
-                        Log.d("Error SL","Error SS")
-                        return@addSnapshotListener
+            val collection = firestore.collection("Favoritos").get().await()
+            val souvenirsList = mutableListOf<Souvenir>()
+            for (document in collection) {
+                if (document!=null) {
+                    val souvenir = document.toObject(Souvenir::class.java)
+                    if (souvenir.emailUser == auth.currentUser?.email) {
+                        Log.d("GUARDADO_FAV_SOUVENIR",souvenir.favorito.toString())
+                        souvenirsList.add(souvenir)
                     }
-                    val souvenirsList = mutableListOf<Souvenir>()
-                    if(querySnapshot != null){
-                        for(souvenir in querySnapshot){
-                            val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
-                            Log.d("Souvenir",souvenirObj.url)
-                            souvenirObj.guardadoFav = true
-                            souvenirsList.add(souvenirObj)
-                        }
-                    }
-                    _souvenirFav.value = souvenirsList
                 }
+            }
+            _souvenirFav.value = souvenirsList
+            Log.d("souvenirFav",souvenirFav.value.toString())
         }
     }
 
@@ -492,53 +456,27 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
     fun fetchSouvenirsCarrito(){
         viewModelScope.launch {
+            val collection = firestore.collection("Carrito").get().await()
             val souvenirsList = mutableListOf<Souvenir>()
-            firestore.collection("Carrito")
-                .whereEqualTo("emailUser",email.toString())
-                .addSnapshotListener{querySnapshot, error->
-                    if(error != null){
-                        return@addSnapshotListener
+            for (document in collection) {
+                if (document!=null) {
+                    val souvenir = document.toObject(Souvenir::class.java)
+                    if (souvenir.emailUser == auth.currentUser?.email) {
+                        souvenirsList.add(souvenir)
                     }
-                    if(querySnapshot != null){
-                        for(souvenir in querySnapshot){
-                            val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
-                            souvenirObj.guardadoCarrito = true
-                            souvenirsList.add(souvenirObj)
-                        }
-                    }
-                    _souvenirCarrito.value = souvenirsList
                 }
-
+            }
+            _souvenirCarrito.value = souvenirsList
+            Log.d("_souvenirSize",souvenirCarrito.value.size.toString())
         }
     }
 
 
     /**
-     * muestra todos los souvenirs que se han pedido
-     * esto lo ve el administrador
+     * Devuelve los souvenirs pedidos
      */
-   /*fun fetchSouvenirsPedido(){
-        viewModelScope.launch {
-            val pedidosList = mutableListOf<Pedido>()
-            firestore.collection("Pedidos")
-                .addSnapshotListener{querySnapshot, error->
-                    if(error != null){
-                        Log.d("Error SL","Error SS")
-                        return@addSnapshotListener
-                    }
-                    if(querySnapshot != null){
-                        for(pedidos in querySnapshot){
-                            val souvenirObj = pedidos.toObject(Pedido::class.java).copy()
-                            pedidosList.add(souvenirObj)
-                        }
-                    }
-                    _souvenirPedidos.value = pedidosList
-                }
-        }
-    }*/
-
     fun fetchSouvenirsPedido() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             firestore.collection("Pedidos")
                 .addSnapshotListener { querySnapshot, error ->
                     if (error != null) {
@@ -563,9 +501,14 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * Vacia los souvenirs del carrito, se realiza cuando los souvenirs son pedidos
      */
     fun vaciarSouvenirsCarrito(){
-        viewModelScope.launch {
-            _souvenirCarrito.value = emptyList()
-        }
+        _souvenirCarrito.value = emptyList()
+    }
+
+    /**
+     * Vacia los souvenirs de fav
+     */
+    fun vaciarSouvenirsFav(){
+        _souvenirFav.value = emptyList()
     }
 
 
@@ -605,7 +548,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             //comprueba si el souvenir esta en los souvenirs favoritos
             for(souvenirG in _souvenirFav.value){
                 if(souvenir.referencia==souvenirG.referencia){
-                    souvenir.guardadoFav = true
+                    souvenir.favorito = true
                     souvenirGuardadoFav = true
                 }
             }
@@ -613,19 +556,33 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             //comprueba si el souvenir esta en los souvenirs del carrito
             for(souvenirC in _souvenirCarrito.value){
                 if(souvenirC.referencia == souvenir.referencia){
-                    souvenir.guardadoCarrito = true
+                    souvenir.carrito = true
                     souvenirGuardadoCarrito = true
                 }
             }
 
             if(!souvenirGuardadoFav){
-                souvenir.guardadoFav = false
+                souvenir.favorito = false
             }
 
             if(!souvenirGuardadoCarrito){
-                souvenir.guardadoCarrito = false
+                souvenir.carrito = false
             }
 
+        }
+    }
+
+
+    /**
+     * actualiza la cantidad del souvenir
+     */
+    fun updateSouvenirCantidad(s: Souvenir, nuevaCantidad: String) {
+        viewModelScope.launch (Dispatchers.IO) {
+            for(souvenir in _souvenirCarrito.value){
+                if(souvenir.referencia==s.referencia){
+                    souvenir.cantidad = nuevaCantidad
+                }
+            }
         }
     }
 

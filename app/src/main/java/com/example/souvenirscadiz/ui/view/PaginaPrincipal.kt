@@ -25,7 +25,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     val onChangeCarrito = souvenirsViewModel.onChangeCarrito.collectAsState()
 
-    LaunchedEffect(true){
+    LaunchedEffect(Unit){
         souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
         souvenirsViewModel.fetchSouvenirsCarrito() //devuelve los souvenirs guardados en carritos
     }

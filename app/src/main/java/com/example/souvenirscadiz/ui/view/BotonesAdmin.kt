@@ -109,7 +109,6 @@ fun EliminarButton(
                 .size(30.dp)
                 .clickable {
                     userState.eliminado != userState.eliminado
-
                 }
         )
     }

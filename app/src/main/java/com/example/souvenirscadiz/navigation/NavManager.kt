@@ -23,7 +23,6 @@ import com.example.souvenirscadiz.ui.view.Principal
 import com.example.souvenirscadiz.ui.view.Registro
 import com.example.souvenirscadiz.ui.view.SouvenirDetail
 import com.example.souvenirscadiz.ui.view.Carrito
-import com.example.souvenirscadiz.ui.view.UsuarioDetail
 import com.example.souvenirscadiz.ui.view.Usuarios
 
 /**
@@ -75,10 +74,6 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
         }
         composable("Usuarios"){
             Usuarios(souvenirsViewModel, navController, loginViewModel)
-        }
-        composable("UsuarioDetail"){
-            //no esta terminado
-            UsuarioDetail(loginViewModel, souvenirsViewModel, navController)
         }
         composable("AnadirSouvenir"){
             AnadirSouvenir(loginViewModel, souvenirsViewModel, navController, cloudStorageManager)

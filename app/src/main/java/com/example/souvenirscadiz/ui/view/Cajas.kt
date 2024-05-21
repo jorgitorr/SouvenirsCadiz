@@ -1,5 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
@@ -57,11 +59,9 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param souvenir clase souvenir
  */
 @Composable
-fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel,
-         loginViewModel: LoginViewModel){
+fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
 
-    val onChangeFav = souvenirsViewModel.onChangeFav.collectAsState()
-    val onChangeCarrito = souvenirsViewModel.onChangeCarrito.collectAsState()
+
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -88,17 +88,9 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
 
 
                 if(!loginViewModel.checkAdmin()){
-                    if(onChangeFav.value){
-                        FavoriteButton(souvenir, souvenirsViewModel)
-                    }else{
-                        FavoriteButton(souvenir, souvenirsViewModel)
-                    }
-
-                    if(onChangeCarrito.value){
-                        ShopingCartButton(souvenir, souvenirsViewModel)
-                    }else{
-                        ShopingCartButton(souvenir, souvenirsViewModel)
-                    }
+                    Log.d("tusmuertos",souvenir.favorito.toString())
+                    FavoriteButton(souvenir, souvenirsViewModel)
+                    ShopingCartButton(souvenir, souvenirsViewModel)
                 }
             }
 
@@ -157,9 +149,6 @@ fun CajaCarrito(
     souvenirsViewModel: SouvenirsViewModel
 ) {
 
-    LaunchedEffect(souvenir.guardadoCarrito){
-        souvenirsViewModel.fetchSouvenirsCarrito()
-    }
     val context = LocalContext.current
     var cantidadSouvenir by remember { mutableStateOf("") }
 
@@ -168,7 +157,6 @@ fun CajaCarrito(
             .fillMaxWidth()
             .background(Silver, shape = RoundedCornerShape(5.dp))
             .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
-            .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
             .padding(8.dp)
     ) {
         Column(
@@ -187,7 +175,9 @@ fun CajaCarrito(
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+                        .clickable {
+                            navController.navigate("SouvenirDetail/${souvenir.referencia}")
+                        }
 
                 )
                 //boton de eliminar souvenir del carrito
@@ -229,10 +219,12 @@ fun CajaCarrito(
                     label = { Text(text = "Cantidad a pedir ${souvenir.cantidad}")},
                     onValueChange = {
                         if (it.isDigitsOnly()) {
-                            cantidadSouvenir = it
-                            souvenir.cantidad = cantidadSouvenir
+                            if(it.isNotEmpty()){
+                                cantidadSouvenir = it
+                                souvenirsViewModel.updateSouvenirCantidad(souvenir,it)
+                            }
                         }else{
-                            Toast.makeText(context,"Has introducido un campo erroneo", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context,"Hay algún campo mal", Toast.LENGTH_SHORT).show()
                         }},
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -340,18 +332,12 @@ fun CajaPedido(
 }
 
 @Composable
-fun CajaUsuarios(user:User,
-                 navController: NavController){
+fun CajaUsuarios(user:User){
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(Silver, shape = RoundedCornerShape(5.dp))
             .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
-            .clickable {
-                navController.navigate(
-                    "UsuarioDetail/"
-                )
-            }
             .padding(8.dp)
     ) {
         Column(
@@ -363,6 +349,8 @@ fun CajaUsuarios(user:User,
                 modifier = Modifier.padding(horizontal = 8.dp),
                 verticalArrangement = Arrangement.Center
             ) {
+
+
                 Text(
                     text = user.email,
                     fontSize = 14.sp,
@@ -380,8 +368,14 @@ fun CajaUsuarios(user:User,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
-                //botón que permite eliminar el usuario
-                EliminarButton(user)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    EliminarButton(user)//boton que permite eliminar al usuario seleccionado
+                }
             }
         }
     }

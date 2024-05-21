@@ -183,7 +183,8 @@ fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavControl
         onClick = {
             loginViewModel.login {
             navController.navigate("Principal")
-            souvenirsViewModel.setSelectedItem("Principal")} },
+            souvenirsViewModel.setSelectedItem("Principal")
+            } },
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
@@ -306,6 +307,9 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
                 .build()
             val googleSingInCliente = GoogleSignIn.getClient(context, opciones)
             launcher.launch(googleSingInCliente.signInIntent)
+
+            //souvenirsViewModel.fetchSouvenirsFav()
+            //souvenirsViewModel.fetchSouvenirsCarrito()
 
         },
         verticalAlignment = Alignment.CenterVertically,
