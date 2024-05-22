@@ -1,7 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
 import android.media.MediaPlayer
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +22,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -52,49 +54,36 @@ fun FavoriteButton(
 ) {
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.like_sound)
+    var isFavorite by remember { mutableStateOf(souvenir.favorito) }
 
     IconToggleButton(
-        checked = souvenir.favorito,
+        checked = isFavorite,
         onCheckedChange = {
-            souvenir.favorito = !souvenir.favorito
+            isFavorite = !isFavorite
+            souvenir.favorito = isFavorite
+            if (isFavorite) {
+                souvenirsViewModel.saveSouvenirInFav({
+                    Toast
+                        .makeText(context, "Souvenir guardado en favoritos", Toast.LENGTH_SHORT)
+                        .show()
+                }, souvenir)
+            } else {
+                souvenirsViewModel.deleteSouvenirInFav({
+                    Toast
+                        .makeText(context, "Souvenir eliminado de favoritos", Toast.LENGTH_SHORT)
+                        .show()
+                }, souvenir)
+            }
+            // efecto de sonido
+            soundEffect.start()
+            souvenirsViewModel.fetchSouvenirsFav()
         }
     ) {
         Icon(
-            tint = if (!souvenir.favorito) RaisanBlack else Redwood,
-            imageVector = if (souvenir.favorito) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            tint = if (!isFavorite) RaisanBlack else Redwood,
+            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
             contentDescription = "Favorite Icon",
-            modifier = Modifier
-                .size(30.dp)
-                .clickable {
-                    if (!souvenir.favorito) {
-                        souvenirsViewModel.saveSouvenirInFav({
-                            souvenir.favorito = true
-                            Log.d("GUARDADOFAV",souvenir.favorito.toString())
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Souvenir guardado en favoritos",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        }, souvenir)
-                    } else {
-                        souvenir.favorito = false
-                        Log.d("GUARDADOFAV",souvenir.favorito.toString())
-                        souvenirsViewModel.deleteSouvenirInFav({
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Souvenir eliminado de favoritos",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        }, souvenir)
-                    }
-                    //efecto de sonido
-                    soundEffect.start()
-                    souvenirsViewModel.fetchSouvenirsFav()
-                }
+            modifier = Modifier.size(30.dp)
         )
     }
 
@@ -113,48 +102,41 @@ fun ShopingCartButton(
     souvenirsViewModel: SouvenirsViewModel
 ) {
     val context = LocalContext.current
+    var isCarrito by remember { mutableStateOf(souvenir.carrito) }
 
     IconToggleButton(
-        checked = souvenir.carrito,
+        checked = isCarrito,
         onCheckedChange = {
-            souvenir.carrito = !souvenir.carrito
+            isCarrito = !isCarrito
+            souvenir.carrito = isCarrito
+            if (isCarrito) {
+                souvenirsViewModel.saveSouvenirInCarrito({
+                    Toast.makeText(
+                        context,
+                        "Souvenir guardado en carrito",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }, souvenir)
+            } else {
+                souvenirsViewModel.deleteSouvenirInCarrito({
+                    Toast.makeText(
+                        context,
+                        "Souvenir eliminado de carrito",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }, souvenir)
+            }
         },
-        modifier = Modifier.padding(top = 280.dp, end = 340.dp) //posicion del icono
+        modifier = Modifier.padding(top = 280.dp, end = 340.dp) // Posiciona el icono
     ) {
         Icon(
-            //si el elemento esta guardado en el carrito, el icono cambia a eliminar del guardado
-            imageVector = if(!souvenir.carrito) Icons.Default.AddShoppingCart else Icons.Default.RemoveShoppingCart,
-            tint = if (!souvenir.carrito) RaisanBlack else Redwood,
+            // Si el souvenir está en el carrito, el icono cambia a eliminar del carrito
+            imageVector = if (!isCarrito) Icons.Default.AddShoppingCart else Icons.Default.RemoveShoppingCart,
+            tint = if (!isCarrito) RaisanBlack else Redwood,
             contentDescription = "Cesta de la compra",
-            modifier = Modifier
-                .size(30.dp)
-                .clickable {
-                    if (!souvenir.carrito) {
-                        souvenirsViewModel.saveSouvenirInCarrito({
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Souvenir guardado en carrito",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        }, souvenir)
-                    } else {
-                        souvenirsViewModel.deleteSouvenirInCarrito({
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Souvenir guardado en carrito",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        }, souvenir)
-                    }
-                }
-
+            modifier = Modifier.size(30.dp)
         )
     }
-
 }
 
 

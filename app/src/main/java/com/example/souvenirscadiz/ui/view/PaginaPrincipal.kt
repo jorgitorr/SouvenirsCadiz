@@ -8,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -23,8 +24,6 @@ import com.example.souvenirscadiz.ui.theme.Silver
  */
 @Composable
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
-    val onChangeCarrito = souvenirsViewModel.onChangeCarrito.collectAsState()
-
     LaunchedEffect(Unit){
         souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
         souvenirsViewModel.fetchSouvenirsCarrito() //devuelve los souvenirs guardados en carritos
@@ -35,11 +34,8 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             if(loginViewModel.checkAdmin()){
                 HeaderAdmin(navController, souvenirsViewModel) //tipo de header del administrador de la BDD
             }else{
-                if(onChangeCarrito.value){
-                    Header(navController, souvenirsViewModel)
-                }else{
-                    Header(navController, souvenirsViewModel)
-                }
+               Header(navController, souvenirsViewModel)
+
             }
         },
         bottomBar = {

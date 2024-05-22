@@ -61,8 +61,6 @@ import com.example.souvenirscadiz.ui.theme.Silver
 @Composable
 fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
 
-
-
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(color = Silver, shape = RoundedCornerShape(5.dp))
@@ -88,7 +86,6 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
 
 
                 if(!loginViewModel.checkAdmin()){
-                    Log.d("tusmuertos",souvenir.favorito.toString())
                     FavoriteButton(souvenir, souvenirsViewModel)
                     ShopingCartButton(souvenir, souvenirsViewModel)
                 }

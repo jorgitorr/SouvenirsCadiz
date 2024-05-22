@@ -41,14 +41,12 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
     val souvenirs by souvenirsViewModel.souvenirsTipo.collectAsState() // souvenirs de un tipo
     val souvenirsPre by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
 
-    val onChangeFav by souvenirsViewModel.onChangeFav.collectAsState()
-    val onChangeCarrito by souvenirsViewModel.onChangeCarrito.collectAsState()
-
     // si no ha seleccionado ningún tipo de souvenirs, muestra todos los souvenirs
     if (souvenirs.isEmpty()) {
         LazyColumn {
             items(souvenirsPre) { souvenirP ->
                 souvenirsViewModel.checkSouvenirIsSaved(souvenirP)
+
                 Caja(navController, souvenirP, souvenirsViewModel, loginViewModel)
             }
         }

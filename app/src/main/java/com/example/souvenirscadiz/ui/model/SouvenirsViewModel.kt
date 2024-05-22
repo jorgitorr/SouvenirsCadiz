@@ -56,10 +56,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private val firestore = Firebase.firestore
     private val email = auth.currentUser?.email
 
-    private var _onChangeFav = MutableStateFlow(false)
-    var onChangeFav = _onChangeFav
-    private var _onChangeCarrito = MutableStateFlow(false)
-    var onChangeCarrito = _onChangeCarrito
 
     var showDialogFav by mutableStateOf(true)
     var showDialogCarrito by mutableStateOf(true)
@@ -82,6 +78,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     fun updateSouvenirImage(downloadUrl:String){
         url.value = downloadUrl
     }
+
 
 
     /**
@@ -126,20 +123,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         }
     }
 
-
-    /**
-     * checkea si se ha añadido algo al fav, en ese caso modifica la variable
-     */
-    fun checkAnteriorFav(){
-        _onChangeFav.value = !_onChangeFav.value
-    }
-
-    /**
-     * checkea si se ha añadido algo o eliminado al carrito, en ese caso modifica la variable
-     */
-    fun checkAnteriorCarrito(){
-        _onChangeCarrito.value = !_onChangeCarrito.value
-    }
 
 
     /**
@@ -248,7 +231,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
-            checkAnteriorFav()
             try {
                 val newSouvenir = hashMapOf(
                     "referencia" to souvenir.referencia,
@@ -296,7 +278,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
         var esIgual = false //variable que comprueba si el souvenir está ya
         viewModelScope.launch (Dispatchers.IO){
-            checkAnteriorCarrito()
             try {
                 souvenir.carrito = true
                 val newSouvenir = hashMapOf(
@@ -343,7 +324,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * y los souvenirs en un pedido
      */
     fun saveSouvenirInPedido(onSuccess:() -> Unit){
-
         viewModelScope.launch {
             try {
                 val email = auth.currentUser?.email
@@ -378,7 +358,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                checkAnteriorFav()
                 firestore.collection("Favoritos")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .get()
@@ -408,7 +387,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                checkAnteriorCarrito()
                 firestore.collection("Carrito")
                     .whereEqualTo("referencia", souvenir.referencia)
                     .get()
@@ -518,7 +496,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     fun deleteSouvenirInCarritoFromUser () {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                checkAnteriorCarrito()
                 firestore.collection("Carrito")
                     .whereEqualTo("emailUser", email)
                     .get()

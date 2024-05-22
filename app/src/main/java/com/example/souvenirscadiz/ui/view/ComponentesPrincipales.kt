@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -141,6 +142,10 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
 fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
     val selectedItem by souvenirsViewModel.selectedItem.collectAsState()
     val souvenirsCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
+
+    LaunchedEffect(Unit){
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
 
     Box(modifier = Modifier
         .fillMaxWidth()
