@@ -59,7 +59,7 @@ import java.util.Date
 
 /**
  * Página de perfil
- * muestra el nombre y el correo
+ * muestra la foto de perfil, el nombre y el correo electrónico
  * @param loginViewModel viewmodel del login
  * @param navController navegacion
  * @param souvenirsViewModel viewmodel de souvenir
@@ -174,6 +174,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
 
 /**
  * Inicio de sesion
+ * @param souvenirsViewModel viewmodel de souvenir
  * @param loginViewModel viewmodel del login
  * @param navController navegacion
  */

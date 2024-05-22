@@ -16,6 +16,12 @@ import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Silver
 
+/**
+ * Pagina de favoritos
+ * @param souvenirsViewModel viewmodel de souvenir
+ * @param navController navegacion entre páginas
+ * @param loginViewModel viewmodel del login
+ */
 @Composable
 fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
     Scaffold(

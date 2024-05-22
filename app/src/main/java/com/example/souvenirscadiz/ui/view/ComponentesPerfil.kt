@@ -201,7 +201,12 @@ fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavControl
 }
 
 
-
+/**
+ * Método todavía no implementado que permitirá modificar el perfil
+ * @param loginViewModel viewmodel del login
+ * @param navController navegacion entre páginas
+ * @param souvenirsViewModel viewmodel de souvenir
+ */
 @Composable
 fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
 

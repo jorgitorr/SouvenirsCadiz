@@ -355,6 +355,12 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
 
+    /**
+     * Checkea si el usuario existe por su correo electrónico
+     * @param email
+     * @param onResult resultado en un Toast
+     */
+
     fun checkUserExists(email: String, onResult: (Boolean) -> Unit) {
         firestore.collection("Users")
             .whereEqualTo("email", email)

@@ -552,6 +552,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     /**
      * actualiza la cantidad del souvenir
+     * @param souvenir objeto del souvenir
+     * @param nuevaCantidad cantidad introducida
      */
     fun updateSouvenirCantidad(s: Souvenir, nuevaCantidad: String) {
         viewModelScope.launch (Dispatchers.IO) {

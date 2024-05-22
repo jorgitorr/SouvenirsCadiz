@@ -1,5 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.ui.model.LoginViewModel
@@ -21,9 +23,11 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * Página prinicipal de los souvenirs
  * @param souvenirsViewModel viewModel de los souvenirs
  * @param navController navegacion
+ * @param loginViewModel viewmodel del login
  */
 @Composable
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+    var context = LocalContext.current
     LaunchedEffect(Unit){
         souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
         souvenirsViewModel.fetchSouvenirsCarrito() //devuelve los souvenirs guardados en carritos
@@ -32,6 +36,12 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     Scaffold(
         topBar = {
             if(loginViewModel.checkAdmin()){
+                Toast.makeText(
+                    context,
+                    "Has iniciado sesión como Administrador",
+                    Toast.LENGTH_SHORT
+                ).show()
+
                 HeaderAdmin(navController, souvenirsViewModel) //tipo de header del administrador de la BDD
             }else{
                Header(navController, souvenirsViewModel)
