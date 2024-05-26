@@ -29,12 +29,11 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 
 /**
- * lista de souvenirs para la PÁGINA PRINCIPAL
- * Si la lista de souvenirs está vacía ya que no se a pulsado ninguno de los tipos de souvenirs
- * me coge la lista completa de souvenirs y me la muesra
- * si la lista (que contiene los souvenirs de un tipo) está vacía me la hace con todos los souvenirs
- * @param navController navegacion
- * @param souvenirsViewModel viewmodel de souvenirs
+ * Souvenirs list
+ *
+ * @param navController
+ * @param souvenirsViewModel
+ * @param loginViewModel
  */
 @Composable
 fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
@@ -62,9 +61,11 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
 
 
 /**
- * Contiene todos los souvenirs guardados por el usuario
- * @param navController navegacion
- * @param souvenirsViewModel viewModel de los souvenirs
+ * Souvenirs list fav
+ *
+ * @param navController
+ * @param souvenirsViewModel
+ * @param loginViewModel
  */
 @Composable
 fun SouvenirsListFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
@@ -131,9 +132,11 @@ fun SouvenirsListFav(navController: NavController, souvenirsViewModel: Souvenirs
 
 
 /**
- * Muestra los souvenirs guardados en fav
- * @param navController navegacion
- * @param souvenirsViewModel viewmodel de souvenirs
+ * Souvenirs list carrito
+ *
+ * @param navController
+ * @param souvenirsViewModel
+ * @param loginViewModel
  */
 @Composable
 fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
@@ -201,9 +204,10 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
 
 
 /**
- * Muestra los souvenirs guardados en pedido
- * @param navController navegacion
- * @param souvenirsViewModel viewmodel de souvenirs
+ * Souvenirs list pedidos
+ *
+ * @param navController
+ * @param souvenirsViewModel
  */
 @Composable
 fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
@@ -224,6 +228,11 @@ fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: Souve
 }
 
 
+/**
+ * Usuarios list
+ *
+ * @param loginViewModel
+ */
 @Composable
 fun UsuariosList(loginViewModel: LoginViewModel){
     val users by loginViewModel.users.collectAsState()

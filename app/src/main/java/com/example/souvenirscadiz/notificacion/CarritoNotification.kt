@@ -8,15 +8,31 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.example.souvenirscadiz.MainActivity
 
+/**
+ * Carrito notification
+ *
+ * @constructor Create empty Carrito notification
+ */
 class CarritoNotification: BroadcastReceiver() {
     companion object{
         const val NOTIFICATION_ID = 1
     }
 
+    /**
+     * On receive
+     *
+     * @param context
+     * @param p1
+     */
     override fun onReceive(context: Context, p1: Intent?) {
         createSimpleNotification(context)
     }
 
+    /**
+     * Create simple notification
+     *
+     * @param context
+     */
     private fun createSimpleNotification(context: Context) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

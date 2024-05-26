@@ -26,6 +26,11 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
+/**
+ * Souvenirs view model
+ *
+ * @constructor Create empty Souvenirs view model
+ */
 @HiltViewModel
 class SouvenirsViewModel @Inject constructor():ViewModel(){
     val query = MutableStateFlow("")
@@ -75,14 +80,19 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         fetchSouvenirs()
     }
 
+    /**
+     * Update souvenir image
+     *
+     * @param downloadUrl
+     */
     fun updateSouvenirImage(downloadUrl:String){
         url.value = downloadUrl
     }
 
 
-
     /**
-     * Te devuelve todos los souvenirs de la base de datos
+     * Fetch souvenirs
+     *
      */
     fun fetchSouvenirs(){
         viewModelScope.launch {
@@ -124,11 +134,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
 
-
     /**
-     * devuelve los souvenirs de un tipo
-     * @param tipo tipo de souvenir
-     * @return _souvenirTipo
+     * Get by tipo
+     *
+     * @param tipo
      */
     fun getByTipo(tipo: Tipo){
         viewModelScope.launch {
@@ -145,9 +154,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * obtiene el souvenir por el valor referencia
-     * @param referencia referencia del souvenir
-     * @return actualSouvenir devuelve el souvenir actual
+     * Get by reference
+     *
+     * @param referencia
+     * @return
      */
     fun getByReference(referencia:String):Souvenir{
         for(souvenir in _souvenirs.value){
@@ -160,17 +170,18 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
     /**
-     * Actualiza la consulta de búsqueda actual.
-     * @param newQuery La nueva cadena de texto de consulta para la búsqueda.
+     * Set query
+     *
+     * @param newQuery
      */
     fun setQuery(newQuery: String) {
         query.value = newQuery
     }
 
     /**
-     * Establece si la búsqueda está activa o no.
+     * Set active
      *
-     * @param newActive El nuevo estado booleano que indica si la búsqueda está activa.
+     * @param newActive
      */
     fun setActive(newActive: Boolean) {
         active.value = newActive
@@ -178,10 +189,9 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * cambia el texto del selectedItem al nuevo que haya seleccionado
-     * @param elementoSeleccionado texto del elemento seleccionado del footer o header
-     * los posibles valores que puede recibir son:
-     * Perfil, Carrito, Favoritos y Principal
+     * Set selected item
+     *
+     * @param elementoSeleccionado
      */
     fun setSelectedItem(elementoSeleccionado:String){
         selectedItem.value = elementoSeleccionado
@@ -189,7 +199,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Permite guardar nuevos souvenir en la base de datos
+     * Save souvenir
+     *
+     * @param onSuccess
+     * @receiver
      */
 
     fun saveSouvenir(onSuccess:() -> Unit){ //otra forma de guardar el souvenir en fav
@@ -223,10 +236,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Guardar souvenir desde la pantalla principal, para ello le paso el souvenir
-     * en vez de recuperarlo en el viewModel
-     * @param onSuccess lambda para que hace el método el caso de lograrlo
-     * @param souvenir souvenir
+     * Save souvenir in fav
+     *
+     * @param onSuccess
+     * @param souvenir
+     * @receiver
      */
     fun saveSouvenirInFav(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
         var esIgual = false //variable que comprueba si el souvenir está ya
@@ -271,8 +285,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Guarda souvenir en carritoç
-     * @param onSuccess lambda para que hace el método al ser logrado
+     * Save souvenir in carrito
+     *
+     * @param onSuccess
+     * @param souvenir
+     * @receiver
      */
 
     fun saveSouvenirInCarrito(onSuccess:() -> Unit, souvenir: Souvenir){ //otra forma de guardar el souvenir en fav
@@ -317,11 +334,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
 
-
-
     /**
-     * Este souvenirs guarda el pedido
-     * y los souvenirs en un pedido
+     * Save souvenir in pedido
+     *
+     * @param onSuccess
+     * @receiver
      */
     fun saveSouvenirInPedido(onSuccess:() -> Unit){
         viewModelScope.launch {
@@ -349,11 +366,12 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
 
-
     /**
-     * Borra el souvenir con su objeto
-     * @param onSuccess si es satisfactorio
-     * @param souvenir el souvenir
+     * Delete souvenir in fav
+     *
+     * @param onSuccess
+     * @param souvenir
+     * @receiver
      */
     fun deleteSouvenirInFav(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -379,10 +397,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * hace lo mismo que el anterior deleteSouvenirInCarrito pero en vez de
-     * pasarle un Souvenir le pasamos la clase SouvenirState
-     * @param onSuccess Toast
-     * @param souvenir souvenirState
+     * Delete souvenir in carrito
+     *
+     * @param onSuccess
+     * @param souvenir
+     * @receiver
      */
     fun deleteSouvenirInCarrito(onSuccess: () -> Unit, souvenir: Souvenir) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -408,7 +427,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * devuelve todos los souvenirs guardados en la lista de favoritos
+     * Fetch souvenirs fav
+     *
      */
     fun fetchSouvenirsFav(){
         viewModelScope.launch {
@@ -430,7 +450,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Devuelve los souvenirs guardados en la lista de carrito
+     * Fetch souvenirs carrito
+     *
      */
     fun fetchSouvenirsCarrito(){
         viewModelScope.launch {
@@ -451,7 +472,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Devuelve los souvenirs pedidos
+     * Fetch souvenirs pedido
+     *
      */
     fun fetchSouvenirsPedido() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -474,16 +496,17 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
 
-
     /**
-     * Vacia los souvenirs del carrito, se realiza cuando los souvenirs son pedidos
+     * Vaciar souvenirs carrito
+     *
      */
     fun vaciarSouvenirsCarrito(){
         _souvenirCarrito.value = emptyList()
     }
 
     /**
-     * Vacia los souvenirs de fav
+     * Vaciar souvenirs fav
+     *
      */
     fun vaciarSouvenirsFav(){
         _souvenirFav.value = emptyList()
@@ -491,7 +514,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Elimina todos los souvenirs que tenga el usuario en el carrito
+     * Delete souvenir in carrito from user
+     *
      */
     fun deleteSouvenirInCarritoFromUser () {
         viewModelScope.launch(Dispatchers.IO) {
@@ -515,7 +539,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
     /**
-     * checkea si el souvenir esta guardado en fav o en el carrito
+     * Check souvenir is saved
+     *
      * @param souvenir
      */
     fun checkSouvenirIsSaved(souvenir: Souvenir){
@@ -551,9 +576,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * actualiza la cantidad del souvenir
-     * @param souvenir objeto del souvenir
-     * @param nuevaCantidad cantidad introducida
+     * Update souvenir cantidad
+     *
+     * @param s
+     * @param nuevaCantidad
      */
     fun updateSouvenirCantidad(s: Souvenir, nuevaCantidad: String) {
         viewModelScope.launch (Dispatchers.IO) {

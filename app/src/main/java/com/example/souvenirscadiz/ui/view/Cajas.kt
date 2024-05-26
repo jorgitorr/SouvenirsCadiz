@@ -53,10 +53,12 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 
 /**
- * Caja que contiene cada imagen del souvenir y su nombre, referencia y precio
- * Caja para la pagina principal y para elementos en favoritos
- * @param navController navegacion
- * @param souvenir clase souvenir
+ * Caja
+ *
+ * @param navController
+ * @param souvenir
+ * @param souvenirsViewModel
+ * @param loginViewModel
  */
 @Composable
 fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
@@ -134,10 +136,11 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
 
 
 /**
- * Caja del carrito
- * @param navController navegacion
- * @param souvenir souvenirState
- * @param souvenirsViewModel viewmodel del souvenir
+ * Caja carrito
+ *
+ * @param navController
+ * @param souvenir
+ * @param souvenirsViewModel
  */
 @Composable
 fun CajaCarrito(
@@ -234,9 +237,10 @@ fun CajaCarrito(
 
 
 /**
- * Caja del carrito
- * @param navController navegacion
- * @param pedido pedido
+ * Caja pedido
+ *
+ * @param navController
+ * @param pedido
  */
 @Composable
 fun CajaPedido(
@@ -328,6 +332,11 @@ fun CajaPedido(
     }
 }
 
+/**
+ * Caja usuarios
+ *
+ * @param user
+ */
 @Composable
 fun CajaUsuarios(user:User){
     Box(

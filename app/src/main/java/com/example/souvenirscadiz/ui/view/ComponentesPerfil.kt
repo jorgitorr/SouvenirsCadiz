@@ -60,8 +60,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 
 /**
- * Introducir contraseña para crear un nuevo usuario
- * @param loginViewModel le pasamos el viewmodel para que ingrese y guarde la contraseña
+ * Introducir contrasenia
+ *
+ * @param loginViewModel
  */
 @Composable
 fun IntroducirContrasenia(loginViewModel: LoginViewModel){
@@ -87,8 +88,9 @@ fun IntroducirContrasenia(loginViewModel: LoginViewModel){
 
 
 /**
- * Introducir email para crear un nuevo usuario
- * @param loginViewModel le pasamos el viewmodel para que guarde el email introducido
+ * Introducir email
+ *
+ * @param loginViewModel
  */
 @Composable
 fun IntroducirEmail(loginViewModel: LoginViewModel){
@@ -103,11 +105,10 @@ fun IntroducirEmail(loginViewModel: LoginViewModel){
 }
 
 
-
 /**
- * Componente que nos permite ingresar un nuevo usuario
- * @param loginViewModel le pasamos el viewmodel del login que guarda la informacion de este usuario nuevo
- * y la añade a la base de datos
+ * Introducir usuario
+ *
+ * @param loginViewModel
  */
 @Composable
 fun IntroducirUsuario(loginViewModel: LoginViewModel){
@@ -122,10 +123,11 @@ fun IntroducirUsuario(loginViewModel: LoginViewModel){
 
 
 /**
- * Boton de aceptar del registro
- * @param loginViewModel le pasamos el viewmodel del login
- * @param navController le pasamos el nav que nos lleva a donde queramos al darle a aceptar y
- * registrar un nuevo usuario en la base de datos
+ * Boton aceptar registro
+ *
+ * @param loginViewModel
+ * @param navController
+ * @param souvenirsViewModel
  */
 @Composable
 fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
@@ -172,10 +174,11 @@ fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavContr
 
 
 /**
- * Boton de inicio de sesion
- * @param loginViewModel le pasamos el viewmodel del login
- * @param navController le pasamos el nav que nos lleva a donde queramos al darle a aceptar y
- * registrar un nuevo usuario en la base de datos
+ * Boton aceptar inicio
+ *
+ * @param loginViewModel
+ * @param navController
+ * @param souvenirsViewModel
  */
 @Composable
 fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
@@ -202,10 +205,11 @@ fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavControl
 
 
 /**
- * Método todavía no implementado que permitirá modificar el perfil
- * @param loginViewModel viewmodel del login
- * @param navController navegacion entre páginas
- * @param souvenirsViewModel viewmodel de souvenir
+ * Modificar perfil
+ *
+ * @param loginViewModel
+ * @param navController
+ * @param souvenirsViewModel
  */
 @Composable
 fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
@@ -271,10 +275,11 @@ fun ModificarPerfil(loginViewModel: LoginViewModel, navController: NavController
 
 
 /**
- * Inicio de sesion con google
- * @param souvenirsViewModel viewmodel de souvenirs
- * @param loginViewModel viewmodel del login
- * @param navController navegacion
+ * Inicio sesion google
+ *
+ * @param souvenirsViewModel
+ * @param loginViewModel
+ * @param navController
  */
 @Composable
 fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){

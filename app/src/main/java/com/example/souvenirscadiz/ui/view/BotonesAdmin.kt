@@ -20,9 +20,10 @@ import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
 
 /**
- * Boton de cancelar
- * @param pedido state del pedido
- * @param souvenirsViewModel viewmodel de souvenir
+ * Cancel button
+ *
+ * @param pedido
+ * @param souvenirsViewModel
  */
 @Composable
 fun CancelButton(
@@ -55,9 +56,10 @@ fun CancelButton(
 }
 
 /**
- * Boton de aceptar
- * @param pedido pedido state
- * @param souvenirsViewModel viewmodel del souvenir
+ * Accept button
+ *
+ * @param pedido
+ * @param souvenirsViewModel
  */
 @Composable
 fun AcceptButton(
@@ -90,6 +92,11 @@ fun AcceptButton(
 }
 
 
+/**
+ * Eliminar button
+ *
+ * @param userState
+ */
 @Composable
 fun EliminarButton(
     userState: User

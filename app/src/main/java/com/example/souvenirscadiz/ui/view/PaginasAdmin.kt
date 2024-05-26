@@ -36,10 +36,11 @@ import coil.request.ImageRequest
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 
 /**
- * pantalla principal del admin, que tiene todos los souvenirs
- * @param souvenirsViewModel viewmodel de souvenirs
- * @param navController navegacion entre paginas
- * @param loginViewModel viewmodel del login
+ * Admin principal
+ *
+ * @param souvenirsViewModel
+ * @param navController
+ * @param loginViewModel
  */
 @Composable
 fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
@@ -65,10 +66,11 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
 }
 
 /**
- * le pasa todos los usuarios de la base de datos para que pueda borrar uno si quiere
- * @param souvenirsViewModel viewmodel de souvenirs
- * @param navController navegacino
- * @param loginViewModel viewmodel del login
+ * Usuarios
+ *
+ * @param souvenirsViewModel
+ * @param navController
+ * @param loginViewModel
  */
 @Composable
 fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
@@ -97,10 +99,12 @@ fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
 
 
 /**
- * Permite añadir nuevos souvenirs
- * @param loginViewModel viewmodel del login
- * @param souvenirsViewModel viewmodel de souvenir
- * @param navController navegacion
+ * Anadir souvenir
+ *
+ * @param loginViewModel
+ * @param souvenirsViewModel
+ * @param navController
+ * @param cloudStorageManager
  */
 @Composable
 fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel, navController: NavController, cloudStorageManager:CloudStorageManager){

@@ -20,10 +20,11 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 
 /**
- * Página prinicipal de los souvenirs
- * @param souvenirsViewModel viewModel de los souvenirs
- * @param navController navegacion
- * @param loginViewModel viewmodel del login
+ * Principal
+ *
+ * @param souvenirsViewModel
+ * @param navController
+ * @param loginViewModel
  */
 @Composable
 fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){

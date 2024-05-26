@@ -58,13 +58,12 @@ import java.util.Date
 
 
 /**
- * Página de perfil
- * muestra la foto de perfil, el nombre y el correo electrónico
- * @param loginViewModel viewmodel del login
- * @param navController navegacion
- * @param souvenirsViewModel viewmodel de souvenir
- * @param cloudStorageManager referencia a la base de datos de storage
+ * Perfil
  *
+ * @param loginViewModel
+ * @param navController
+ * @param souvenirsViewModel
+ * @param cloudStorageManager contiene el acceso a las imagenes de firebase
  */
 @Composable
 fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel,
@@ -173,10 +172,11 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
 
 
 /**
- * Inicio de sesion
- * @param souvenirsViewModel viewmodel de souvenir
- * @param loginViewModel viewmodel del login
- * @param navController navegacion
+ * Inicio sesion
+ *
+ * @param souvenirsViewModel
+ * @param loginViewModel
+ * @param navController
  */
 @Composable
 fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController) {
@@ -233,8 +233,10 @@ fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginVi
 
 /**
  * Registro
- * @param loginViewModel viewModel del login
- * @param navController navegacion
+ *
+ * @param souvenirsViewModel
+ * @param loginViewModel
+ * @param navController
  */
 @Composable
 fun Registro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController) {
@@ -285,6 +287,11 @@ fun Registro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewMo
     }
 }
 
+/**
+ * Create image file
+ *
+ * @return Archivo de imagen
+ */
 @SuppressLint("SimpleDateFormat")
 fun Context.createImageFile(): File {
     val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())

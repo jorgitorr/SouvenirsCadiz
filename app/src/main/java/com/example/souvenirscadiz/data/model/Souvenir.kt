@@ -1,9 +1,20 @@
 package com.example.souvenirscadiz.data.model
 
 
-
 /**
- * Es el souvenir que guardan los usuarios
+ * Souvenir
+ *
+ * @property referencia
+ * @property cantidad
+ * @property nombre
+ * @property url
+ * @property precio
+ * @property tipo
+ * @property emailUser
+ * @property favorito
+ * @property carrito
+ * @property stock
+ * @constructor Create empty Souvenir
  */
 data class Souvenir(
     val referencia:String = "",

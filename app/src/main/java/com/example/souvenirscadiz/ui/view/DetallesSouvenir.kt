@@ -26,10 +26,12 @@ import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.Silver
 
 /**
- * Página que detalla información del souvenir
- * @param navController navegacion
- * @param souvenirsViewModel viewmodel de los souvenirs
- * @param referencia referencia del souvenir
+ * Souvenir detail
+ *
+ * @param navController
+ * @param souvenirsViewModel
+ * @param loginViewModel
+ * @param referencia referencia del souvenir para entrar en sus detalles
  */
 @Composable
 fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, referencia:String) {

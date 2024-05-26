@@ -56,9 +56,10 @@ import com.example.souvenirscadiz.ui.theme.White
 
 /**
  * Footer
- * @param navController navegacion entre páginas
- * @param souvenirsViewModel viewmodel de souvenirs
- * @param loginViewModel viewmodel de login
+ *
+ * @param navController
+ * @param souvenirsViewModel
+ * @param loginViewModel
  */
 @Composable
 fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
@@ -136,7 +137,9 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
 
 /**
  * Header
- * @param navController navegacion entre páginas
+ *
+ * @param navController
+ * @param souvenirsViewModel
  */
 @Composable
 fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
@@ -186,12 +189,10 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
 }
 
 /**
- * Buscador
- * @param souvenirsViewModel viewModel de souvenirs
- * @param navController navegacion entre páginas
- * active -> si se ha pulsado en el buscador quedará activa
- * query -> la información que se recoge del buscador
- * souvenirs -> todos los souvenirs para que con ello me pueda generar la lista de los souvenirs
+ * Search
+ *
+ * @param souvenirsViewModel
+ * @param navController
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -243,10 +244,10 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
 }
 
 
-
 /**
- * nombre de todos los tipos de souvenirs
- * @param souvenirsViewModel viewmodel de souvenirs
+ * Enumarado souvenirs
+ *
+ * @param souvenirsViewModel
  */
 @Composable
 fun EnumaradoSouvenirs(souvenirsViewModel: SouvenirsViewModel){

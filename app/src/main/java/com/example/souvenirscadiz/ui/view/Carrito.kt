@@ -16,7 +16,11 @@ import com.example.souvenirscadiz.ui.theme.Silver
 
 
 /**
- * pagina del carrito
+ * Carrito
+ *
+ * @param souvenirsViewModel
+ * @param navController
+ * @param loginViewModel
  */
 @Composable
 fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){

@@ -39,13 +39,11 @@ import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
 
 
-
-
-
 /**
- * Boton de favoritos con los souvenirs de la base de datos (Cajas de favoritos)
- * @param souvenir souvenirState que es de la base de datos (Favorito)
- * @param souvenirsViewModel viewmodel del souvenir
+ * Favorite button
+ *
+ * @param souvenir
+ * @param souvenirsViewModel
  */
 @Composable
 fun FavoriteButton(
@@ -90,11 +88,11 @@ fun FavoriteButton(
 }
 
 
-
 /**
- * icono del carrito en cada caja recogieda de la base de datos (Favorito)
- * @param souvenir souvenir actual de la base de datos (Favorito)
- * @param souvenirsViewModel viewmodel
+ * Shoping cart button
+ *
+ * @param souvenir
+ * @param souvenirsViewModel
  */
 @Composable
 fun ShopingCartButton(
@@ -141,9 +139,10 @@ fun ShopingCartButton(
 
 
 /**
- * Boton de eliminar (Carrito)
- * @param souvenirsViewModel viewmodel de souvenir
- * @param souvenir souvenirState recogido de la base de datos (Carrito)
+ * Eliminar button
+ *
+ * @param souvenirsViewModel
+ * @param souvenir
  */
 @Composable
 fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: Souvenir) {
@@ -175,10 +174,11 @@ fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: Souvenir) {
 
 
 /**
- * Muestra el botón de pedir en el caso de que se pueda mostrar o el mensaje de alerta
- * @param souvenirsViewModel viewmodel de souvenirs
- * @param loginViewModel viewmodel del login
- * @param navController navegacion
+ * Button pedir or msg
+ *
+ * @param souvenirsViewModel
+ * @param loginViewModel
+ * @param navController
  */
 @Composable
 fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){

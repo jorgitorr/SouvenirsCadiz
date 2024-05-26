@@ -35,10 +35,11 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 
 /**
- * página de detalles al seleccionar el lOGO
- * @param souvenirsViewModel viewmodel de souvenirs
- * @param navController navegacion entre páginas
- * @param loginViewModel viewmodel del login
+ * Detalles logo
+ *
+ * @param souvenirsViewModel
+ * @param navController
+ * @param loginViewModel
  */
 @Composable
 fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
@@ -94,13 +95,9 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
 }
 
 
-
 /**
- * implementacion de google maps para la página de detalle del logo y de la empresa
- * marker: marcador
- * cameraPositionState: posicion de la camara
- * UiSettings: para activar el zoom
- * Poperties: Propiedades, para activar el satelite
+ * My google maps
+ *
  */
 @Composable
 fun MyGoogleMaps(){

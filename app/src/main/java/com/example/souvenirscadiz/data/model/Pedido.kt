@@ -1,8 +1,16 @@
 package com.example.souvenirscadiz.data.model
 
-import kotlinx.coroutines.flow.MutableStateFlow
 
-
+/**
+ * Pedido
+ *
+ * @property emailUser
+ * @property souvenirs
+ * @property fecha
+ * @property pedidoAceptado
+ * @property pedidoCancelado
+ * @constructor Create empty Pedido
+ */
 data class Pedido(
     val emailUser:String = "",
     var souvenirs: List<Souvenir> = emptyList(),

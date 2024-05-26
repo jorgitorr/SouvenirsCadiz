@@ -28,6 +28,11 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
+/**
+ * Login view model
+ *
+ * @constructor Create empty Login view model
+ */
 @HiltViewModel
 class LoginViewModel @Inject constructor(): ViewModel(){
     /**
@@ -76,7 +81,8 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
     /**
-     * cierra sesion
+     * Sign out
+     *
      */
     fun signOut(){
         try {
@@ -89,6 +95,10 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
 
+    /**
+     * Fetch img profile
+     *
+     */
     fun fetchImgProfile() {
         viewModelScope.launch {
             try {
@@ -113,12 +123,19 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
 
+    /**
+     * Update user profile image
+     *
+     * @param imageUrl
+     */
     fun updateUserProfileImage(imageUrl: String) {
         _userState.value = _userState.value?.copy(imagen = imageUrl)
     }
 
     /**
-     * obtiene el usuario actual
+     * Get current user
+     *
+     * @return
      */
     fun getCurrentUser(): FirebaseUser?{
         return auth.currentUser
@@ -126,6 +143,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
 
     /**
+     * Fetch user
      *
      */
     fun fetchUser(){
@@ -142,10 +160,10 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
 
     /**
-     * función que te permite iniciar sesion
-     * @param onSuccess lambda que realiza algo cuando es satisfactorio el inicio de sesion
-     * en este caso se le pasaria el nav que va a la página que nos interese
-     * Dentro realiza una corrutina para iniciar sesion con un email y una contrasenia
+     * Login
+     *
+     * @param onSuccess
+     * @receiver
      */
     fun login(onSuccess: () -> Unit) {
         auth.signInWithEmailAndPassword(email, password)
@@ -160,8 +178,10 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
     /**
-     * crea un usuario que se guarda en la base de datos
-     * @param onSuccess se le pasa un nav que va a la pantalla de creacion de usuario
+     * Create user
+     *
+     * @param onSuccess
+     * @receiver
      */
     fun createUser(onSuccess: () -> Unit) {
         auth.createUserWithEmailAndPassword(email, password)
@@ -200,34 +220,35 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
     /**
-     * Cierra el diálogo de alerta de error mostrada en la UI.
+     * Close alert
+     *
      */
     fun closeAlert(){
         showAlert = false
     }
 
     /**
-     * Actualiza el email del usuario.
+     * Change email
      *
-     * @param email Nuevo email a establecer.
+     * @param email
      */
     fun changeEmail(email: String) {
         this.email = email
     }
 
     /**
-     * Actualiza la contraseña del usuario.
+     * Change password
      *
-     * @param password Nueva contraseña a establecer.
+     * @param password
      */
     fun changePassword(password: String) {
         this.password = password
     }
 
     /**
-     * Actualiza el nombre de usuario.
+     * Change user name
      *
-     * @param userName Nuevo nombre de usuario a establecer.
+     * @param userName
      */
     fun changeUserName(userName: String) {
         this.userName = userName
@@ -235,9 +256,12 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
 
     /**
-     * Permite iniciar sesion con google y guarda el correo y el usuario en las variables
-     * @param credential credenciales para el inicio de sesion
-     * @param home lambda que dice lo que hace el método al iniciar sesion
+     * Sing in with google credential
+     *
+     * @param credential
+     * @param home
+     * @param context
+     * @receiver
      */
 
     fun singInWithGoogleCredential(credential: AuthCredential, home:()->Unit, context:Context)
@@ -279,7 +303,8 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
     /**
-     * Te devuelve todos los usuarios de la BDD
+     * Fetch users
+     *
      */
 
     fun fetchUsers(){
@@ -305,8 +330,9 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
     /**
-     * Comprueba si eres admin
-     * @return esAdmin variable que devuelve true si el usuario actual tiene el correo del admin
+     * Check admin
+     *
+     * @return
      */
     fun checkAdmin():Boolean{
         if(auth.currentUser?.email == EMAIL_ADMIN){
@@ -317,22 +343,30 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
 
     /**
-     * Actualiza la consulta de búsqueda actual.
-     * @param newQuery La nueva cadena de texto de consulta para la búsqueda.
+     * Set query
+     *
+     * @param newQuery
      */
     fun setQuery(newQuery: String) {
         query.value = newQuery
     }
 
     /**
-     * Establece si la búsqueda está activa o no.
+     * Set active
      *
-     * @param newActive El nuevo estado booleano que indica si la búsqueda está activa.
+     * @param newActive
      */
     fun setActive(newActive: Boolean) {
         active.value = newActive
     }
 
+    /**
+     * Delete user
+     *
+     * @param userState
+     * @param delete
+     * @receiver
+     */
     fun deleteUser(userState: User, delete:()->Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -356,9 +390,11 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
 
     /**
-     * Checkea si el usuario existe por su correo electrónico
+     * Check user exists
+     *
      * @param email
-     * @param onResult resultado en un Toast
+     * @param onResult
+     * @receiver
      */
 
     fun checkUserExists(email: String, onResult: (Boolean) -> Unit) {

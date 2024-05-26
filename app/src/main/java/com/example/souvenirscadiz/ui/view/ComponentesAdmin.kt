@@ -55,10 +55,11 @@ import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.White
 
 /**
- * Footer del administrador
- * @param navController navegacion entre páginas
- * @param souvenirsViewModel viewmodel de souvenirs
- * @param loginViewModel viewmodel de login
+ * Footer admin
+ *
+ * @param navController
+ * @param souvenirsViewModel
+ * @param loginViewModel
  */
 @Composable
 fun FooterAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
@@ -136,8 +137,10 @@ fun FooterAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
 
 
 /**
- * Header del administrador
- * @param navController navegacion entre páginas
+ * Header admin
+ *
+ * @param navController
+ * @param souvenirsViewModel
  */
 @Composable
 fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
@@ -177,10 +180,11 @@ fun HeaderAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
 }
 
 
-
 /**
- * Busca por usuarios
- * @param loginViewModel viewmodel del login
+ * Search usuarios
+ *
+ * @param loginViewModel
+ * @param navController
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -245,7 +249,9 @@ fun SearchUsuarios(loginViewModel: LoginViewModel, navController: NavController)
 }
 
 /**
- * Menu Drop Down
+ * Menu tipos souvenir
+ *
+ * @param souvenirsViewModel
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
