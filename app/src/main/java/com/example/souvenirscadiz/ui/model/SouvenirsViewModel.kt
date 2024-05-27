@@ -13,7 +13,9 @@ import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -73,8 +75,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     var nombre = mutableStateOf("")
     var referencia = mutableStateOf("")
-    var precio = mutableStateOf("2.99")//le damos un precio predeterminado
-    var tipo = mutableStateOf("") //le damos el valor predeterminado de llavero
+    var precio = mutableStateOf("")
+    var tipo = mutableStateOf("")
     var stock = mutableStateOf("")
     var url = mutableStateOf("")
     var selectedImageUri  = mutableStateOf<Uri?>(null)
@@ -112,10 +114,56 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                             souvenirsList.add(souvenirObj)
                         }
                     }
-                    souvenirsList.sortBy { it.url }
+                    souvenirsList.sortBy { it.url } //ordena por url
                     fetchImgSouvenirs(souvenirsList)
                     _souvenirs.value = souvenirsList
                 }
+        }
+    }
+
+
+    /**
+     * Modifica souvenir
+     *
+     * @param souvenir
+     */
+    fun modificaSouvenir(souvenir: Souvenir){
+        viewModelScope.launch {
+            _souvenirs.value.find { it == souvenir }?.apply {
+                nombre.takeIf { it.isNotEmpty() }?.let { this.nombre = it }
+                referencia.takeIf { it.isNotEmpty() }?.let { this.referencia = it }
+                precio.takeIf { it.isNotEmpty() }?.let { this.precio = it }
+
+                updateSouvenir(souvenir)
+            }
+        }
+    }
+
+
+    /**
+     * Update souvenir
+     *
+     * @param souvenir
+     */
+    suspend fun updateSouvenir(souvenir: Souvenir) {
+        val souvenirsCollection = firestore.collection("souvenirs").get().await()
+
+        try {
+            val souvenirMap = mapOf(
+                "nombre" to souvenir.nombre,
+                "referencia" to souvenir.referencia,
+                "precio" to souvenir.precio,
+                "stock" to souvenir.stock
+            )
+            for(s in souvenirsCollection){
+                var t = s.toObject(souvenir::class.java)
+                if(t.referencia == souvenir.referencia){
+                    firestore.collection("souvenirs").document(s.id).update(souvenirMap)
+                }
+            }
+
+        } catch (e: Exception) {
+            throw e
         }
     }
 
@@ -155,6 +203,26 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             _souvenirsTipo.value = list
         }
     }
+
+
+    /**
+     * Get by precio
+     *
+     * @param precio
+     */
+    fun getByPrecio(precio:Int){
+        viewModelScope.launch {
+            val list: MutableList<Souvenir> = mutableListOf()
+            _souvenirsTipo.value = emptyList()//limpiamos los valores que pueda tener
+            for(souvenir in souvenirs.value){
+                if(souvenir.precio.toInt() == precio){
+                    list.add(souvenir)
+                }
+            }
+            _souvenirsTipo.value = list
+        }
+    }
+
 
 
     /**

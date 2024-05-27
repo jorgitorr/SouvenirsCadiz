@@ -24,7 +24,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
-import com.example.souvenirscadiz.ui.theme.Cerulean
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
@@ -84,8 +83,12 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                         .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
                 )
 
-                FavoriteButton(souvenir, souvenirsViewModel)
-                ShopingCartButton(souvenir, souvenirsViewModel)
+                if(!loginViewModel.checkAdmin()){
+                    FavoriteButton(souvenir, souvenirsViewModel)
+                    ShopingCartButton(souvenir, souvenirsViewModel)
+                }else{
+                    ModifyButton(souvenir, navController)
+                }
             }
 
             LazyColumn(modifier = Modifier.fillMaxWidth(),
@@ -94,7 +97,8 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 item {
                     //nombre
                     Spacer(modifier = Modifier.height(5.dp))
-                    Box (modifier = Modifier.background(Redwood)
+                    Box (modifier = Modifier
+                        .background(Redwood)
                         .fillMaxWidth()){
                         Text(
                             text = souvenir.nombre,
@@ -108,7 +112,8 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
 
                 item {
                     //referencia
-                    Box(modifier = Modifier.background(Redwood)
+                    Box(modifier = Modifier
+                        .background(Redwood)
                         .fillMaxWidth()){
                         Text(text = souvenir.referencia,
                             fontFamily = KiwiMaru,
@@ -121,7 +126,8 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
 
                 item{
                     //precio
-                    Box(modifier = Modifier.background(Redwood)
+                    Box(modifier = Modifier
+                        .background(Redwood)
                         .fillMaxWidth()){
                         Text(text = "${souvenir.precio}€",
                             fontFamily = KiwiMaru,

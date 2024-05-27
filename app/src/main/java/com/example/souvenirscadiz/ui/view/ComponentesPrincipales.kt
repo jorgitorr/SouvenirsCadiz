@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -213,7 +214,7 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
 
     SearchBar(
         modifier = Modifier
-            .padding(15.dp),
+            .padding(start = 15.dp),
         query = query,
         onQueryChange = { souvenirsViewModel.setQuery(it) }, // DCS - Actualiza el texto de búsqueda en el ViewModel.
         onSearch = { souvenirsViewModel.setActive(false) }, // DCS - Desactiva la búsqueda al presionar el botón de búsqueda.
@@ -248,8 +249,8 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
                 )
             }
         }
-    }
 
+    }
 }
 
 

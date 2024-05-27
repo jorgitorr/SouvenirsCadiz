@@ -24,6 +24,7 @@ import com.example.souvenirscadiz.ui.view.Registro
 import com.example.souvenirscadiz.ui.view.SouvenirDetail
 import com.example.souvenirscadiz.ui.view.Carrito
 import com.example.souvenirscadiz.ui.view.Filtro
+import com.example.souvenirscadiz.ui.view.ModificarSouvenir
 import com.example.souvenirscadiz.ui.view.Usuarios
 
 /**
@@ -81,6 +82,12 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
         }
         composable("Filtro"){
             Filtro(souvenirsViewModel, loginViewModel, navController)
+        }
+        composable("ModificarSouvenir/{referencia}", arguments = listOf(
+            navArgument("referencia") { type = NavType.StringType }
+        )  ){
+            val referencia = it.arguments?.getString("referencia") ?: 0
+            ModificarSouvenir(souvenirsViewModel, loginViewModel, navController, referencia.toString())
         }
 
     }

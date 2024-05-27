@@ -4,8 +4,10 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
@@ -81,12 +84,17 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Row(modifier = Modifier.fillMaxWidth()){
-                Search(souvenirsViewModel, navController)/*buscador*/
-                Icon(imageVector = Icons.Default.FilterAlt, contentDescription = "Filtrar",
-                    Modifier
+                Search(souvenirsViewModel, navController) /* buscador */
+                Icon(
+                    imageVector = Icons.Default.FilterAlt,
+                    contentDescription = "Filtrar",
+                    modifier = Modifier
                         .clickable { navController.navigate("Filtro") }
-                        .size(50.dp))
+                        .padding(top = 18.dp, start = 5.dp)
+                        .size(30.dp)
+                )
             }
+
             SouvenirsList(navController, souvenirsViewModel, loginViewModel)//lista de souvenirs
         }
     }
@@ -129,15 +137,14 @@ fun Filtro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewMode
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            val souvenirsFiltrados by souvenirsViewModel.souvenirsFiltrados.collectAsState()
             val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
-
-            var checkedState by remember { mutableStateOf(false) }
             var tipoElegido: Tipo = Tipo.LLAVERO
             var sliderPosition by remember { mutableFloatStateOf(0f) }
 
-            LazyColumn (modifier = Modifier.background(Silver)
-                .padding(5.dp)){
+            LazyColumn (modifier = Modifier
+                .background(Silver)
+                .fillMaxSize()
+                .padding(10.dp)){
                 item {
                     Text(
                         text = "TIPO DE SOUVENIR",
@@ -168,10 +175,20 @@ fun Filtro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewMode
                         Text(text = "$sliderPosition €")
                     }
                 }
+                
+                item { 
+                    Button(onClick = {
+                        souvenirsViewModel.getByTipo(tipoElegido)
+                        //si el precio es diferente a cero
+                        /*if(sliderPosition.toInt() !=0){
+                            souvenirsViewModel.getByPrecio(sliderPosition.toInt())
+                        }*/
+                        navController.navigate("Principal")
+                    }) {
+                        Text(text = "Filtrar")
+                    }
+                }
             }
-            souvenirs.filter { it.tipo == tipoElegido.valor }
-
-
         }
     }
 

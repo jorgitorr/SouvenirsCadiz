@@ -86,6 +86,8 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                 if(!loginViewModel.checkAdmin()){
                     FavoriteButton(souvenir, souvenirsViewModel)
                     ShopingCartButton(souvenir, souvenirsViewModel)
+                }else{
+                    ModifyButton(souvenir, navController)
                 }
             }
 

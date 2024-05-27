@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.ModeEdit
 import androidx.compose.material.icons.filled.RemoveShoppingCart
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -234,6 +235,27 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
                 }
             )
         }
+    }
+}
+
+
+@Composable
+fun ModifyButton(souvenir: Souvenir, navController: NavController) {
+    var onModify by remember { mutableStateOf(souvenir.favorito) }
+    
+    IconToggleButton(
+        checked = onModify,
+        onCheckedChange = {
+            onModify = !onModify
+            navController.navigate("ModificarSouvenir/${souvenir.referencia}")
+        }
+    ) {
+        Icon(
+            tint = if (!onModify) RaisanBlack else Redwood,
+            imageVector = if (onModify) Icons.Default.ModeEdit else Icons.Default.ModeEdit,
+            contentDescription = "Favorite Icon",
+            modifier = Modifier.size(30.dp)
+        )
     }
 }
 

@@ -17,11 +17,11 @@ package com.example.souvenirscadiz.data.model
  * @constructor Create empty Souvenir
  */
 data class Souvenir(
-    val referencia:String = "",
+    var referencia:String = "",
     var cantidad: String = "",
-    val nombre:String = "",
+    var nombre:String = "",
     val url:String = "",
-    val precio:String = "2.99",
+    var precio:String = "2.99",
     val tipo: String = "",
     val emailUser:String = "",
     var favorito:Boolean = false,
