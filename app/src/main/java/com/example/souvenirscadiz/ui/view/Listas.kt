@@ -45,7 +45,6 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
         LazyColumn {
             items(souvenirsPre) { souvenirP ->
                 souvenirsViewModel.checkSouvenirIsSaved(souvenirP)
-
                 Caja(navController, souvenirP, souvenirsViewModel, loginViewModel)
             }
         }
@@ -118,7 +117,6 @@ fun SouvenirsListFav(navController: NavController, souvenirsViewModel: Souvenirs
     }else{
         LazyColumn{
             items(souvenirSaved){ souvenir ->
-                Log.d("favoritosssss",souvenir.favorito.toString())
                 Caja(navController,
                     souvenir,
                     souvenirsViewModel,

@@ -59,7 +59,7 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Search(souvenirsViewModel, navController)//buscador
-            EnumaradoSouvenirs(souvenirsViewModel)//todos los enumerados
+            //EnumaradoSouvenirs(souvenirsViewModel)//todos los enumerados
             SouvenirsList(navController, souvenirsViewModel, loginViewModel)//lista de souvenirs
         }
     }

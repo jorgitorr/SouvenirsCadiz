@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,13 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.Cerulean
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
+import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
+import com.example.souvenirscadiz.ui.theme.White
 
 /**
  * Souvenir detail
@@ -88,24 +93,42 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
 
                 item {
                     //nombre
-                    Text(
-                        text = souvenir.nombre,
-                        fontFamily = KiwiMaru
-                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Box (modifier = Modifier.background(Redwood)
+                        .fillMaxWidth()){
+                        Text(
+                            text = souvenir.nombre,
+                            fontFamily = KiwiMaru,
+                            fontSize = 20.sp,
+                            color = White,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
                 }
 
                 item {
                     //referencia
-                    Text(text = souvenir.referencia,
-                        fontFamily = KiwiMaru
-                    )
+                    Box(modifier = Modifier.background(Redwood)
+                        .fillMaxWidth()){
+                        Text(text = souvenir.referencia,
+                            fontFamily = KiwiMaru,
+                            fontSize = 20.sp,
+                            color = White
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
                 }
 
                 item{
                     //precio
-                    Text(text = "${souvenir.precio}€",
-                        fontFamily = KiwiMaru
-                    )
+                    Box(modifier = Modifier.background(Redwood)
+                        .fillMaxWidth()){
+                        Text(text = "${souvenir.precio}€",
+                            fontFamily = KiwiMaru,
+                            fontSize = 20.sp,
+                            color = White
+                        )
+                    }
                 }
 
             }

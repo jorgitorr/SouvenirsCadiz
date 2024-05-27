@@ -23,6 +23,7 @@ import com.example.souvenirscadiz.ui.view.Principal
 import com.example.souvenirscadiz.ui.view.Registro
 import com.example.souvenirscadiz.ui.view.SouvenirDetail
 import com.example.souvenirscadiz.ui.view.Carrito
+import com.example.souvenirscadiz.ui.view.Filtro
 import com.example.souvenirscadiz.ui.view.Usuarios
 
 /**
@@ -77,6 +78,9 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
         }
         composable("AnadirSouvenir"){
             AnadirSouvenir(loginViewModel, souvenirsViewModel, navController, cloudStorageManager)
+        }
+        composable("Filtro"){
+            Filtro(souvenirsViewModel, loginViewModel, navController)
         }
 
     }

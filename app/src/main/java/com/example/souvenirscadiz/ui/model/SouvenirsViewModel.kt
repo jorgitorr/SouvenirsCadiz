@@ -45,6 +45,9 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsTipo = _souvenirsTipo
 
+    private val _souvenirsFiltrados = MutableStateFlow<List<Souvenir>>(emptyList())
+    var souvenirsFiltrados = _souvenirsFiltrados
+
     private val _actualSouvenir by mutableStateOf(Souvenir())
     private var actualSouvenir = _actualSouvenir
 
@@ -109,6 +112,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                             souvenirsList.add(souvenirObj)
                         }
                     }
+                    souvenirsList.sortBy { it.url }
                     fetchImgSouvenirs(souvenirsList)
                     _souvenirs.value = souvenirsList
                 }
