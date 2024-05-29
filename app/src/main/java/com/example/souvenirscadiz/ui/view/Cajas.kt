@@ -106,7 +106,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                 Row {
                     Text(
                         text = souvenir.nombre,
-                        style = TextStyle(fontSize = 15.sp),
+                        style = TextStyle(fontSize = 20.sp),
                         fontFamily = KiwiMaru,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -116,7 +116,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
 
                     Text(
                         text = souvenir.referencia,
-                        style = TextStyle(fontSize = 15.sp),
+                        style = TextStyle(fontSize = 20.sp),
                         fontFamily = KiwiMaru,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
