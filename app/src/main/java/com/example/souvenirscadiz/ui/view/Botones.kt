@@ -21,10 +21,12 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -125,11 +127,12 @@ fun ShopingCartButton(
                     ).show()
                 }, souvenir)
             }
+
+            souvenirsViewModel.fetchSouvenirsCarrito()
         },
         modifier = Modifier.padding(top = 280.dp, end = 340.dp) // Posiciona el icono
     ) {
         Icon(
-            // Si el souvenir está en el carrito, el icono cambia a eliminar del carrito
             imageVector = if (!isCarrito) Icons.Default.AddShoppingCart else Icons.Default.RemoveShoppingCart,
             tint = if (!isCarrito) RaisanBlack else Redwood,
             contentDescription = "Cesta de la compra",

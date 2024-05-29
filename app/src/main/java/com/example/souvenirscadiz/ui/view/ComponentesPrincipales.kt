@@ -1,8 +1,10 @@
 package com.example.souvenirscadiz.ui.view
 
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -13,46 +15,42 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
+import com.example.souvenirscadiz.data.model.Fecha
 import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -61,6 +59,7 @@ import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.KleeOne
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
+import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.White
 
@@ -170,7 +169,9 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
             verticalAlignment = Alignment.CenterVertically){
             //logo personalizado
             Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO",
-                modifier = Modifier.clickable { navController.navigate("Detalles") })
+                modifier = Modifier.clickable {
+                    navController.navigate("Detalles")
+                    souvenirsViewModel.setSelectedItem("")})
             //texto de souvenirs cadiz
             Text(text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave)
@@ -276,6 +277,93 @@ fun EnumaradoSouvenirs(souvenirsViewModel: SouvenirsViewModel){
     }
 }
 
+
+
+@Composable
+fun EventosBox(fecha:String){
+    Box(
+        modifier = Modifier
+            .width(350.dp)
+            .height(75.dp)
+            .background(Redwood)
+            .border(width = 2.dp, color = RaisanBlack)
+            .padding(10.dp), // Padding dentro del Box
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Feliz ${fecha}, 20% en souvenirs".uppercase(),
+            fontFamily = KneWave,
+            color = White,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+fun ActiveEvent(souvenirsViewModel: SouvenirsViewModel) {
+    when (souvenirsViewModel.fechaActualComparison()) {
+        Fecha.CARNAVAL -> EventosBox(fecha = "Carnavales")
+        Fecha.SEMANA_SANTA -> EventosBox(fecha = "Semana Santa")
+        Fecha.NAVIDAD -> EventosBox(fecha = "Navidad")
+        Fecha.BLACK_FRIDAY -> EventosBox(fecha = "Black Friday")
+        else -> {}
+    }
+}
+
+
+@Composable
+fun Share(text: String, context: android.content.Context) {
+    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+        putExtra(Intent.EXTRA_TEXT, text)
+        type = "text/plain"
+    }
+    val shareIntent = Intent.createChooser(sendIntent, null)
+
+    Button(
+        onClick = {
+            startActivity(context, shareIntent, null)
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = Redwood)
+    ) {
+        Icon(imageVector = Icons.Default.Share, contentDescription = null)
+        Text("Share", modifier = Modifier.padding(start = 8.dp))
+    }
+}
+
+@Composable
+fun ShareWithWhatsAppOption(text: String, context: android.content.Context) {
+    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+        putExtra(Intent.EXTRA_TEXT, text)
+        type = "text/plain"
+    }
+
+    val shareIntent = Intent.createChooser(sendIntent, null)
+
+    Button(
+        onClick = {
+            val packageManager = context.packageManager
+            val whatsappIntent = Intent(Intent.ACTION_SEND).apply {
+                `package` = "com.whatsapp"
+                putExtra(Intent.EXTRA_TEXT, text)
+                type = "text/plain"
+            }
+
+            val resolveInfoList = packageManager.queryIntentActivities(sendIntent, 0)
+            val resolvedApps = resolveInfoList.map { it.activityInfo.packageName }
+            if (resolvedApps.contains("com.whatsapp")) {
+                val chooserIntent = Intent.createChooser(whatsappIntent, null)
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(sendIntent))
+                startActivity(context, chooserIntent, null)
+            } else {
+                startActivity(context, shareIntent, null)
+            }
+        },
+        colors = ButtonDefaults.buttonColors(containerColor = Redwood)
+    ) {
+        Icon(imageVector = Icons.Default.Share, contentDescription = null)
+        Text("Share", modifier = Modifier.padding(start = 8.dp))
+    }
+}
 
 
 

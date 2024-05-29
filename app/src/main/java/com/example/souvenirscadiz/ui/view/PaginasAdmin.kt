@@ -21,6 +21,7 @@ import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Silver
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -28,6 +29,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
@@ -163,19 +165,22 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                 .padding(innerPadding)
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            
+            Spacer(modifier = Modifier.padding(5.dp))
 
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre= it },
-                label = { Text("Nombre del souvenir") },
+                label = { Text("Nombre del souvenir", fontFamily = KiwiMaru) },
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             
             OutlinedTextField(
                 value = referencia,
                 onValueChange = { referencia = it },
-                label = { Text("referencia del souvenir") },
+                label = { Text("referencia del souvenir", fontFamily = KiwiMaru) },
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
@@ -183,14 +188,14 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
             OutlinedTextField(
                 value = precio,
                 onValueChange = { precio = it },
-                label = { Text("precio del souvenir") },
+                label = { Text("precio del souvenir", fontFamily = KiwiMaru) },
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
             OutlinedTextField(
                 value = stock,
                 onValueChange = { stock = it },
-                label = { Text("stock del souvenir") },
+                label = { Text("stock del souvenir", fontFamily = KiwiMaru) },
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
@@ -199,7 +204,7 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
             Card(
                 shape = CircleShape,
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(5.dp)
                     .size(100.dp)
                     .clickable {
                         singlePhotoPickerLauncher.launch(
@@ -222,8 +227,10 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                 souvenirsViewModel.saveSouvenir {
                     Toast.makeText(context, "souvenir guardado", Toast.LENGTH_SHORT).show()
                 }
-            }) {
-                Text(text = "GUARDAR")
+            }, colors = ButtonDefaults.buttonColors(
+                Redwood
+            )) {
+                Text(text = "GUARDAR", fontFamily = KiwiMaru)
             }
             
         }

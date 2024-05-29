@@ -204,7 +204,7 @@ fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginVi
                 text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave,
                 fontSize = 24.sp,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 6.dp)
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

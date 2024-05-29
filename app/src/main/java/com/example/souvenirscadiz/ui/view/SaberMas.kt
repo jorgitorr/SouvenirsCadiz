@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -18,12 +21,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
+import com.example.souvenirscadiz.ui.theme.KneWave
+import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -63,7 +69,9 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
 
             Row (modifier = Modifier.align(Alignment.CenterHorizontally)){
                 Text(text = "VENTA DE SOUVENIRS",
-                    fontFamily = KiwiMaru,
+                    fontFamily = KneWave,
+                    fontWeight = FontWeight.Bold,
+                    color = RaisanBlack,
                     textAlign = TextAlign.Center)
             }
             Spacer(modifier = Modifier.height(2.dp))
@@ -72,9 +80,12 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
             Row (modifier = Modifier.align(Alignment.CenterHorizontally)){
                 Text(text = "Jorge Arce Nogueroles Enterprise" ,
                     fontFamily = KiwiMaru,
+                    color = RaisanBlack,
                     textAlign = TextAlign.Center)
             }
             Spacer(modifier = Modifier.height(2.dp))
+
+
             /*
             QUITE LA FUNCIÓN DE LLAMAR PORQUE NO ES UNA FUNCIÓN ADECUADA PARA ESTA APP
             YA QUE PUEDEN LLAMAR MUCHA GENTE A LA VEZ O CUALQUIER COSA
@@ -93,6 +104,9 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
         }
     }
 }
+
+
+
 
 
 /**
@@ -114,7 +128,9 @@ fun MyGoogleMaps(){
     }
 
     GoogleMap(
-        modifier = Modifier.fillMaxWidth().height(500.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(500.dp),
         cameraPositionState = cameraPositionState,
         properties = properties,
         uiSettings = uiSettings,
@@ -122,6 +138,9 @@ fun MyGoogleMaps(){
         Marker(position = marker, title = "Ubicación", snippet = "Empresa")
     }
 }
+
+
+
 
 
 /*

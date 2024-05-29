@@ -87,6 +87,9 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     fun signOut(){
         try {
             auth.signOut()
+            email = ""
+            userName = ""
+            password = ""
             showAlert = false
         } catch(e: Exception) {
             e.printStackTrace()
@@ -335,9 +338,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
      * @return
      */
     fun checkAdmin():Boolean{
-        if(auth.currentUser?.email == EMAIL_ADMIN){
-            esAdmin = true
-        }
+        esAdmin = auth.currentUser?.email == EMAIL_ADMIN
         return esAdmin
     }
 

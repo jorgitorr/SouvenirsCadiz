@@ -261,9 +261,11 @@ fun CajaPedido(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 verticalArrangement = Arrangement.Center
             ) {
+
                 Text(
                     text = pedido.emailUser,
                     fontSize = 20.sp,
+                    fontFamily = KiwiMaru,
                     fontWeight = FontWeight.Bold,
                     color = RaisanBlack,
                     maxLines = 1,
@@ -271,6 +273,10 @@ fun CajaPedido(
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
 
+                Spacer(modifier = Modifier.padding(5.dp))
+
+
+                //recorre todos los pedidos del usuario
                 for(souvenir in pedido.souvenirs){
                     Box(contentAlignment = Alignment.TopEnd){
                         // Imagen
@@ -291,6 +297,7 @@ fun CajaPedido(
                     Text(
                         text = "Referencia: ${souvenir.referencia}",
                         fontSize = 20.sp,
+                        fontFamily = KiwiMaru,
                         color = RaisanBlack,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -300,6 +307,7 @@ fun CajaPedido(
                     Text(
                         text = souvenir.nombre,
                         fontSize = 15.sp,
+                        fontFamily = KiwiMaru,
                         color = RaisanBlack,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -309,6 +317,7 @@ fun CajaPedido(
                     Text(
                         text = "Cantidad: ${souvenir.cantidad}",
                         fontSize = 15.sp,
+                        fontFamily = KiwiMaru,
                         color = RaisanBlack,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -316,8 +325,9 @@ fun CajaPedido(
                     )
 
                     Text(
-                        text = souvenir.precio+"€",
+                        text = "precio: ${souvenir.precio}€",
                         fontSize = 15.sp,
+                        fontFamily = KiwiMaru,
                         color = RaisanBlack,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -353,7 +363,6 @@ fun CajaUsuarios(user:User){
                 modifier = Modifier.padding(horizontal = 8.dp),
                 verticalArrangement = Arrangement.Center
             ) {
-
 
                 Text(
                     text = user.email,

@@ -1,21 +1,21 @@
 package com.example.souvenirscadiz.ui.model
 
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.souvenirscadiz.data.model.Fecha
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +24,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -43,9 +45,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
-
-    private val _souvenirsTipo = MutableStateFlow<List<Souvenir>>(emptyList())
-    var souvenirsTipo = _souvenirsTipo
 
     private val _souvenirsFiltrados = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsFiltrados = _souvenirsFiltrados
@@ -108,9 +107,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                         return@addSnapshotListener
                     }
                     val souvenirsList = mutableListOf<Souvenir>()
+
                     if(querySnapshot != null){
                         for(souvenir in querySnapshot){
                             val souvenirObj = souvenir.toObject(Souvenir::class.java).copy()
+                            Log.d("souvenirFavoritos",souvenirObj.favorito.toString())
                             souvenirsList.add(souvenirObj)
                         }
                     }
@@ -120,6 +121,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 }
         }
     }
+
+
 
 
     /**
@@ -145,7 +148,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      *
      * @param souvenir
      */
-    suspend fun updateSouvenir(souvenir: Souvenir) {
+    private suspend fun updateSouvenir(souvenir: Souvenir) {
         val souvenirsCollection = firestore.collection("souvenirs").get().await()
 
         try {
@@ -156,7 +159,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 "stock" to souvenir.stock
             )
             for(s in souvenirsCollection){
-                var t = s.toObject(souvenir::class.java)
+                val t = s.toObject(souvenir::class.java)
                 if(t.referencia == souvenir.referencia){
                     firestore.collection("souvenirs").document(s.id).update(souvenirMap)
                 }
@@ -194,13 +197,13 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     fun getByTipo(tipo: Tipo){
         viewModelScope.launch {
             val list: MutableList<Souvenir> = mutableListOf()
-            _souvenirsTipo.value = emptyList()//limpiamos los valores que pueda tener
+            _souvenirsFiltrados.value = emptyList()//limpiamos los valores que pueda tener
             for(souvenir in souvenirs.value){
                 if(souvenir.tipo == tipo.valor){
                     list.add(souvenir)
                 }
             }
-            _souvenirsTipo.value = list
+            _souvenirsFiltrados.value = list
         }
     }
 
@@ -210,16 +213,9 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      *
      * @param precio
      */
-    fun getByPrecio(precio:Int){
+    fun getByPrecio(precio:Float){
         viewModelScope.launch {
-            val list: MutableList<Souvenir> = mutableListOf()
-            _souvenirsTipo.value = emptyList()//limpiamos los valores que pueda tener
-            for(souvenir in souvenirs.value){
-                if(souvenir.precio.toInt() == precio){
-                    list.add(souvenir)
-                }
-            }
-            _souvenirsTipo.value = list
+            _souvenirsFiltrados.value = souvenirs.value.filter { it.precio.toFloat() <= precio }
         }
     }
 
@@ -619,6 +615,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         viewModelScope.launch {
             var souvenirGuardadoFav = false
             var souvenirGuardadoCarrito = false
+
             //comprueba si el souvenir esta en los souvenirs favoritos
             for(souvenirG in _souvenirFav.value){
                 if(souvenir.referencia==souvenirG.referencia){
@@ -662,6 +659,34 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             }
         }
     }
+
+
+    /**
+     * Fecha actual comparison
+     *
+     * @return devuelve la fecha si no hay evento devuelve null
+     */
+    fun fechaActualComparison(): Fecha? {
+        var fecha: Fecha? = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+            val fechaActual = LocalDate.now()
+
+            for (evento in Fecha.entries) {
+                val fechaInicio = LocalDate.parse(evento.fechaInicio.replace("yyyy", "2024"), dateFormatter)
+                val fechaFin = LocalDate.parse(evento.fechaFin.replace("yyyy", "2024"), dateFormatter)
+
+                if (fechaActual.isAfter(fechaInicio) || fechaActual.isEqual(fechaInicio)) {
+                    if (fechaActual.isBefore(fechaFin) || fechaActual.isEqual(fechaFin)) {
+                        fecha = evento
+                        break
+                    }
+                }
+            }
+        }
+        return fecha
+    }
+
 
 
 }

@@ -137,6 +137,13 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                     }
                 }
 
+                item {
+                    ShareWithWhatsAppOption(text = "Compartido con la app Souvenirs Cadiz\n" +
+                            "${souvenir.nombre} \n" +
+                            souvenir.referencia + "\n ",
+                        context = LocalContext.current )
+                }
+
             }
         }
     }

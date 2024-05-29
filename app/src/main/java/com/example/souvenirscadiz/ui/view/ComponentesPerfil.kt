@@ -358,7 +358,8 @@ fun MenuTiposSouvenir(souvenirsViewModel:SouvenirsViewModel) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(32.dp)
+            .padding(50.dp),
+        contentAlignment = Alignment.Center
     ) {
         ExposedDropdownMenuBox(
             expanded = expanded,
