@@ -66,7 +66,7 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 val seed = Color(0xFF825500)
 
-val Silver = Color(198,197,185)
+val Silver = Color(218,218,181)
 val RaisanBlack = Color(33,39,56)
 
 val Cerulean = Color(0,126,167)

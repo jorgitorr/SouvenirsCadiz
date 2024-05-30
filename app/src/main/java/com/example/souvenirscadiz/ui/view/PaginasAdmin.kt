@@ -35,6 +35,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -167,6 +169,8 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            var tipoElegido by remember { mutableStateOf<String?>(null) }
             
             Spacer(modifier = Modifier.padding(5.dp))
 
@@ -199,7 +203,9 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
-            MenuTiposSouvenir(souvenirsViewModel)
+            MenuTiposSouvenir(souvenirsViewModel, onTipoSelected = { tipo ->
+                tipoElegido = tipo
+            })
 
             Card(
                 shape = CircleShape,
@@ -253,7 +259,7 @@ fun ModificarSouvenir(
     referencia: String
 ) {
 
-    var souvenir = souvenirsViewModel.getByReference(referencia)
+    val souvenir = souvenirsViewModel.getByReference(referencia)
 
     var nombre by souvenirsViewModel.nombre
     var referencia by souvenirsViewModel.referencia

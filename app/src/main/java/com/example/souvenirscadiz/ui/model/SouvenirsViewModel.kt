@@ -11,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Fecha
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
-import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -21,6 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -75,7 +75,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var nombre = mutableStateOf("")
     var referencia = mutableStateOf("")
     var precio = mutableStateOf("")
-    var tipo = mutableStateOf("")
     var stock = mutableStateOf("")
     var url = mutableStateOf("")
     var selectedImageUri  = mutableStateOf<Uri?>(null)
@@ -189,35 +188,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
 
-    /**
-     * Get by tipo
-     *
-     * @param tipo
-     */
-    fun getByTipo(tipo: Tipo){
-        viewModelScope.launch {
-            val list: MutableList<Souvenir> = mutableListOf()
-            _souvenirsFiltrados.value = emptyList()//limpiamos los valores que pueda tener
-            for(souvenir in souvenirs.value){
-                if(souvenir.tipo == tipo.valor){
-                    list.add(souvenir)
-                }
-            }
-            _souvenirsFiltrados.value = list
-        }
-    }
 
 
-    /**
-     * Get by precio
-     *
-     * @param precio
-     */
-    fun getByPrecio(precio:Float){
-        viewModelScope.launch {
-            _souvenirsFiltrados.value = souvenirs.value.filter { it.precio.toFloat() <= precio }
-        }
-    }
 
 
 
@@ -687,6 +659,9 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         return fecha
     }
 
-
+    fun updateSouvenirs(filteredSouvenirs: List<Souvenir>) {
+        _souvenirsFiltrados.value = _souvenirs.value
+        _souvenirsFiltrados.value = filteredSouvenirs
+    }
 
 }

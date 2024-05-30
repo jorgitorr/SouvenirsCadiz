@@ -36,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -348,12 +349,11 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuTiposSouvenir(souvenirsViewModel:SouvenirsViewModel) {
+fun MenuTiposSouvenir(souvenirsViewModel: SouvenirsViewModel, onTipoSelected: (String) -> Unit) {
     val context = LocalContext.current
     val tiposSouvenir = Tipo.entries.toTypedArray()
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(tiposSouvenir[0].valor) }
-    var tipo by souvenirsViewModel.tipo
+    var selectedText by remember { mutableStateOf("TODOS") }
 
     Box(
         modifier = Modifier
@@ -367,9 +367,10 @@ fun MenuTiposSouvenir(souvenirsViewModel:SouvenirsViewModel) {
                 expanded = !expanded
             }
         ) {
+
             TextField(
                 value = selectedText,
-                onValueChange = { tipo = selectedText},
+                onValueChange = {selectedText = onTipoSelected.toString()},
                 readOnly = true,
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 modifier = Modifier.menuAnchor()
@@ -384,8 +385,8 @@ fun MenuTiposSouvenir(souvenirsViewModel:SouvenirsViewModel) {
                         text = { Text(text = item.valor, color = RaisanBlack) },
                         onClick = {
                             selectedText = item.valor
-                            tipo = selectedText
                             expanded = false
+                            onTipoSelected(item.valor)
                             Toast.makeText(context, item.valor, Toast.LENGTH_SHORT).show()
                         }
                     )

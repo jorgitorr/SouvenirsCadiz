@@ -1,6 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -37,11 +38,21 @@ import com.example.souvenirscadiz.ui.theme.Silver
 @Composable
 fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
     val souvenirs by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
+    val souvenirsFiltrados by souvenirsViewModel.souvenirsFiltrados.collectAsState()
 
-    LazyColumn {
-        items(souvenirs) { souvenir ->
-            souvenirsViewModel.checkSouvenirIsSaved(souvenir)
-            Caja(navController, souvenir, souvenirsViewModel, loginViewModel)
+    if(souvenirsFiltrados.isEmpty()){
+        LazyColumn {
+            items(souvenirs) { souvenir ->
+                souvenirsViewModel.checkSouvenirIsSaved(souvenir)
+                Caja(navController, souvenir, souvenirsViewModel, loginViewModel)
+            }
+        }
+    }else{
+        LazyColumn{
+            items(souvenirsFiltrados) { souvenir ->
+                souvenirsViewModel.checkSouvenirIsSaved(souvenir)
+                Caja(navController, souvenir, souvenirsViewModel, loginViewModel)
+            }
         }
     }
 }

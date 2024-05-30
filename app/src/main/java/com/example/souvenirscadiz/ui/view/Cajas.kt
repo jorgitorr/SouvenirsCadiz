@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -73,7 +75,11 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                     .data(souvenir.url)
                     .build(),
                     loading = {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier.width(20.dp),
+                            color = MaterialTheme.colorScheme.secondary,
+                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                        )
                     },
                     contentDescription = souvenir.nombre,
                     modifier = Modifier

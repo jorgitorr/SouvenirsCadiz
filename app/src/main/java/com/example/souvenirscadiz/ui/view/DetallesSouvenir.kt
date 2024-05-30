@@ -1,6 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,9 +26,8 @@ import coil.request.ImageRequest
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
-import com.example.souvenirscadiz.ui.theme.Redwood
+import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
-import com.example.souvenirscadiz.ui.theme.White
 
 /**
  * Souvenir detail
@@ -80,6 +80,8 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(345.dp)
+                        .padding(5.dp)
+                        .border(1.dp, RaisanBlack)
                         .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
                 )
 
@@ -91,20 +93,18 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 }
             }
 
-            LazyColumn(modifier = Modifier.fillMaxWidth(),
+            LazyColumn(modifier = Modifier.fillMaxWidth().padding(30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally){
 
                 item {
                     //nombre
-                    Spacer(modifier = Modifier.height(5.dp))
                     Box (modifier = Modifier
-                        .background(Redwood)
                         .fillMaxWidth()){
                         Text(
                             text = souvenir.nombre,
                             fontFamily = KiwiMaru,
                             fontSize = 20.sp,
-                            color = White,
+                            color = RaisanBlack,
                         )
                     }
                     Spacer(modifier = Modifier.height(5.dp))
@@ -113,12 +113,11 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 item {
                     //referencia
                     Box(modifier = Modifier
-                        .background(Redwood)
                         .fillMaxWidth()){
                         Text(text = souvenir.referencia,
                             fontFamily = KiwiMaru,
                             fontSize = 20.sp,
-                            color = White
+                            color = RaisanBlack
                         )
                     }
                     Spacer(modifier = Modifier.height(5.dp))
@@ -127,21 +126,21 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 item{
                     //precio
                     Box(modifier = Modifier
-                        .background(Redwood)
                         .fillMaxWidth()){
                         Text(text = "${souvenir.precio}€",
                             fontFamily = KiwiMaru,
                             fontSize = 20.sp,
-                            color = White
+                            color = RaisanBlack
                         )
                     }
                 }
 
                 item {
-                    ShareWithWhatsAppOption(text = "Compartido con la app Souvenirs Cadiz\n" +
+                    Spacer(modifier = Modifier.height(100.dp))
+                    Share(text = "Compartido con la app Souvenirs Cadiz\n" +
                             "${souvenir.nombre} \n" +
                             souvenir.referencia + "\n ",
-                        context = LocalContext.current )
+                        context = LocalContext.current)
                 }
 
             }

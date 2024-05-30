@@ -30,7 +30,6 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -214,8 +213,8 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
     val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
 
     SearchBar(
-        modifier = Modifier
-            .padding(start = 15.dp),
+        modifier = Modifier.width(345.dp)
+            .padding(start = 25.dp),
         query = query,
         onQueryChange = { souvenirsViewModel.setQuery(it) }, // DCS - Actualiza el texto de búsqueda en el ViewModel.
         onSearch = { souvenirsViewModel.setActive(false) }, // DCS - Desactiva la búsqueda al presionar el botón de búsqueda.
@@ -255,30 +254,6 @@ fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController)
 }
 
 
-/**
- * Enumarado souvenirs
- *
- * @param souvenirsViewModel
- */
-@Composable
-fun EnumaradoSouvenirs(souvenirsViewModel: SouvenirsViewModel){
-    LazyRow {
-        items(Tipo.entries.toTypedArray()) { tipo ->
-            Text(
-                text = tipo.valor,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                    .clickable { souvenirsViewModel.getByTipo(tipo) },
-                color = RaisanBlack,
-                fontSize = 16.sp,
-                fontFamily = KleeOne
-            )
-        }
-    }
-}
-
-
-
 @Composable
 fun EventosBox(fecha:String){
     Box(
@@ -313,25 +288,6 @@ fun ActiveEvent(souvenirsViewModel: SouvenirsViewModel) {
 
 @Composable
 fun Share(text: String, context: android.content.Context) {
-    val sendIntent = Intent(Intent.ACTION_SEND).apply {
-        putExtra(Intent.EXTRA_TEXT, text)
-        type = "text/plain"
-    }
-    val shareIntent = Intent.createChooser(sendIntent, null)
-
-    Button(
-        onClick = {
-            startActivity(context, shareIntent, null)
-        },
-        colors = ButtonDefaults.buttonColors(containerColor = Redwood)
-    ) {
-        Icon(imageVector = Icons.Default.Share, contentDescription = null)
-        Text("Share", modifier = Modifier.padding(start = 8.dp))
-    }
-}
-
-@Composable
-fun ShareWithWhatsAppOption(text: String, context: android.content.Context) {
     val sendIntent = Intent(Intent.ACTION_SEND).apply {
         putExtra(Intent.EXTRA_TEXT, text)
         type = "text/plain"
