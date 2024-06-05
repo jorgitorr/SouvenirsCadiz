@@ -130,6 +130,7 @@ fun AnadirSouvenir(
     var precio by souvenirsViewModel.precio
     var stock by souvenirsViewModel.stock
     var url by souvenirsViewModel.url
+    var tipo by souvenirsViewModel.tipo
     var selectedImageUri by souvenirsViewModel.selectedImageUri
 
     LaunchedEffect(true) {
@@ -203,8 +204,8 @@ fun AnadirSouvenir(
                     .fillMaxWidth()
             )
 
-            MenuTiposSouvenir(souvenirsViewModel) { tipo ->
-                // Handle tipo selection
+            MenuTiposSouvenir(souvenirsViewModel) { tipoSouvenir ->
+                tipo = tipoSouvenir
             }
 
             Card(

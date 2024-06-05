@@ -76,6 +76,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var precio = mutableStateOf("")
     var stock = mutableStateOf("")
     var url = mutableStateOf("")
+    var tipo = mutableStateOf("")
     var selectedImageUri  = mutableStateOf<Uri?>(null)
 
     init {
