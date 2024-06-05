@@ -25,7 +25,7 @@ class PedidosNotification: BroadcastReceiver() {
      * @param p1
      */
     override fun onReceive(context: Context, p1: Intent?) {
-        createSimpleNotification(context)
+        notificationPendientes(context)
     }
 
     /**
@@ -33,7 +33,33 @@ class PedidosNotification: BroadcastReceiver() {
      *
      * @param context
      */
-    private fun createSimpleNotification(context: Context) {
+    private fun notificationPendientes(context: Context) {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val flag = PendingIntent.FLAG_IMMUTABLE
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, flag)
+
+        val notification = NotificationCompat.Builder(context, MainActivity.MY_CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_delete)
+            .setContentTitle("SOUVENIRS CADIZ")
+            .setContentText("Tienes souvenirs pendientes por aceptar")
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("Tiene souvenirs pedidos por clientes")
+            )
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .build()
+
+        val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.notify(NOTIFICATION_ID,notification)
+    }
+
+
+
+    private fun notificationPedidoAceptado(context: Context) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }

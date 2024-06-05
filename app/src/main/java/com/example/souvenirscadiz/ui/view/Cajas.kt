@@ -48,6 +48,8 @@ import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
+import com.example.souvenirscadiz.ui.theme.White
+import com.example.souvenirscadiz.ui.theme.seed
 
 
 /**
@@ -64,6 +66,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(color = Silver, shape = RoundedCornerShape(5.dp))
+        .padding(5.dp)
         .border(width = 1.dp, color = RaisanBlack, shape = RoundedCornerShape(5.dp))){
 
         Column(horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,6 +97,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                     ShopingCartButton(souvenir, souvenirsViewModel)
                 }else{
                     ModifyButton(souvenir, navController)
+                    //eliminarButton
                 }
             }
 
@@ -103,7 +107,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(2.dp),
+                    .padding(2.dp).background(seed),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -116,7 +120,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                         fontFamily = KiwiMaru,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = RaisanBlack,
+                        color = White,
                         modifier = Modifier.padding(start = 4.dp, end = 8.dp)
                     )
 
@@ -126,7 +130,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                         fontFamily = KiwiMaru,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        color = RaisanBlack,
+                        color = White,
                         textAlign = TextAlign.End,
                         modifier = Modifier
                             .padding(start = 4.dp, end = 8.dp)
@@ -248,6 +252,7 @@ fun CajaCarrito(
  */
 @Composable
 fun CajaPedido(
+    souvenirsViewModel: SouvenirsViewModel,
     navController: NavController,
     pedido: Pedido
 ) {
@@ -273,6 +278,17 @@ fun CajaPedido(
                     fontSize = 20.sp,
                     fontFamily = KiwiMaru,
                     fontWeight = FontWeight.Bold,
+                    color = seed,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+
+                Text(
+                    text = pedido.fecha,
+                    fontSize = 20.sp,
+                    fontFamily = KiwiMaru,
+                    fontWeight = FontWeight.Bold,
                     color = RaisanBlack,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -284,7 +300,9 @@ fun CajaPedido(
 
                 //recorre todos los pedidos del usuario
                 for(souvenir in pedido.souvenirs){
-                    Box(contentAlignment = Alignment.TopEnd){
+                    Box(contentAlignment = Alignment.TopEnd,
+                        modifier = Modifier
+                            .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))){
                         // Imagen
                         SubcomposeAsyncImage(
                             model = ImageRequest.Builder(context = LocalContext.current)
@@ -340,6 +358,13 @@ fun CajaPedido(
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
 
+                    Spacer(modifier = Modifier.padding(bottom = 50.dp))
+
+                }
+
+                Row {
+                    EliminarPedido(souvenirsViewModel, pedido)
+                    AceptarPedido(souvenirsViewModel, pedido)
                 }
             }
         }
@@ -352,7 +377,7 @@ fun CajaPedido(
  * @param user
  */
 @Composable
-fun CajaUsuarios(user:User){
+fun CajaUsuarios(user:User, loginViewModel: LoginViewModel){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -393,7 +418,7 @@ fun CajaUsuarios(user:User){
                         .padding(top = 8.dp),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    EliminarButton(user)//boton que permite eliminar al usuario seleccionado
+                    EliminarUser(user, loginViewModel)//boton que permite eliminar al usuario seleccionado
                 }
             }
         }

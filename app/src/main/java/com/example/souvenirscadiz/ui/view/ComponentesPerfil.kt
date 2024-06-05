@@ -325,10 +325,6 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
                 .build()
             val googleSingInCliente = GoogleSignIn.getClient(context, opciones)
             launcher.launch(googleSingInCliente.signInIntent)
-
-            //souvenirsViewModel.fetchSouvenirsFav()
-            //souvenirsViewModel.fetchSouvenirsCarrito()
-
         },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center){

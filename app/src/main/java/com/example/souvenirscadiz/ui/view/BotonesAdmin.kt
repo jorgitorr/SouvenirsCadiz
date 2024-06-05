@@ -1,20 +1,26 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.AddTask
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.AddTask
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.User
+import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
@@ -98,9 +104,11 @@ fun AcceptButton(
  * @param userState
  */
 @Composable
-fun EliminarButton(
-    userState: User
+fun EliminarUser(
+    userState: User,
+    loginViewModel: LoginViewModel
 ) {
+    var context = LocalContext.current
 
     IconToggleButton(
         checked = userState.eliminado,
@@ -116,8 +124,92 @@ fun EliminarButton(
                 .size(30.dp)
                 .clickable {
                     userState.eliminado != userState.eliminado
+                    loginViewModel.deleteUser({
+                        Toast.makeText(
+                            context,
+                            "Usuario eliminado",
+                            Toast.LENGTH_LONG
+                        ).show() },userState)
                 }
         )
     }
 
+}
+
+
+/**
+ * Eliminar pedido
+ *
+ * @param pedido
+ */
+@Composable
+fun EliminarPedido(souvenirsViewModel: SouvenirsViewModel, pedido: Pedido, ){
+    val context = LocalContext.current
+    IconToggleButton(
+        checked = pedido.pedidoCancelado,
+        onCheckedChange = {
+            pedido.pedidoCancelado = !pedido.pedidoCancelado
+        }
+    ) {
+        Log.d("PedidoCancelado",pedido.pedidoCancelado.toString())
+        Icon(
+            tint = if (!pedido.pedidoCancelado) RaisanBlack else Redwood,
+            imageVector = if (!pedido.pedidoCancelado) Icons.Outlined.Cancel else Icons.Default.Cancel,
+            contentDescription = "Eliminado Icon",
+            modifier = Modifier
+                .size(30.dp)
+                .clickable {
+                    pedido.pedidoCancelado = !pedido.pedidoCancelado
+                    Log.d("pedidoCancelado",pedido.pedidoCancelado.toString())
+                    if(pedido.pedidoCancelado){
+                        souvenirsViewModel.deletePedido ({
+                            Toast.makeText(
+                                context,
+                                "Pedido Cancelado",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }, pedido)
+                    }
+                }
+        )
+    }
+}
+
+
+/**
+ * Aceptar pedido
+ *
+ * @param pedido
+ */
+@Composable
+fun AceptarPedido(souvenirsViewModel: SouvenirsViewModel, pedido: Pedido){
+    val context = LocalContext.current
+
+    IconToggleButton(
+        checked = pedido.pedidoAceptado,
+        onCheckedChange = {
+            pedido.pedidoAceptado = !pedido.pedidoAceptado
+        }
+    ) {
+        Icon(
+            tint = if (!pedido.pedidoAceptado) RaisanBlack else Redwood,
+            imageVector = if (!pedido.pedidoAceptado) Icons.Outlined.AddTask else Icons.Default.AddTask,
+            contentDescription = "Eliminado Icon",
+            modifier = Modifier
+                .size(30.dp)
+                .clickable {
+                    pedido.pedidoAceptado = !pedido.pedidoAceptado
+                    Log.d("PedidoAceptado",pedido.pedidoAceptado.toString())
+                    if(pedido.pedidoAceptado){
+                        souvenirsViewModel.deletePedido( {
+                            Toast.makeText(
+                                context,
+                                "Pedido Aceptado",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }, pedido)
+                    }
+                }
+        )
+    }
 }

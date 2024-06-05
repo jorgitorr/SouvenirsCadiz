@@ -217,6 +217,7 @@ fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: Souve
         LazyColumn{
             items(souvenirsPedidos){ pedido ->
                 CajaPedido(
+                    souvenirsViewModel,
                     navController,
                     pedido)
             }
@@ -240,7 +241,7 @@ fun UsuariosList(loginViewModel: LoginViewModel){
     }else{
         LazyColumn{
             items(users){ user ->
-                CajaUsuarios(user)
+                CajaUsuarios(user, loginViewModel)
             }
         }
     }

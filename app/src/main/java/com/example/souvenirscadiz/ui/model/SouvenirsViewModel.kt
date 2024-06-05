@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Fecha
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
+import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -168,6 +169,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             throw e
         }
     }
+
 
     /**
      * Hace la llamada a la base de datos de firestore para recuperar las imagenes de los souvenirs
@@ -464,6 +466,32 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             }
         }
     }
+
+
+
+    fun deletePedido(onSuccess: () -> Unit, pedido: Pedido) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore.collection("Pedidos")
+                    .whereEqualTo("emailUser", pedido.emailUser)
+                    .whereEqualTo("fecha",pedido.fecha)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            document.reference.delete()
+                            onSuccess()
+                            Log.d("Delete Success", "Se eliminó el pedido")
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Delete Error", "Error al eliminar pedido: $exception")
+                    }
+            } catch (e: Exception) {
+                Log.d("Error al eliminar pedido", "Error al eliminar pedido")
+            }
+        }
+    }
+
 
 
     /**

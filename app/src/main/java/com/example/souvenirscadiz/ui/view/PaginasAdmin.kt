@@ -24,6 +24,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,8 +36,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -44,7 +43,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.Redwood
@@ -73,7 +71,6 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Search(souvenirsViewModel, navController)//buscador
-            //EnumaradoSouvenirs(souvenirsViewModel)//todos los enumerados
             SouvenirsList(navController, souvenirsViewModel, loginViewModel)//lista de souvenirs
         }
     }
@@ -121,7 +118,12 @@ fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
  * @param cloudStorageManager
  */
 @Composable
-fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: SouvenirsViewModel, navController: NavController, cloudStorageManager:CloudStorageManager){
+fun AnadirSouvenir(
+    loginViewModel: LoginViewModel,
+    souvenirsViewModel: SouvenirsViewModel,
+    navController: NavController,
+    cloudStorageManager: CloudStorageManager
+) {
     val context = LocalContext.current
     var nombre by souvenirsViewModel.nombre
     var referencia by souvenirsViewModel.referencia
@@ -130,8 +132,8 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
     var url by souvenirsViewModel.url
     var selectedImageUri by souvenirsViewModel.selectedImageUri
 
-    LaunchedEffect(true){
-        souvenirsViewModel.fetchSouvenirs() //recorre la lista de souvenirs y añade el nuevo
+    LaunchedEffect(true) {
+        souvenirsViewModel.fetchSouvenirs()
     }
 
     val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
@@ -143,11 +145,9 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                     if (success) {
                         url = downloadUrl
                         souvenirsViewModel.updateSouvenirImage(downloadUrl)
-                        Toast.makeText(context, "Imagen subida a firebase", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(context, "Imagen subida a Firebase", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(context, "Error al subir la imagen", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(context, "Error al subir la imagen", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -155,62 +155,62 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
     )
 
     Scaffold(
-        topBar = {
-            HeaderAdmin(navController, souvenirsViewModel)
-        },
-        bottomBar = {
-            FooterAdmin(navController,souvenirsViewModel, loginViewModel)
-        }, containerColor = Silver
+        topBar = { HeaderAdmin(navController, souvenirsViewModel) },
+        bottomBar = { FooterAdmin(navController, souvenirsViewModel, loginViewModel) },
+        containerColor = Silver
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .background(Silver),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            var tipoElegido by remember { mutableStateOf<String?>(null) }
-            
-            Spacer(modifier = Modifier.padding(5.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = nombre,
-                onValueChange = { nombre= it },
+                onValueChange = { nombre = it },
                 label = { Text("Nombre del souvenir", fontFamily = KiwiMaru) },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
             )
-            
+
             OutlinedTextField(
                 value = referencia,
                 onValueChange = { referencia = it },
-                label = { Text("referencia del souvenir", fontFamily = KiwiMaru) },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                label = { Text("Referencia del souvenir", fontFamily = KiwiMaru) },
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
             )
-
 
             OutlinedTextField(
                 value = precio,
                 onValueChange = { precio = it },
-                label = { Text("precio del souvenir", fontFamily = KiwiMaru) },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                label = { Text("Precio del souvenir", fontFamily = KiwiMaru) },
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
             )
 
             OutlinedTextField(
                 value = stock,
                 onValueChange = { stock = it },
-                label = { Text("stock del souvenir", fontFamily = KiwiMaru) },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                label = { Text("Stock del souvenir", fontFamily = KiwiMaru) },
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
             )
 
-            MenuTiposSouvenir(souvenirsViewModel, onTipoSelected = { tipo ->
-                tipoElegido = tipo
-            })
+            MenuTiposSouvenir(souvenirsViewModel) { tipo ->
+                // Handle tipo selection
+            }
 
             Card(
                 shape = CircleShape,
                 modifier = Modifier
-                    .padding(5.dp)
+                    .padding(16.dp)
                     .size(100.dp)
                     .clickable {
                         singlePhotoPickerLauncher.launch(
@@ -229,20 +229,22 @@ fun AnadirSouvenir(loginViewModel: LoginViewModel, souvenirsViewModel: Souvenirs
                 )
             }
 
-            Button(onClick = {
-                souvenirsViewModel.saveSouvenir {
-                    Toast.makeText(context, "souvenir guardado", Toast.LENGTH_SHORT).show()
-                }
-            }, colors = ButtonDefaults.buttonColors(
-                Redwood
-            )) {
-                Text(text = "GUARDAR", fontFamily = KiwiMaru)
+            Button(
+                onClick = {
+                    souvenirsViewModel.saveSouvenir {
+                        Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(Redwood),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = "GUARDAR", fontFamily = KiwiMaru, modifier = Modifier.padding(8.dp))
             }
-            
         }
     }
 }
-
 /**
  * Modificar souvenir
  *
@@ -335,6 +337,9 @@ fun ModificarSouvenir(
             }) {
                 Text(text = "MODIFICAR")
             }
+
+
+            //hacer un boton para eliminar souvenir
         }
     }
 }
