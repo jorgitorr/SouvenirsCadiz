@@ -11,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Fecha
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
-import com.example.souvenirscadiz.data.model.User
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -21,7 +20,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
@@ -126,7 +124,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     /**
-     * Modifica souvenir
+     * Modifica souvenir y lo guarda en la base de datos
      *
      * @param souvenir
      */
@@ -137,8 +135,43 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 referencia.takeIf { it.isNotEmpty() }?.let { this.referencia = it }
                 precio.takeIf { it.isNotEmpty() }?.let { this.precio = it }
 
-                updateSouvenir(souvenir)
+                updateSouvenir(souvenir) //actualiza el souvenir
             }
+        }
+    }
+
+
+    /**
+     * Eliminar souvenir
+     *
+     * @param souvenir
+     */
+    fun eliminarSouvenir(souvenir: Souvenir, onSuccess:() -> Unit){
+        viewModelScope.launch {
+            borrarSouvenir(souvenir, onSuccess)
+        }
+    }
+
+
+    /**
+     * Borrar souvenir
+     *
+     * @param souvenir
+     */
+    private suspend fun borrarSouvenir(souvenir:Souvenir, onSuccess:() -> Unit){
+        val souvenirsCollection = firestore.collection("souvenirs").get().await()
+
+        try {
+            for(s in souvenirsCollection){
+                val t = s.toObject(souvenir::class.java)
+                if(t.referencia == souvenir.referencia){
+                    onSuccess()
+                    firestore.collection("souvenirs").document(s.id).delete()
+                }
+            }
+
+        } catch (e: Exception) {
+            throw e
         }
     }
 

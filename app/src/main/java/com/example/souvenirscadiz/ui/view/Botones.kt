@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ModeEdit
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.RemoveShoppingCart
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -254,6 +255,36 @@ fun ModifyButton(souvenir: Souvenir, navController: NavController) {
         Icon(
             tint = if (!onModify) RaisanBlack else Redwood,
             imageVector = if (onModify) Icons.Default.ModeEdit else Icons.Default.ModeEdit,
+            contentDescription = "Favorite Icon",
+            modifier = Modifier.size(30.dp)
+        )
+    }
+}
+
+
+@Composable
+fun EliminarButton(souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel) {
+    var onModify by remember { mutableStateOf(souvenir.favorito) }
+    var context = LocalContext.current
+
+    IconToggleButton(
+        checked = onModify,
+        onCheckedChange = {
+            onModify = !onModify
+            souvenirsViewModel.eliminarSouvenir(souvenir
+            ) {
+                Toast.makeText(
+                    context,
+                    "Has eliminado un souvenir",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+        ,modifier = Modifier.padding(top = 280.dp, end = 340.dp)
+    ) {
+        Icon(
+            tint = if (!onModify) RaisanBlack else Redwood,
+            imageVector = if (onModify) Icons.Default.Remove else Icons.Default.Remove,
             contentDescription = "Favorite Icon",
             modifier = Modifier.size(30.dp)
         )

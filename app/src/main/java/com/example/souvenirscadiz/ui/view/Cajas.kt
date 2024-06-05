@@ -97,7 +97,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                     ShopingCartButton(souvenir, souvenirsViewModel)
                 }else{
                     ModifyButton(souvenir, navController)
-                    //eliminarButton
+                    EliminarButton(souvenir, souvenirsViewModel)
                 }
             }
 
@@ -107,7 +107,8 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(2.dp).background(seed),
+                    .padding(2.dp)
+                    .background(seed),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {

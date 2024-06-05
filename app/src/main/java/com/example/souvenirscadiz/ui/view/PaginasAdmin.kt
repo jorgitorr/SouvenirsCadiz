@@ -234,6 +234,7 @@ fun AnadirSouvenir(
                     souvenirsViewModel.saveSouvenir {
                         Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT).show()
                     }
+                    navController.navigate("PrincipalAdmin")
                 },
                 colors = ButtonDefaults.buttonColors(Redwood),
                 modifier = Modifier
@@ -264,7 +265,7 @@ fun ModificarSouvenir(
     val souvenir = souvenirsViewModel.getByReference(referencia)
 
     var nombre by souvenirsViewModel.nombre
-    var referencia by souvenirsViewModel.referencia
+    var referenciaS by souvenirsViewModel.referencia
     var precio by souvenirsViewModel.precio
     var stock by souvenirsViewModel.stock
 
@@ -300,7 +301,7 @@ fun ModificarSouvenir(
 
             OutlinedTextField(
                 value = referencia,
-                onValueChange = { referencia = it },
+                onValueChange = { referenciaS = it },
                 label = { Text("Referencia actual: ${souvenir.referencia}", fontFamily = KiwiMaru) },
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
@@ -332,14 +333,12 @@ fun ModificarSouvenir(
             
             Button(onClick = {
                 souvenirsViewModel.modificaSouvenir(souvenir)
-            navController.navigate("Principal")
-            //tengo que guardarlo en la BDD
+                navController.navigate("Principal")
             }) {
-                Text(text = "MODIFICAR")
+                Text(text = "MODIFICAR",
+                    fontFamily = KiwiMaru)
             }
 
-
-            //hacer un boton para eliminar souvenir
         }
     }
 }

@@ -11,12 +11,18 @@ import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.AddTask
 import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType.Companion.Text
 import androidx.compose.ui.unit.dp
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.User
@@ -204,7 +210,7 @@ fun AceptarPedido(souvenirsViewModel: SouvenirsViewModel, pedido: Pedido){
                         souvenirsViewModel.deletePedido( {
                             Toast.makeText(
                                 context,
-                                "Pedido Aceptado",
+                                "Pedido Completado",
                                 Toast.LENGTH_LONG
                             ).show()
                         }, pedido)
