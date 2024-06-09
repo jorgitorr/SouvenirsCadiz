@@ -114,7 +114,7 @@ fun EliminarUser(
     userState: User,
     loginViewModel: LoginViewModel
 ) {
-    var context = LocalContext.current
+    val context = LocalContext.current
 
     IconToggleButton(
         checked = userState.eliminado,
