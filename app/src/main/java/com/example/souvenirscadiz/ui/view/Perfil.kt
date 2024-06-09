@@ -2,7 +2,6 @@ package com.example.souvenirscadiz.ui.view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -131,7 +130,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
             ) {
                 SubcomposeAsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(userState?.imagen)
+                        .data(userState?.imagen ?: R.drawable.imagen_perfil_pre)
                         .build(),
                     contentDescription = null,
                     loading = { CircularProgressIndicator() },
@@ -261,7 +260,7 @@ fun Registro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewMo
                 text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave,
                 fontSize = 24.sp,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 5.dp)
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

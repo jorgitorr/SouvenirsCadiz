@@ -126,7 +126,6 @@ fun ShopingCartButton(
                     ).show()
                 }, souvenir)
             }
-
             souvenirsViewModel.fetchSouvenirsCarrito()
         },
         modifier = Modifier.padding(top = 280.dp, end = 340.dp) // Posiciona el icono

@@ -91,7 +91,6 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                         .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
                 )
 
-
                 if(!loginViewModel.checkAdmin()){
                     FavoriteButton(souvenir, souvenirsViewModel)
                     ShopingCartButton(souvenir, souvenirsViewModel)

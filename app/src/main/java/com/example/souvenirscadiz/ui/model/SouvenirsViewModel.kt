@@ -4,13 +4,16 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Fecha
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
+import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -79,9 +82,15 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var tipo = mutableStateOf("")
     var selectedImageUri  = mutableStateOf<Uri?>(null)
 
+
+
+
     init {
         fetchSouvenirs()
     }
+
+
+
 
     /**
      * Update souvenir image
@@ -461,6 +470,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                             onSuccess()
                             Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
                         }
+                        fetchSouvenirsFav()
                     }
                     .addOnFailureListener { exception ->
                         Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
@@ -491,6 +501,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                             onSuccess()
                             Log.d("Delete Success", "Se eliminó el souvenir de favoritos")
                         }
+                        fetchSouvenirsCarrito()
                     }
                     .addOnFailureListener { exception ->
                         Log.d("Delete Error", "Error al eliminar souvenir de favoritos: $exception")
@@ -555,23 +566,23 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * Fetch souvenirs carrito
      *
      */
-    fun fetchSouvenirsCarrito(){
+    fun fetchSouvenirsCarrito() {
         viewModelScope.launch {
             val collection = firestore.collection("Carrito").get().await()
             val souvenirsList = mutableListOf<Souvenir>()
             for (document in collection) {
-                if (document!=null) {
+                if (document != null) {
                     val souvenir = document.toObject(Souvenir::class.java)
                     if (souvenir.emailUser == auth.currentUser?.email) {
+                        Log.d("Souvenir",souvenir.nombre)
                         souvenirsList.add(souvenir)
                     }
                 }
             }
             _souvenirCarrito.value = souvenirsList
-            Log.d("_souvenirSize",souvenirCarrito.value.size.toString())
+            Log.d("_souvenirSize", _souvenirCarrito.value.size.toString())
         }
     }
-
 
     /**
      * Fetch souvenirs pedido

@@ -1,7 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -11,6 +10,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -143,8 +143,11 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
     val soundEffect = MediaPlayer.create(context, R.raw.empty_basket_sound)
 
 
-    if(souvenirSaved.isEmpty()){
+    LaunchedEffect(Unit){
+        souvenirsViewModel.fetchSouvenirsCarrito()
+    }
 
+    if(souvenirSaved.isEmpty()){
         if(souvenirsViewModel.soundPlayedCarrito){
             soundEffect.start()
             souvenirsViewModel.soundPlayedCarrito = false
@@ -154,7 +157,6 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
 
         //muestra el AlertDialog
         if (souvenirsViewModel.showDialogCarrito) {
-
             AlertDialog(
                 onDismissRequest = {
                     souvenirsViewModel.showDialogCarrito = false

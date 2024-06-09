@@ -360,7 +360,7 @@ fun InicioSesionGoogle(souvenirsViewModel: SouvenirsViewModel, loginViewModel: L
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center){
 
-        Text(text = "Login Google",
+        Text(text = "Inicio con Google",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = KiwiMaru
