@@ -142,22 +142,32 @@ fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavContr
     val context = LocalContext.current
     Button(
         onClick = {
-            if(loginViewModel.password.length<6){
+            //userName
+            if(loginViewModel.userName.isEmpty()){
+                Toast.makeText(context,"No has introducido usuario", Toast.LENGTH_SHORT).show()
+            }
+            else if(!loginViewModel.validateUserName()){
+                Toast.makeText(context,"No has introducido el usuario correctamente", Toast.LENGTH_SHORT).show()
+            }
+            //email
+            if(loginViewModel.email.isEmpty()){
+                Toast.makeText(context,"No has introducido email", Toast.LENGTH_SHORT).show()
+            }
+            else if(!loginViewModel.validateEmail()){
+                Toast.makeText(context,"No has introducido el email correctamente", Toast.LENGTH_SHORT).show()
+            }
+            //password
+            if(loginViewModel.password.isEmpty() ){
+                Toast.makeText(context,"No has introducido contraseña", Toast.LENGTH_SHORT).show()
+            }
+            else if(!loginViewModel.validatePassword()){
                 Toast.makeText(context,"La contraseña tiene que ser mayor de 6 carácteres", Toast.LENGTH_SHORT).show()
             }
-            else if(loginViewModel.email.isEmpty()){
-                Toast.makeText(context,"No has introducido el email", Toast.LENGTH_SHORT).show()
-            }
-            else if(loginViewModel.password.isEmpty()){
-                Toast.makeText(context,"No has introducido la contraseña", Toast.LENGTH_SHORT).show()
-            }
-            else if(loginViewModel.userName.isEmpty()){
-                Toast.makeText(context,"No has introducido la contraseña", Toast.LENGTH_SHORT).show()
-            }else {
+            else {
                 loginViewModel.checkUserExists(loginViewModel.email){
                     exists ->
                     if(exists){
-                        Toast.makeText(context,"Es un usario existente", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"No puedes crearlo, es un usario existente", Toast.LENGTH_SHORT).show()
                     }else{
                         loginViewModel.createUser {
                             navController.navigate("Principal")
@@ -190,11 +200,32 @@ fun BotonAceptarRegistro(loginViewModel: LoginViewModel, navController: NavContr
  */
 @Composable
 fun BotonAceptarInicio(loginViewModel: LoginViewModel, navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    val context = LocalContext.current
     Button(
         onClick = {
-            loginViewModel.login {
-            navController.navigate("Principal")
-            souvenirsViewModel.setSelectedItem("Principal")
+            //email
+            if(loginViewModel.email.isEmpty()){
+                Toast.makeText(context,"No has introducido email", Toast.LENGTH_SHORT).show()
+            }
+            else if(!loginViewModel.validateEmail()){
+                Toast.makeText(context,"No has introducido el email correctamente", Toast.LENGTH_SHORT).show()
+            }
+            //password
+            if(loginViewModel.password.isEmpty() ){
+                Toast.makeText(context,"No has introducido contraseña", Toast.LENGTH_SHORT).show()
+            }
+            else if(!loginViewModel.validatePassword()){
+                Toast.makeText(context,"La contraseña tiene que ser mayor de 6 carácteres", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                if(loginViewModel.showAlert){
+                    Toast.makeText(context,"El usuario introducido no existe", Toast.LENGTH_SHORT).show()
+                }else{
+                    loginViewModel.login {
+                        navController.navigate("Principal")
+                        souvenirsViewModel.setSelectedItem("Principal")
+                    }
+                }
             } },
         modifier = Modifier
             .fillMaxWidth()

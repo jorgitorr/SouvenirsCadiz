@@ -2,6 +2,7 @@ package com.example.souvenirscadiz.ui.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -121,7 +122,7 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
                 shape = CircleShape,
                 modifier = Modifier
                     .padding(10.dp)
-                    .size(100.dp)
+                    .size(180.dp)
                     .clickable {
                         singlePhotoPickerLauncher.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -139,17 +140,13 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
                 )
             }
 
-            //user
-            Text(text = loginViewModel.userName,
-                color = RaisanBlack,
-                style = TextStyle(fontWeight = FontWeight.Bold))
-            Spacer(modifier = Modifier.height(8.dp))
-
             //email
             Text(text = loginViewModel.email,
                 color = RaisanBlack,
-                style = TextStyle(fontWeight = FontWeight.Bold))
-            Spacer(modifier = Modifier.height(8.dp))
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             //boton para cerra sesion
             Button(onClick = {

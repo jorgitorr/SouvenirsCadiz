@@ -3,6 +3,7 @@ package com.example.souvenirscadiz.ui.model
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -102,7 +103,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
      * Fetch img profile
      *
      */
-    fun fetchImgProfile() {
+    private fun fetchImgProfile() {
         viewModelScope.launch {
             try {
                 val currentUser = FirebaseAuth.getInstance().currentUser
@@ -174,7 +175,6 @@ class LoginViewModel @Inject constructor(): ViewModel(){
                 if (task.isSuccessful) {
                     onSuccess()
                 } else {
-                    Log.d("ERROR DE FB", "Error al iniciar sesión: ${task.exception?.localizedMessage}")
                     showAlert = true
                 }
             }
@@ -199,6 +199,33 @@ class LoginViewModel @Inject constructor(): ViewModel(){
             }
     }
 
+
+    /**
+     * Is valid email
+     *
+     * @return
+     */
+
+    private fun String.isValidEmail(): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+
+    fun validateUserName(): Boolean {
+        return userName.isNotEmpty() && userName.any { !it.isDigit() }
+    }
+
+    fun validateEmail():Boolean {
+        return email.isValidEmail()
+    }
+
+
+    fun validatePassword(): Boolean {
+        return password.length >= 6
+    }
+
+
+
     /**
      * Funcion privada que guarda los usuarios
      * @param username se le pasa el nombre de usuario que queremos guardar
@@ -208,7 +235,6 @@ class LoginViewModel @Inject constructor(): ViewModel(){
         val id = auth.currentUser?.uid
         val email = auth.currentUser?.email
 
-
         val user = User(
             userId = id.toString(),
             email = email.toString(),
@@ -217,8 +243,8 @@ class LoginViewModel @Inject constructor(): ViewModel(){
             // DCS - Añade el usuario a la colección "Users" en la base de datos Firestore
         firestore.collection("Users")
             .add(user)
-            .addOnSuccessListener { Log.d("GUARDAR OK", "Se guardó el usuario correctamente en Firestore") }
-            .addOnFailureListener { Log.d("ERROR AL GUARDAR", "ERROR al guardar en Firestore") }
+            .addOnSuccessListener { Log.d("GUARDAR OK", "Se guardó el usuario correctamente") }
+            .addOnFailureListener { Log.d("ERROR AL GUARDAR", "ERROR al guardar Usuario") }
 
     }
 
@@ -254,6 +280,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
      * @param userName
      */
     fun changeUserName(userName: String) {
+        Log.d("userName",userName)
         this.userName = userName
     }
 
