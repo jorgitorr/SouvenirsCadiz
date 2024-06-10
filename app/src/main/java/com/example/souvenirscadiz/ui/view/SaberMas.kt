@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -49,7 +46,6 @@ import com.google.maps.android.compose.rememberCameraPositionState
  */
 @Composable
 fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
-    //var telefonoSeleccionado by remember { mutableStateOf(false)}
     Scaffold(
         topBar = {
             Header(navController, souvenirsViewModel)
@@ -84,22 +80,7 @@ fun DetallesLogo(souvenirsViewModel: SouvenirsViewModel, navController: NavContr
                     textAlign = TextAlign.Center)
             }
             Spacer(modifier = Modifier.height(2.dp))
-
-
-            /*
-            QUITE LA FUNCIÓN DE LLAMAR PORQUE NO ES UNA FUNCIÓN ADECUADA PARA ESTA APP
-            YA QUE PUEDEN LLAMAR MUCHA GENTE A LA VEZ O CUALQUIER COSA
-            Row{
-                Text(text = "Para pedidos e información: ", fontFamily = KiwiMaru)
-                Text(text = NUMERO_TLF, fontFamily = KiwiMaru, color = Cerulean, modifier = Modifier.clickable {
-                    telefonoSeleccionado = true //para realizar la llamada al numero de telefono
-                })
-            }*/
-
-            /*if(telefonoSeleccionado){
-                MakePhoneCall(NUMERO_TLF, LocalContext.current)
-                telefonoSeleccionado = false //para que no vuelva a llamar al salir
-            }*/
+            TargetPage(navController, souvenirsViewModel)
 
         }
     }

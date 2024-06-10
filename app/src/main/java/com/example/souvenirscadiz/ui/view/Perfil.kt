@@ -3,6 +3,7 @@ package com.example.souvenirscadiz.ui.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -162,6 +163,8 @@ fun Perfil(loginViewModel: LoginViewModel, navController: NavController, souveni
                 )
             }
 
+            TargetPage(navController, souvenirsViewModel)
+
         }
     }
 }
@@ -188,20 +191,23 @@ fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginVi
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Silver),
-            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "",
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(start = 16.dp) // Agrega un padding opcional para el margen izquierdo
             )
+            Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave,
-                fontSize = 24.sp,
-                modifier = Modifier.padding(start = 6.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.padding(end = 100.dp) // Agrega un padding opcional para el margen derecho
             )
+            Spacer(modifier = Modifier.weight(1f))
         }
         Spacer(modifier = Modifier.height(16.dp))
         IntroducirEmail(loginViewModel)
@@ -223,6 +229,8 @@ fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginVi
         if(loginViewModel.checkAdmin()){ //si es Admin
             navController.navigate("PrincipalAdmin")//se dirige a una pantalla esclusiva para el admin
         }
+
+        TargetPage(navController, souvenirsViewModel)
 
     }
 }
@@ -248,20 +256,23 @@ fun Registro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewMo
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Silver),
-            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "",
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(start = 16.dp) // Agrega un padding opcional para el margen izquierdo
             )
+            Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave,
-                fontSize = 24.sp,
-                modifier = Modifier.padding(start = 5.dp)
+                fontSize = 20.sp,
+                modifier = Modifier.padding(end = 100.dp) // Agrega un padding opcional para el margen derecho
             )
+            Spacer(modifier = Modifier.weight(1f))
         }
         Spacer(modifier = Modifier.height(16.dp))
         IntroducirUsuario(loginViewModel)
@@ -272,14 +283,33 @@ fun Registro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewMo
         Spacer(modifier = Modifier.height(16.dp))
         BotonAceptarRegistro(loginViewModel, navController, souvenirsViewModel)
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "¿Tienes cuenta?", fontFamily = KiwiMaru)
-        Spacer(modifier = Modifier.height(16.dp))
         InicioSesionGoogle(souvenirsViewModel, loginViewModel, navController)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "¿Tienes cuenta?", fontFamily = KiwiMaru)
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Inicia Sesión.", modifier = Modifier
             .clickable { navController.navigate("InicioSesion") },
             fontFamily = KiwiMaru,
             color = Redwood)
+
+        TargetPage(navController, souvenirsViewModel)
+    }
+}
+
+
+/**
+ * Target page
+ * Te permite volver a la página principal
+ *
+ * @param navController
+ */
+@Composable
+fun TargetPage(navController: NavController, souvenirsViewModel: SouvenirsViewModel) {
+    BackHandler {
+        navController.navigate("Principal") {
+            popUpTo("Principal") { inclusive = true }
+            souvenirsViewModel.setSelectedItem("Principal")
+        }
     }
 }
 

@@ -25,6 +25,7 @@ import com.example.souvenirscadiz.ui.view.SouvenirDetail
 import com.example.souvenirscadiz.ui.view.Carrito
 import com.example.souvenirscadiz.ui.view.Filtro
 import com.example.souvenirscadiz.ui.view.ModificarSouvenir
+import com.example.souvenirscadiz.ui.view.TargetPage
 import com.example.souvenirscadiz.ui.view.Usuarios
 
 /**
@@ -36,7 +37,7 @@ import com.example.souvenirscadiz.ui.view.Usuarios
 @Composable
 fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, cloudStorageManager:CloudStorageManager){
     val navController = rememberNavController()
-    
+
     NavHost(navController = navController, startDestination = "Principal"){
         composable("Principal"){
             Principal(souvenirsViewModel, navController, loginViewModel)
@@ -89,6 +90,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             val referencia = it.arguments?.getString("referencia") ?: 0
             ModificarSouvenir(souvenirsViewModel, loginViewModel, navController, referencia.toString())
         }
+
 
     }
 }

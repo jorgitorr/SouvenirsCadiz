@@ -27,7 +27,6 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsCarrito()
     }
-
     Scaffold(
         topBar = {
             Header(navController, souvenirsViewModel)
@@ -43,6 +42,7 @@ fun Carrito(souvenirsViewModel: SouvenirsViewModel, navController: NavController
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             SouvenirsListCarrito(navController, souvenirsViewModel, loginViewModel) //souvenirs en el carrito
+            TargetPage(navController, souvenirsViewModel)
         }
     }
 }

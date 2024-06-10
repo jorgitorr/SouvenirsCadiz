@@ -48,6 +48,7 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             SouvenirsListFav(navController, souvenirsViewModel, loginViewModel)
+            TargetPage(navController, souvenirsViewModel)
         }
     }
 }

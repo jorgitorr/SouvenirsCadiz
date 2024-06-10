@@ -94,8 +94,10 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable {
-                            souvenirsViewModel.setSelectedItem("Principal")
-                            navController.navigate("Principal")
+                            if(selectedItem!="Principal"){
+                                souvenirsViewModel.setSelectedItem("Principal")
+                                navController.navigate("Principal")
+                            }
                         }
                 )
                 Text("Home")
@@ -112,8 +114,10 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable {
-                            souvenirsViewModel.setSelectedItem("Favoritos")
-                            navController.navigate("Favoritos")
+                            if(selectedItem!="Favoritos"){
+                                souvenirsViewModel.setSelectedItem("Favoritos")
+                                navController.navigate("Favoritos")
+                            }
                         }
                 )
                 Text("Favorites")
@@ -130,11 +134,13 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable {
-                            souvenirsViewModel.setSelectedItem("Perfil")
-                            if (loginViewModel.getCurrentUser() != null) {
-                                navController.navigate("Perfil")
-                            } else {
-                                navController.navigate("InicioSesion")
+                            if(selectedItem!="Perfil"){
+                                if (loginViewModel.getCurrentUser() != null) {
+                                    navController.navigate("Perfil")
+                                } else {
+                                    navController.navigate("InicioSesion")
+                                }
+                                souvenirsViewModel.setSelectedItem("Perfil")
                             }
                         }
                 )
@@ -169,8 +175,11 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
             //logo personalizado
             Image(painter = painterResource(id = R.drawable.logo), contentDescription = "LOGO",
                 modifier = Modifier.clickable {
-                    navController.navigate("Detalles")
-                    souvenirsViewModel.setSelectedItem("")})
+                    if(selectedItem!="Detalles"){
+                        navController.navigate("Detalles")
+                        souvenirsViewModel.setSelectedItem("Detalles")
+                    }
+                })
             //texto de souvenirs cadiz
             Text(text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave)
@@ -191,8 +200,10 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
                     contentDescription = "Shop",
                     tint = if(selectedItem=="Carrito") Cerulean else RaisanBlack,
                     modifier = Modifier.clickable {
-                        navController.navigate("Tienda")
-                        souvenirsViewModel.setSelectedItem("Carrito")
+                        if(selectedItem!="Carrito"){
+                            navController.navigate("Tienda")
+                            souvenirsViewModel.setSelectedItem("Carrito")
+                        }
                     })
             }
         }
