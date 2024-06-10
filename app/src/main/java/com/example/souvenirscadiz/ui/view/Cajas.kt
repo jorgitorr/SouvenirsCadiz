@@ -1,5 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.os.Debug
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,6 +42,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.example.souvenirscadiz.data.model.Historial
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.User
@@ -88,7 +91,12 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(345.dp)
-                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+                        .clickable {
+
+                            navController.navigate("SouvenirDetail/${souvenir.referencia}")
+                            souvenirsViewModel.setSelectedItem("SouvenirDetail")
+
+                        }
                 )
 
                 if(!loginViewModel.checkAdmin()){
@@ -98,6 +106,8 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                     ModifyButton(souvenir, navController)
                     EliminarButton(souvenir, souvenirsViewModel)
                 }
+
+                TargetPage(navController, souvenirsViewModel)
             }
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -371,6 +381,116 @@ fun CajaPedido(
     }
 }
 
+
+@Composable
+fun CajaHistorial(
+    navController: NavController,
+    historial: Historial
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Silver, shape = RoundedCornerShape(5.dp))
+            .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
+            .padding(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
+        ) {
+            // Columna para pedidos aceptados
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                if (historial.pedidoAceptado) {
+                    Text(
+                        text = "ACEPTADOS",
+                        fontSize = 20.sp,
+                        fontFamily = KiwiMaru,
+                        fontWeight = FontWeight.Bold,
+                        color = seed,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+
+                    Text(text = historial.emailUser)
+                    Text(text = historial.fecha)
+
+
+                    for (souvenir in historial.souvenirs) {
+
+                        Box(
+                            contentAlignment = Alignment.TopEnd,
+                            modifier = Modifier
+                                .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
+                        ) {
+                            // Imagen
+                            SubcomposeAsyncImage(
+                                model = ImageRequest.Builder(context = LocalContext.current)
+                                    .data(souvenir.url)
+                                    .build(),
+                                loading = { CircularProgressIndicator() },
+                                contentDescription = souvenir.nombre,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+
+                            )
+                        }
+
+                        Text(
+                            text = "Referencia: ${souvenir.referencia}",
+                            fontSize = 20.sp,
+                            fontFamily = KiwiMaru,
+                            color = RaisanBlack,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Text(
+                            text = souvenir.nombre,
+                            fontSize = 15.sp,
+                            fontFamily = KiwiMaru,
+                            color = RaisanBlack,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Text(
+                            text = "Cantidad: ${souvenir.cantidad}",
+                            fontSize = 15.sp,
+                            fontFamily = KiwiMaru,
+                            color = RaisanBlack,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Text(
+                            text = "precio: ${souvenir.precio}€",
+                            fontSize = 15.sp,
+                            fontFamily = KiwiMaru,
+                            color = RaisanBlack,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Spacer(modifier = Modifier.padding(bottom = 50.dp))
+                    }
+                }
+            }
+
+        }
+    }
+}
 /**
  * Caja usuarios
  *

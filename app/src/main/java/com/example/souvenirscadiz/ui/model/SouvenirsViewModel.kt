@@ -4,16 +4,14 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Fecha
+import com.example.souvenirscadiz.data.model.Historial
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
-import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -62,6 +60,9 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     private val _souvenirPedidos = MutableStateFlow<List<Pedido>>(emptyList())
     val souvenirPedidos: StateFlow<List<Pedido>> =  _souvenirPedidos
+
+    private val _pedidoHistorial = MutableStateFlow<List<Historial>>(emptyList())
+    val pedidoHistorial: StateFlow<List<Historial>> =  _pedidoHistorial
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
@@ -450,6 +451,33 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         }
     }
 
+    fun saveSouvenirInHistorial(onSuccess:() -> Unit, pedido: Pedido){
+        viewModelScope.launch {
+            try {
+                val newPedido = hashMapOf(
+                    "emailUser" to pedido.emailUser,
+                    "fecha" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()).toString(),
+                    "pedido" to pedido.souvenirs,
+                    "pedidoAceptado" to pedido.pedidoAceptado,
+                    "pedidoCancelado" to pedido.pedidoCancelado
+                )
+                //se guardan todos los souvenirs de la lista de _souvenirCarrito
+
+                firestore.collection("Historial")
+                    .add(newPedido)
+                    .addOnSuccessListener {
+                        onSuccess()
+                        Log.d("Error save","Se guardó el pedido")
+                    }.addOnFailureListener{
+                        Log.d("Save error","Error al guardar pedido")
+                    }
+            }catch (e:Exception){
+                Log.d("Error al guardar souvenir","Error al guardar Pedido")
+            }
+        }
+    }
+
+
 
     /**
      * Delete souvenir in fav
@@ -601,6 +629,28 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                             document.toObject(Pedido::class.java)
                         }
                         _souvenirPedidos.value = pedidosList
+                    } else {
+                        Log.d("Error SL", "QuerySnapshot es nulo")
+                    }
+                }
+        }
+    }
+
+
+
+    fun fetchSouvenirsHistorial() {
+        viewModelScope.launch(Dispatchers.IO) {
+            firestore.collection("Historial")
+                .addSnapshotListener { querySnapshot, error ->
+                    if (error != null) {
+                        Log.d("Error SL", "Error al obtener los datos: ${error.message}")
+                        return@addSnapshotListener
+                    }
+                    if (querySnapshot != null) {
+                        val pedidosList = querySnapshot.documents.mapNotNull { document ->
+                            document.toObject(Historial::class.java)
+                        }
+                        _pedidoHistorial.value = pedidosList
                     } else {
                         Log.d("Error SL", "QuerySnapshot es nulo")
                     }

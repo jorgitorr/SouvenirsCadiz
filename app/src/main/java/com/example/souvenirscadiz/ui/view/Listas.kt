@@ -228,6 +228,26 @@ fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: Souve
 }
 
 
+
+@Composable
+fun SouvenirsListHistorial(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    val souvenirsHistorial by souvenirsViewModel.pedidoHistorial.collectAsState()
+
+    if(souvenirsHistorial.isEmpty()){
+        Text(text = "No hay ningún pedido",
+            fontFamily = KiwiMaru)
+    }else{
+        LazyColumn{
+            items(souvenirsHistorial){ historial ->
+                CajaHistorial(
+                    navController,
+                    historial)
+            }
+        }
+    }
+}
+
+
 /**
  * Usuarios list
  *

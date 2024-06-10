@@ -14,17 +14,11 @@ import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Silver
 
-/**
- * Pedidos
- *
- * @param souvenirsViewModel
- * @param navController
- * @param loginViewModel
- */
 @Composable
-fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+fun Historial(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){
     LaunchedEffect(true){
         souvenirsViewModel.fetchSouvenirsPedido()
+        souvenirsViewModel.fetchSouvenirsHistorial()
     }
 
     Scaffold(
@@ -41,14 +35,7 @@ fun Pedidos(souvenirsViewModel: SouvenirsViewModel, navController: NavController
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            SouvenirsListPedidos(navController, souvenirsViewModel)
+            SouvenirsListHistorial(navController, souvenirsViewModel)
         }
     }
-
 }
-
-
-
-
-
-

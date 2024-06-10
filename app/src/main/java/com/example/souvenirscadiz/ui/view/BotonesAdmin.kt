@@ -206,6 +206,7 @@ fun AceptarPedido(souvenirsViewModel: SouvenirsViewModel, pedido: Pedido){
                 .clickable {
                     pedido.pedidoAceptado = !pedido.pedidoAceptado
                     Log.d("PedidoAceptado",pedido.pedidoAceptado.toString())
+                    souvenirsViewModel.saveSouvenirInHistorial({},pedido)
                     if(pedido.pedidoAceptado){
                         souvenirsViewModel.deletePedido( {
                             Toast.makeText(

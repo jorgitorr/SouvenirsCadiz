@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PersonSearch
@@ -85,8 +86,8 @@ fun FooterAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                //favoritos
-                Icon(
+
+                /*Icon(
                     imageVector = Icons.Default.PersonSearch,
                     contentDescription = "Usuarios",
                     tint = if(selectedItem=="Usuarios") Cerulean else RaisanBlack,
@@ -97,7 +98,22 @@ fun FooterAdmin(navController: NavController, souvenirsViewModel: SouvenirsViewM
                             navController.navigate("Usuarios")
                         }
                 )
-                Text("Users")
+                Text("Users")*/
+
+                Icon(
+                    imageVector = Icons.Default.History,
+                    contentDescription = "Historial",
+                    tint = if(selectedItem=="Historial") Cerulean else RaisanBlack,
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
+                        .clickable {
+                            souvenirsViewModel.setSelectedItem("Historial")
+                            navController.navigate("Historial")
+                        }
+                )
+                Text("History")
+
+
             }
 
             Column(
