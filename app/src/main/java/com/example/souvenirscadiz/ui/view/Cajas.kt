@@ -588,58 +588,5 @@ fun CajaHistorial(
         }
     }
 }
-/**
- * Caja usuarios
- *
- * @param user
- */
-@Composable
-fun CajaUsuarios(user:User, loginViewModel: LoginViewModel){
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Silver, shape = RoundedCornerShape(5.dp))
-            .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
-            .padding(8.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-
-                Text(
-                    text = user.email,
-                    fontSize = 14.sp,
-                    color = RaisanBlack,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
-
-                Text(
-                    text = user.username,
-                    fontSize = 14.sp,
-                    color = RaisanBlack,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    EliminarUser(user, loginViewModel)//boton que permite eliminar al usuario seleccionado
-                }
-            }
-        }
-    }
-}
 
 

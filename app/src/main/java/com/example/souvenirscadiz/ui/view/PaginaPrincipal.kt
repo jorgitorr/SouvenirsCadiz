@@ -76,7 +76,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Row(modifier = Modifier.fillMaxWidth()){
-                Search(souvenirsViewModel, navController) /* buscador */
+                Buscador(souvenirsViewModel, navController) /* buscador */
                 Icon(
                     imageVector = Icons.Default.FilterList,
                     contentDescription = "Filtrar",
@@ -214,7 +214,6 @@ fun Filtro(
                         Text(text = "Filtrar")
                     }
                 }
-
 
                 }
             }

@@ -27,7 +27,6 @@ import com.example.souvenirscadiz.ui.view.Filtro
 import com.example.souvenirscadiz.ui.view.Historial
 import com.example.souvenirscadiz.ui.view.ModificarSouvenir
 import com.example.souvenirscadiz.ui.view.TargetPage
-import com.example.souvenirscadiz.ui.view.Usuarios
 
 /**
  * navManager que permite la navegacion entre páginas

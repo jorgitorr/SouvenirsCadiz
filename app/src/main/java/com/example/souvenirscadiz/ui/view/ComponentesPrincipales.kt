@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -50,12 +48,10 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Fecha
-import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Cerulean
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
-import com.example.souvenirscadiz.ui.theme.KleeOne
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Redwood
@@ -218,51 +214,66 @@ fun Header(navController: NavController, souvenirsViewModel: SouvenirsViewModel)
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Search(souvenirsViewModel: SouvenirsViewModel, navController: NavController){
+fun Buscador(souvenirsViewModel: SouvenirsViewModel, navController: NavController) {
     val active by souvenirsViewModel.active.collectAsState()
     val query by souvenirsViewModel.query.collectAsState()
     val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
 
+    val filteredSouvenirs = if (query.isNotEmpty()) {
+        souvenirs.filter { it.nombre.contains(query, ignoreCase = true) }
+    } else {
+        souvenirs
+    }
+
+    // Actualiza los souvenirs filtrados en el ViewModel si es necesario
+    LaunchedEffect(filteredSouvenirs) {
+        souvenirsViewModel.souvenirsFiltrados(filteredSouvenirs)
+    }
+
     SearchBar(
-        modifier = Modifier.width(345.dp)
+        modifier = Modifier
+            .width(345.dp)
             .padding(start = 25.dp),
         query = query,
-        onQueryChange = { souvenirsViewModel.setQuery(it) }, // DCS - Actualiza el texto de búsqueda en el ViewModel.
-        onSearch = { souvenirsViewModel.setActive(false) }, // DCS - Desactiva la búsqueda al presionar el botón de búsqueda.
+        onQueryChange = { souvenirsViewModel.setQuery(it) },
+        onSearch = { souvenirsViewModel.setActive(false) },
         active = active,
-        onActiveChange = { souvenirsViewModel.setActive(it) }, // DCS - Actualiza el estado de activación de la búsqueda.
+        onActiveChange = { souvenirsViewModel.setActive(it) },
         placeholder = {
-            Text(text = "Search",
-            color = if(isSystemInDarkTheme()) Silver else RaisanBlack)}, // DCS - Muestra un texto placeholder en la barra de búsqueda.
+            Text(
+                text = "Search",
+                color = if (isSystemInDarkTheme()) Silver else RaisanBlack
+            )
+        },
         leadingIcon = {
             Icon(imageVector = Icons.Default.Search, contentDescription = "BUSCADOR")
         },
         trailingIcon = {
-            Icon(imageVector = Icons.Default.Close, contentDescription = "CERRAR",
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "CERRAR",
                 modifier = Modifier.clickable {
                     souvenirsViewModel.setActive(false)
-                    souvenirsViewModel.setQuery("") }
+                    souvenirsViewModel.setQuery("")
+                }
             )
         }
     ) {
-        if(query.isNotEmpty()){
-            val filterName = souvenirs.filter { it.nombre.contains(query,ignoreCase = true) }
-
-            filterName.forEach{
-                Text(text = it.nombre,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = KiwiMaru,
-                    color = if(isSystemInDarkTheme()) White else RaisanBlack,
-                    modifier = Modifier
-                        .padding(bottom = 10.dp, start = 10.dp)
-                        .clickable { navController.navigate("SouvenirDetail/${it.referencia}") }
-                )
-            }
+        filteredSouvenirs.forEach { souvenir ->
+            Text(
+                text = souvenir.nombre,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = KiwiMaru,
+                color = if (isSystemInDarkTheme()) White else RaisanBlack,
+                modifier = Modifier
+                    .padding(bottom = 10.dp, start = 10.dp)
+                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+            )
         }
-
     }
 }
+
 
 
 @Composable

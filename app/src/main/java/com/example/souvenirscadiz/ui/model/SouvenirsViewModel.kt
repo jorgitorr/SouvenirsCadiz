@@ -42,8 +42,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
     private val imageRepository = CloudStorageManager()
 
+
+
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
+
 
     private val _souvenirsFiltrados = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsFiltrados = _souvenirsFiltrados
@@ -163,6 +166,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
 
+
+
     /**
      * Borrar souvenir
      *
@@ -280,6 +285,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      */
     fun setSelectedItem(elementoSeleccionado:String){
         selectedItem.value = elementoSeleccionado
+    }
+
+
+    fun souvenirsFiltrados(souvenirsList: List<Souvenir>){
+        _souvenirsFiltrados.value = souvenirsList
     }
 
 

@@ -247,24 +247,3 @@ fun SouvenirsListHistorial(navController: NavController, souvenirsViewModel: Sou
     }
 }
 
-
-/**
- * Usuarios list
- *
- * @param loginViewModel
- */
-@Composable
-fun UsuariosList(loginViewModel: LoginViewModel){
-    val users by loginViewModel.users.collectAsState()
-
-    if(users.isEmpty()){
-        Text(text = "No hay usuarios registrados",
-            fontFamily = KiwiMaru)
-    }else{
-        LazyColumn{
-            items(users){ user ->
-                CajaUsuarios(user, loginViewModel)
-            }
-        }
-    }
-}

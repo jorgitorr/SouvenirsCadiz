@@ -35,11 +35,15 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
@@ -70,43 +74,12 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Search(souvenirsViewModel, navController)//buscador
+            Buscador(souvenirsViewModel, navController)//buscador
             SouvenirsList(navController, souvenirsViewModel, loginViewModel)//lista de souvenirs
         }
     }
 }
 
-/**
- * Usuarios
- *
- * @param souvenirsViewModel
- * @param navController
- * @param loginViewModel
- */
-@Composable
-fun Usuarios(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
-    LaunchedEffect(true){
-        loginViewModel.fetchUsers()
-    }
-    Scaffold(
-        topBar = {
-            HeaderAdmin(navController, souvenirsViewModel)
-        },
-        bottomBar = {
-            FooterAdmin(navController,souvenirsViewModel, loginViewModel)
-        }, containerColor = Silver
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .background(Silver),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            SearchUsuarios(loginViewModel, navController)
-            UsuariosList(loginViewModel)
-        }
-    }
-}
 
 
 /**
@@ -124,6 +97,8 @@ fun AnadirSouvenir(
     navController: NavController,
     cloudStorageManager: CloudStorageManager
 ) {
+
+    val souvenirList by souvenirsViewModel.souvenirs.collectAsState()
     val context = LocalContext.current
     var nombre by souvenirsViewModel.nombre
     var referencia by souvenirsViewModel.referencia
@@ -188,8 +163,13 @@ fun AnadirSouvenir(
 
             OutlinedTextField(
                 value = precio,
-                onValueChange = { precio = it },
+                onValueChange = {
+                    if (it.all { char -> char.isDigit() }) {
+                        precio = it
+                    }
+                },
                 label = { Text("Precio del souvenir", fontFamily = KiwiMaru) },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
@@ -232,10 +212,33 @@ fun AnadirSouvenir(
 
             Button(
                 onClick = {
-                    souvenirsViewModel.saveSouvenir {
-                        Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT).show()
+                    //comprobacion
+                    if (nombre.trim().isEmpty()) {
+                        Toast.makeText(context, "Por favor, introduzca el nombre del souvenir", Toast.LENGTH_SHORT).show()
+                    } else if (referencia.trim().isEmpty()) {
+                        Toast.makeText(context, "Por favor, introduzca la referencia del souvenir", Toast.LENGTH_SHORT).show()
+                    } else if(precio.trim().isEmpty()){
+                        Toast.makeText(context, "Por favor, introduzca el precio del souvenir", Toast.LENGTH_SHORT).show()
+                    } else if(stock.trim().isEmpty()){
+                        Toast.makeText(context, "Por favor, introduzca el stock del souvenir", Toast.LENGTH_SHORT).show()
+                    } else if(tipo.isEmpty() || tipo == "TODOS"){
+                        Toast.makeText(context, "Por favor, seleccione un tipo", Toast.LENGTH_SHORT).show()
+                    } else if (selectedImageUri == null) {
+                        Toast.makeText(context, "Por favor, seleccione una imagen del souvenir", Toast.LENGTH_SHORT).show()
                     }
-                    navController.navigate("PrincipalAdmin")
+                    else{
+                        //comprueba si ya existe un souvenir con la misma referencia
+                        val isDuplicated = souvenirList.any{it.referencia == referencia}
+
+                        if (isDuplicated) {
+                            Toast.makeText(context, "Un souvenir con esta referencia ya existe", Toast.LENGTH_SHORT).show()
+                        }else{
+                            souvenirsViewModel.saveSouvenir {
+                                Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT).show()
+                            }
+                            navController.navigate("PrincipalAdmin")
+                        }
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(Redwood),
                 modifier = Modifier
@@ -264,11 +267,13 @@ fun ModificarSouvenir(
 ) {
 
     val souvenir = souvenirsViewModel.getByReference(referencia)
-
     var nombre by souvenirsViewModel.nombre
     var referenciaS by souvenirsViewModel.referencia
     var precio by souvenirsViewModel.precio
     var stock by souvenirsViewModel.stock
+    val context = LocalContext.current
+
+
 
     Scaffold(
         topBar = {
@@ -331,10 +336,21 @@ fun ModificarSouvenir(
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
             )
-            
+
+
             Button(onClick = {
-                souvenirsViewModel.modificaSouvenir(souvenir)
-                navController.navigate("Principal")
+                if (nombre.trim().isEmpty()) {
+                    Toast.makeText(context, "Por favor, introduzca el nombre del souvenir", Toast.LENGTH_SHORT).show()
+                } else if (referencia.trim().isEmpty()) {
+                    Toast.makeText(context, "Por favor, introduzca la referencia del souvenir", Toast.LENGTH_SHORT).show()
+                } else if (precio.trim().isEmpty()) {
+                    Toast.makeText(context, "Por favor, introduzca el precio del souvenir", Toast.LENGTH_SHORT).show()
+                } else if (stock.trim().isEmpty()) {
+                    Toast.makeText(context, "Por favor, introduzca el stock del souvenir", Toast.LENGTH_SHORT).show()
+                }else{
+                    souvenirsViewModel.modificaSouvenir(souvenir)
+                    navController.navigate("Principal")
+                }
             }) {
                 Text(text = "MODIFICAR",
                     fontFamily = KiwiMaru)

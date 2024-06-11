@@ -20,10 +20,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,12 +38,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
@@ -47,6 +53,7 @@ import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.Cerulean
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.KneWave
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
@@ -57,6 +64,28 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 
+
+/**
+ * Boton ir hacia atras
+ *
+ * @param souvenirsViewModel
+ * @param navController
+ */
+@Composable
+fun BotonIrHaciaAtras(navController: NavController, souvenirsViewModel: SouvenirsViewModel){
+    Row (modifier = Modifier.padding(end = 300.dp)){
+        Icon(
+            imageVector = Icons.Default.ArrowBackIosNew,
+            contentDescription = "Back",
+            tint = RaisanBlack,
+            modifier = Modifier
+                .clickable {
+                    navController.navigate("Principal")
+                    souvenirsViewModel.setSelectedItem("Principal")
+                }
+        )
+    }
+}
 
 /**
  * Perfil
@@ -187,6 +216,9 @@ fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginVi
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        BotonIrHaciaAtras(navController, souvenirsViewModel)
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -204,7 +236,7 @@ fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginVi
             Text(
                 text = "SOUVENIRS CADIZ",
                 fontFamily = KneWave,
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 modifier = Modifier.padding(end = 100.dp) // Agrega un padding opcional para el margen derecho
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -252,6 +284,8 @@ fun Registro(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewMo
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        BotonIrHaciaAtras(navController, souvenirsViewModel)
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
