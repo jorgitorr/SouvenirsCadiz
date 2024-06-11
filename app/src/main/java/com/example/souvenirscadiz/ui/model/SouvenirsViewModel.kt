@@ -9,7 +9,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.souvenirscadiz.data.model.Fecha
-import com.example.souvenirscadiz.data.model.Historial
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.util.CloudStorageManager
@@ -61,8 +60,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private val _souvenirPedidos = MutableStateFlow<List<Pedido>>(emptyList())
     val souvenirPedidos: StateFlow<List<Pedido>> =  _souvenirPedidos
 
-    private val _pedidoHistorial = MutableStateFlow<List<Historial>>(emptyList())
-    val pedidoHistorial: StateFlow<List<Historial>> =  _pedidoHistorial
+    private val _pedidoHistorial = MutableStateFlow<List<Pedido>>(emptyList())
+    val pedidoHistorial: StateFlow<List<Pedido>> =  _pedidoHistorial
 
     private val auth: FirebaseAuth by lazy { Firebase.auth }
     private val firestore = Firebase.firestore
@@ -457,7 +456,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 val newPedido = hashMapOf(
                     "emailUser" to pedido.emailUser,
                     "fecha" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()).toString(),
-                    "pedido" to pedido.souvenirs,
+                    "souvenirs" to pedido.souvenirs,
                     "pedidoAceptado" to pedido.pedidoAceptado,
                     "pedidoCancelado" to pedido.pedidoCancelado
                 )
@@ -639,22 +638,21 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
 
 
     fun fetchSouvenirsHistorial() {
-        viewModelScope.launch(Dispatchers.IO) {
-            firestore.collection("Historial")
-                .addSnapshotListener { querySnapshot, error ->
-                    if (error != null) {
-                        Log.d("Error SL", "Error al obtener los datos: ${error.message}")
-                        return@addSnapshotListener
-                    }
-                    if (querySnapshot != null) {
-                        val pedidosList = querySnapshot.documents.mapNotNull { document ->
-                            document.toObject(Historial::class.java)
-                        }
-                        _pedidoHistorial.value = pedidosList
-                    } else {
-                        Log.d("Error SL", "QuerySnapshot es nulo")
+        viewModelScope.launch {
+            try {
+                val collection = firestore.collection("Historial").get().await()
+                val historialList = mutableListOf<Pedido>()
+                for (document in collection) {
+                    document?.let {
+                        val pedido = it.toObject(Pedido::class.java)
+                        historialList.add(pedido)
                     }
                 }
+                Log.d("HistorialViewModel", "Pedidos obtenidos: $historialList")
+                _pedidoHistorial.value = historialList
+            } catch (e: Exception) {
+                Log.e("HistorialViewModel", "Error al obtener los pedidos", e)
+            }
         }
     }
 

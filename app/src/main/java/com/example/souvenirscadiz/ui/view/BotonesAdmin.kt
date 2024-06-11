@@ -166,7 +166,7 @@ fun EliminarPedido(souvenirsViewModel: SouvenirsViewModel, pedido: Pedido, ){
                 .size(30.dp)
                 .clickable {
                     pedido.pedidoCancelado = !pedido.pedidoCancelado
-                    Log.d("pedidoCancelado",pedido.pedidoCancelado.toString())
+                    souvenirsViewModel.saveSouvenirInHistorial({},pedido)
                     if(pedido.pedidoCancelado){
                         souvenirsViewModel.deletePedido ({
                             Toast.makeText(

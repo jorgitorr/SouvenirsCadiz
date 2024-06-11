@@ -1,6 +1,6 @@
 package com.example.souvenirscadiz.ui.view
 
-import android.os.Debug
+
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,7 +43,6 @@ import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.example.souvenirscadiz.data.model.Historial
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.model.User
@@ -385,7 +385,7 @@ fun CajaPedido(
 @Composable
 fun CajaHistorial(
     navController: NavController,
-    historial: Historial
+    pedido: Pedido
 ) {
     Box(
         modifier = Modifier
@@ -407,7 +407,7 @@ fun CajaHistorial(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                if (historial.pedidoAceptado) {
+                if (pedido.pedidoAceptado) {
                     Text(
                         text = "ACEPTADOS",
                         fontSize = 20.sp,
@@ -416,12 +416,109 @@ fun CajaHistorial(
                         color = seed,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
+                    Text(
+                        text = pedido.emailUser,
+                        fontSize = 20.sp,
+                        fontFamily = KiwiMaru,
+                        color = RaisanBlack,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                    Text(
+                        text = pedido.fecha,
+                        fontSize = 20.sp,
+                        fontFamily = KiwiMaru,
+                        color = RaisanBlack,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
 
-                    Text(text = historial.emailUser)
-                    Text(text = historial.fecha)
+
+                    for (souvenir in pedido.souvenirs) {
+                        Log.d("souvenirReferencia",souvenir.referencia)
+
+                        Box(
+                            contentAlignment = Alignment.TopEnd,
+                            modifier = Modifier
+                                .border(1.dp, RaisanBlack, shape = RoundedCornerShape(5.dp))
+                        ) {
+                            // Imagen
+                            SubcomposeAsyncImage(
+                                model = ImageRequest.Builder(context = LocalContext.current)
+                                    .data(souvenir.url)
+                                    .build(),
+                                loading = { CircularProgressIndicator() },
+                                contentDescription = souvenir.nombre,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+
+                            )
+                        }
+
+                        Text(
+                            text = "Referencia: ${souvenir.referencia}",
+                            fontSize = 20.sp,
+                            fontFamily = KiwiMaru,
+                            color = RaisanBlack,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Text(
+                            text = souvenir.nombre,
+                            fontSize = 15.sp,
+                            fontFamily = KiwiMaru,
+                            color = RaisanBlack,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Text(
+                            text = "Cantidad: ${souvenir.cantidad}",
+                            fontSize = 15.sp,
+                            fontFamily = KiwiMaru,
+                            color = RaisanBlack,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Text(
+                            text = "precio: ${souvenir.precio}€",
+                            fontSize = 15.sp,
+                            fontFamily = KiwiMaru,
+                            color = RaisanBlack,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        Spacer(modifier = Modifier.padding(bottom = 50.dp))
+                    }
+                }
+
+                if (pedido.pedidoCancelado) {
+                    Text(
+                        text = "CANCELADOS",
+                        fontSize = 20.sp,
+                        fontFamily = KiwiMaru,
+                        fontWeight = FontWeight.Bold,
+                        color = seed,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+
+                    Text(text = pedido.emailUser)
+                    Text(text = pedido.fecha)
 
 
-                    for (souvenir in historial.souvenirs) {
+                    for (souvenir in pedido.souvenirs) {
+                        Log.d("souvenirReferencia",souvenir.referencia)
 
                         Box(
                             contentAlignment = Alignment.TopEnd,

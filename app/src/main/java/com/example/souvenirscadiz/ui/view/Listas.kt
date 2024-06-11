@@ -238,10 +238,10 @@ fun SouvenirsListHistorial(navController: NavController, souvenirsViewModel: Sou
             fontFamily = KiwiMaru)
     }else{
         LazyColumn{
-            items(souvenirsHistorial){ historial ->
+            items(souvenirsHistorial){ pedido ->
                 CajaHistorial(
                     navController,
-                    historial)
+                    pedido)
             }
         }
     }

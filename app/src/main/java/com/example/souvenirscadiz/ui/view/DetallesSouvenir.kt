@@ -82,7 +82,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                         .height(345.dp)
                         .padding(5.dp)
                         .border(1.dp, RaisanBlack)
-                        .clickable { navController.navigate("SouvenirDetail/${souvenir.referencia}") }
+                        .clickable { /*navController.navigate("SouvenirDetail/${souvenir.referencia}")*/ }
                 )
 
                 if(!loginViewModel.checkAdmin()){
