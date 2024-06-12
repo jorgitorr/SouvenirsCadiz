@@ -21,6 +21,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.souvenirscadiz.R
+import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -36,7 +37,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param loginViewModel
  */
 @Composable
-fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel) {
+fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, cloudStorageManager: CloudStorageManager) {
     val souvenirs by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
     val souvenirsFiltrados by souvenirsViewModel.souvenirsFiltrados.collectAsState()
 
@@ -44,14 +45,14 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
         LazyColumn {
             items(souvenirs) { souvenir ->
                 souvenirsViewModel.checkSouvenirIsSaved(souvenir)
-                Caja(navController, souvenir, souvenirsViewModel, loginViewModel)
+                Caja(navController, souvenir, souvenirsViewModel, loginViewModel, cloudStorageManager)
             }
         }
     }else{
         LazyColumn{
             items(souvenirsFiltrados) { souvenir ->
                 souvenirsViewModel.checkSouvenirIsSaved(souvenir)
-                Caja(navController, souvenir, souvenirsViewModel, loginViewModel)
+                Caja(navController, souvenir, souvenirsViewModel, loginViewModel, cloudStorageManager)
             }
         }
     }
@@ -66,7 +67,8 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
  * @param loginViewModel
  */
 @Composable
-fun SouvenirsListFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
+fun SouvenirsListFav(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel,
+                     cloudStorageManager: CloudStorageManager){
     val context = LocalContext.current
     val souvenirSaved by souvenirsViewModel.souvenirFav.collectAsState()
     val soundEffect = MediaPlayer.create(context, R.raw.angry_start_sound)
@@ -119,7 +121,8 @@ fun SouvenirsListFav(navController: NavController, souvenirsViewModel: Souvenirs
                 Caja(navController,
                     souvenir,
                     souvenirsViewModel,
-                    loginViewModel)
+                    loginViewModel,
+                    cloudStorageManager)
             }
         }
     }

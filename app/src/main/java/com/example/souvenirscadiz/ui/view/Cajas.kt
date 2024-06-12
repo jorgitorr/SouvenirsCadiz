@@ -33,7 +33,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,7 +44,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
-import com.example.souvenirscadiz.data.model.User
+import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -64,8 +63,8 @@ import com.example.souvenirscadiz.ui.theme.seed
  * @param loginViewModel
  */
 @Composable
-fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel){
-
+fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel,
+         loginViewModel: LoginViewModel, cloudStorageManager:CloudStorageManager){
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(color = Silver, shape = RoundedCornerShape(5.dp))
@@ -104,7 +103,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                     ShopingCartButton(souvenir, souvenirsViewModel)
                 }else{
                     ModifyButton(souvenir, navController)
-                    EliminarButton(souvenir, souvenirsViewModel)
+                    EliminarButton(souvenir, souvenirsViewModel, cloudStorageManager)
                 }
 
                 TargetPage(navController, souvenirsViewModel)

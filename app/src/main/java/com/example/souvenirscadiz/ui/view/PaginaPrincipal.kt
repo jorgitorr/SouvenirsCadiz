@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.data.model.Tipo
+import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -46,7 +47,7 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param loginViewModel
  */
 @Composable
-fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel, cloudStorageManager:CloudStorageManager){
     LaunchedEffect(Unit){
         souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
         souvenirsViewModel.fetchSouvenirsCarrito() //devuelve los souvenirs guardados en carritos
@@ -87,7 +88,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                 )
             }
             //ActiveEvent(souvenirsViewModel)
-            SouvenirsList(navController, souvenirsViewModel, loginViewModel)//lista de souvenirs
+            SouvenirsList(navController, souvenirsViewModel, loginViewModel, cloudStorageManager)//lista de souvenirs
         }
     }
 }

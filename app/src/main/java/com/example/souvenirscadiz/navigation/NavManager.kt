@@ -40,10 +40,10 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
 
     NavHost(navController = navController, startDestination = "Principal"){
         composable("Principal"){
-            Principal(souvenirsViewModel, navController, loginViewModel)
+            Principal(souvenirsViewModel, navController, loginViewModel, cloudStorageManager)
         }
         composable("Favoritos"){
-            Favoritos(souvenirsViewModel, navController, loginViewModel)
+            Favoritos(souvenirsViewModel, navController, loginViewModel, cloudStorageManager)
         }
         composable("Perfil"){
             Perfil(loginViewModel, navController, souvenirsViewModel, cloudStorageManager)
@@ -70,7 +70,7 @@ fun NavManager(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginView
             DetallesLogo(souvenirsViewModel, navController, loginViewModel)
         }
         composable("PrincipalAdmin"){
-            AdminPrincipal(souvenirsViewModel, navController, loginViewModel)
+            AdminPrincipal(souvenirsViewModel, navController, loginViewModel, cloudStorageManager)
         }
         composable("Pedidos"){
             Pedidos(souvenirsViewModel, navController, loginViewModel)

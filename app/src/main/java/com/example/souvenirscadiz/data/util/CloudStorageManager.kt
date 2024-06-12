@@ -21,9 +21,10 @@ class CloudStorageManager {
     }
 
 
-
     /**
-     * @return link de las imagenes de los souvenirs
+     * Get souvenirs images
+     *
+     * @return
      */
 
     suspend fun getSouvenirsImages():List<String>{
@@ -39,6 +40,14 @@ class CloudStorageManager {
     }
 
 
+    /**
+     * Upload img profile
+     *
+     * @param uid
+     * @param uri
+     * @param callback
+     * @receiver
+     */
     fun uploadImgProfile(uid: String, uri: Uri, callback: (Boolean, String) -> Unit) {
         val storageRef = FirebaseStorage.getInstance().reference
         val profileImageRef = storageRef.child("profile_images/$uid.jpg")
@@ -57,6 +66,15 @@ class CloudStorageManager {
     }
 
 
+    /**
+     * Upload img souvenir
+     *
+     * @param souvenirsViewModel
+     * @param uri
+     * @param callback
+     * @receiver
+     */
+
     fun uploadImgSouvenir(souvenirsViewModel: SouvenirsViewModel, uri: Uri, callback: (Boolean, String) -> Unit) {
         val storageRef = FirebaseStorage.getInstance().reference
         val profileImageRef = storageRef.child("souvenirs/${souvenirsViewModel.souvenirs.value.size}")
@@ -72,6 +90,24 @@ class CloudStorageManager {
             .addOnFailureListener {
                 callback(false, "")
             }
+    }
+
+
+    /**
+     * Delete image
+     *
+     * @param imageUrl
+     * @param callback
+     * @receiver
+     */
+
+    fun deleteImage(imageUrl: String, callback: (Boolean) -> Unit) {
+        val photoRef = storage.getReferenceFromUrl(imageUrl)
+        photoRef.delete().addOnSuccessListener {
+            callback(true)
+        }.addOnFailureListener {
+            callback(false)
+        }
     }
 
 

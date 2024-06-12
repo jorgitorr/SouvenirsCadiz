@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
+import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -239,7 +240,12 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
     }
 }
 
-
+/**
+ * Modify button
+ *
+ * @param souvenir
+ * @param navController
+ */
 @Composable
 fun ModifyButton(souvenir: Souvenir, navController: NavController) {
     var onModify by remember { mutableStateOf(souvenir.favorito) }
@@ -260,26 +266,32 @@ fun ModifyButton(souvenir: Souvenir, navController: NavController) {
     }
 }
 
-
+/**
+ * Eliminar button
+ *
+ * @param souvenir
+ * @param souvenirsViewModel
+ */
 @Composable
-fun EliminarButton(souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel) {
+fun EliminarButton(souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel, cloudStorageManager: CloudStorageManager) {
     var onModify by remember { mutableStateOf(souvenir.favorito) }
-    var context = LocalContext.current
+    val context = LocalContext.current
 
     IconToggleButton(
         checked = onModify,
         onCheckedChange = {
             onModify = !onModify
-            souvenirsViewModel.eliminarSouvenir(souvenir
-            ) {
-                Toast.makeText(
-                    context,
-                    "Has eliminado un souvenir",
-                    Toast.LENGTH_SHORT
-                ).show()
+            cloudStorageManager.deleteImage(souvenir.url) { success ->
+                if (success) {
+                    souvenirsViewModel.eliminarSouvenir(souvenir) {
+                        Toast.makeText(context, "Has eliminado un souvenir", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(context, "Error al eliminar la imagen del souvenir", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
-        ,modifier = Modifier.padding(top = 280.dp, end = 340.dp)
+        },
+        modifier = Modifier.padding(top = 280.dp, end = 340.dp)
     ) {
         Icon(
             tint = if (!onModify) RaisanBlack else Redwood,

@@ -37,13 +37,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
@@ -59,7 +56,8 @@ import com.example.souvenirscadiz.ui.theme.Redwood
  * @param loginViewModel
  */
 @Composable
-fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel,
+                   cloudStorageManager: CloudStorageManager){
     Scaffold(
         topBar = {
             HeaderAdmin(navController, souvenirsViewModel)
@@ -75,7 +73,7 @@ fun AdminPrincipal(souvenirsViewModel: SouvenirsViewModel, navController: NavCon
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Buscador(souvenirsViewModel, navController)//buscador
-            SouvenirsList(navController, souvenirsViewModel, loginViewModel)//lista de souvenirs
+            SouvenirsList(navController, souvenirsViewModel, loginViewModel, cloudStorageManager)//lista de souvenirs
         }
     }
 }
@@ -164,7 +162,7 @@ fun AnadirSouvenir(
             OutlinedTextField(
                 value = precio,
                 onValueChange = {
-                    if (it.all { char -> char.isDigit() }) {
+                    if (it.all { char -> char.isDigit() || char == ',' || char == '.' }) {
                         precio = it
                     }
                 },
@@ -177,8 +175,12 @@ fun AnadirSouvenir(
 
             OutlinedTextField(
                 value = stock,
-                onValueChange = { stock = it },
+                onValueChange = { if (it.all { char -> char.isDigit()}) {
+                    stock = it
+                    }
+                },
                 label = { Text("Stock del souvenir", fontFamily = KiwiMaru) },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth()
@@ -266,6 +268,8 @@ fun ModificarSouvenir(
     referencia: String
 ) {
 
+    val souvenirList by souvenirsViewModel.souvenirs.collectAsState()
+
     val souvenir = souvenirsViewModel.getByReference(referencia)
     var nombre by souvenirsViewModel.nombre
     var referenciaS by souvenirsViewModel.referencia
@@ -337,20 +341,18 @@ fun ModificarSouvenir(
                     .fillMaxWidth()
             )
 
-
             Button(onClick = {
-                if (nombre.trim().isEmpty()) {
-                    Toast.makeText(context, "Por favor, introduzca el nombre del souvenir", Toast.LENGTH_SHORT).show()
-                } else if (referencia.trim().isEmpty()) {
-                    Toast.makeText(context, "Por favor, introduzca la referencia del souvenir", Toast.LENGTH_SHORT).show()
-                } else if (precio.trim().isEmpty()) {
-                    Toast.makeText(context, "Por favor, introduzca el precio del souvenir", Toast.LENGTH_SHORT).show()
-                } else if (stock.trim().isEmpty()) {
-                    Toast.makeText(context, "Por favor, introduzca el stock del souvenir", Toast.LENGTH_SHORT).show()
-                }else{
+
+                val isDuplicated = souvenirList.any { it.referencia == referencia && it.referencia != souvenir.referencia }
+
+                if (isDuplicated) {
+                    Toast.makeText(context, "Un souvenir con esta referencia ya existe", Toast.LENGTH_SHORT).show()
+                } else {
                     souvenirsViewModel.modificaSouvenir(souvenir)
                     navController.navigate("Principal")
+                    Toast.makeText(context, "Has modificado el souvenir", Toast.LENGTH_SHORT).show()
                 }
+
             }) {
                 Text(text = "MODIFICAR",
                     fontFamily = KiwiMaru)

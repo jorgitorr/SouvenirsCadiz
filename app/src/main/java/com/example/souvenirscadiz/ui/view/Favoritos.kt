@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Silver
@@ -24,7 +24,8 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param loginViewModel
  */
 @Composable
-fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel){
+fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavController, loginViewModel: LoginViewModel,
+              cloudStorageManager: CloudStorageManager){
     Scaffold(
         topBar = {
             if(loginViewModel.checkAdmin()){
@@ -47,7 +48,7 @@ fun Favoritos(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            SouvenirsListFav(navController, souvenirsViewModel, loginViewModel)
+            SouvenirsListFav(navController, souvenirsViewModel, loginViewModel, cloudStorageManager)
             TargetPage(navController, souvenirsViewModel)
         }
     }
