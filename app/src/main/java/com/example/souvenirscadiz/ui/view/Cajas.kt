@@ -91,10 +91,8 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                         .fillMaxWidth()
                         .height(345.dp)
                         .clickable {
-
                             navController.navigate("SouvenirDetail/${souvenir.referencia}")
                             souvenirsViewModel.setSelectedItem("SouvenirDetail")
-
                         }
                 )
 
@@ -121,7 +119,6 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                // Quitamos el modificador de peso del Column
                 Row {
                     Text(
                         text = souvenir.nombre,

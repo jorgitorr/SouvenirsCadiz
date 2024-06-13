@@ -1,14 +1,13 @@
 package com.example.souvenirscadiz.ui.model
 
 import android.net.Uri
-import android.os.Build
 import android.util.Log
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.souvenirscadiz.data.model.Fecha
 import com.example.souvenirscadiz.data.model.Pedido
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.util.CloudStorageManager
@@ -23,8 +22,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -77,6 +74,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var soundPlayedFav by mutableStateOf(true)
     var soundPlayedCarrito by mutableStateOf(true)
 
+    //agregar y modificar souvenir
     var nombre = mutableStateOf("")
     var referencia = mutableStateOf("")
     var precio = mutableStateOf("")
@@ -84,6 +82,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var url = mutableStateOf("")
     var tipo = mutableStateOf("")
     var selectedImageUri  = mutableStateOf<Uri?>(null)
+
+    //filtro
+    var sliderPosition = mutableFloatStateOf(0.0F)
+    var tipoElegido = mutableStateOf<String?>(null)
 
 
 
@@ -253,11 +255,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
 
-
-
-
-
-
     /**
      * Get by reference
      *
@@ -323,7 +320,9 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     "referencia" to referencia.value,
                     "nombre" to nombre.value,
                     "url" to url.value,
-                    "precio" to precio.value
+                    "precio" to precio.value,
+                    "stock" to stock.value,
+                    "tipo" to tipo.value.uppercase()
                 )
                 //tengo que añadir el souvenir a la lista
                 //si el souvenir no es igual a uno de los anteriormente guardados lo guarda
@@ -786,7 +785,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      *
      * @return devuelve la fecha si no hay evento devuelve null
      */
-    fun fechaActualComparison(): Fecha? {
+    /*fun fechaActualComparison(): Fecha? {
         var fecha: Fecha? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
@@ -805,10 +804,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             }
         }
         return fecha
-    }
+    }*/
 
     fun updateSouvenirs(filteredSouvenirs: List<Souvenir>) {
-        _souvenirsFiltrados.value = _souvenirs.value
+        //_souvenirsFiltrados.value = _souvenirs.value
         _souvenirsFiltrados.value = filteredSouvenirs
     }
 

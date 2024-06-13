@@ -26,5 +26,5 @@ data class Souvenir(
     val emailUser:String = "",
     var favorito:Boolean = false,
     var carrito:Boolean = false,
-    var stock:Int = 2000
+    var stock:String = "2000"
 )

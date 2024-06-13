@@ -325,7 +325,7 @@ fun ModificarSouvenir(
                 value = stock,
                 onValueChange = {
                     stock = it
-                    souvenir.stock = stock.toInt()
+                    souvenir.stock = stock
                 },
                 label = { Text("Stock actual: ${souvenir.stock}", fontFamily = KiwiMaru) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

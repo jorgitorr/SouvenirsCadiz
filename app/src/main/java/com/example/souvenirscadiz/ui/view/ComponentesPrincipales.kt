@@ -2,9 +2,9 @@ package com.example.souvenirscadiz.ui.view
 
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -41,9 +41,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,8 +52,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
-import com.example.souvenirscadiz.data.model.Fecha
-import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.Cerulean
@@ -284,47 +279,7 @@ fun Buscador(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
 }
 
 
-/**
- * Eventos box
- *
- * @param fecha
- */
-@Composable
-fun EventosBox(fecha:String){
-    Box(
-        modifier = Modifier
-            .width(350.dp)
-            .height(75.dp)
-            .background(Redwood)
-            .border(width = 2.dp, color = RaisanBlack)
-            .padding(10.dp), // Padding dentro del Box
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "Feliz ${fecha}, 20% en souvenirs".uppercase(),
-            fontFamily = KneWave,
-            color = White,
-            modifier = Modifier.align(Alignment.Center)
-        )
-    }
-}
 
-
-/**
- * Active event
- *
- * @param souvenirsViewModel
- */
-@Composable
-fun ActiveEvent(souvenirsViewModel: SouvenirsViewModel) {
-    when (souvenirsViewModel.fechaActualComparison()) {
-        Fecha.CARNAVAL -> EventosBox(fecha = "Carnavales")
-        Fecha.SEMANA_SANTA -> EventosBox(fecha = "Semana Santa")
-        Fecha.NAVIDAD -> EventosBox(fecha = "Navidad")
-        Fecha.BLACK_FRIDAY -> EventosBox(fecha = "Black Friday")
-        else -> {}
-    }
-}
 
 
 @Composable
@@ -400,10 +355,9 @@ fun Filtro(
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            var sliderPosition by remember { mutableFloatStateOf(0f) }
-            var tipoElegido by remember { mutableStateOf<String?>(null) }
             val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
-
+            var tipoElegido by souvenirsViewModel.tipoElegido
+            var sliderPosition by souvenirsViewModel.sliderPosition
 
             LazyColumn(
                 modifier = Modifier
@@ -451,35 +405,13 @@ fun Filtro(
                     ){
                         Button(
                             onClick = {
-                                val tipoFiltrado = when (tipoElegido) {
-                                    Tipo.LLAVERO.valor -> "LLAVERO"
-                                    Tipo.IMAN.valor -> "IMAN"
-                                    Tipo.ABRIDOR.valor -> "ABRIDOR"
-                                    Tipo.PINS.valor -> "PINS"
-                                    Tipo.CUCHARILLA.valor -> "CUCHARILLA"
-                                    Tipo.CORTAUNIAS.valor -> "CORTAUNIAS"
-                                    Tipo.ADHESIVO.valor -> "ADHESIVO"
-                                    Tipo.ESPEJO.valor -> "ESPEJO"
-                                    Tipo.PASTILLERO.valor -> "PASTILLERO"
-                                    Tipo.SALVAMANTELES.valor -> "SALVAMANTELES"
-                                    Tipo.POSA.valor -> "POSA"
-                                    Tipo.SET.valor -> "SET"
-                                    Tipo.PARCHE.valor -> "PARCHE"
-                                    Tipo.CUBRE_MASCARILLA.valor -> "CUBRE_MASCARILLA"
-                                    Tipo.PLATO.valor -> "PLATO"
-                                    Tipo.BOLA.valor -> "BOLA"
-                                    Tipo.FIGURA.valor -> "FIGURA"
-                                    Tipo.CAMPANA.valor -> "CAMPANA"
-                                    Tipo.DEDAL.valor -> "DEDAL"
-                                    Tipo.ABANICO.valor -> "ABANICO"
-                                    Tipo.ESTUCHE.valor -> "ESTUCHE"
-                                    Tipo.PISAPAPELES.valor -> "PISAPAPELES"
-                                    else -> tipoElegido?.uppercase()
-                                }
+                                Log.d("tipoElegido",tipoElegido.toString())
                                 val filteredSouvenirs = souvenirs.filter { souvenir ->
-                                    (tipoFiltrado == null || souvenir.tipo == tipoFiltrado) && souvenir.precio.toFloat() >= sliderPosition
+                                    souvenir.tipo.equals(tipoElegido.toString(), ignoreCase = true) && souvenir.precio.toFloat() >= sliderPosition
                                 }
+
                                 souvenirsViewModel.updateSouvenirs(filteredSouvenirs)
+                                souvenirsViewModel.setSelectedItem("Principal")
                                 navController.navigate("Principal")
                             }
                         ) {

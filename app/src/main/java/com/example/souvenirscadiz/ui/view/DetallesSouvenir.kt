@@ -136,11 +136,23 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 }
 
                 item{
-                    //precio
                     if(loginViewModel.checkAdmin()){
                         Box(modifier = Modifier
                             .fillMaxWidth()){
                             Text(text = "stock: ${souvenir.stock}",
+                                fontFamily = KiwiMaru,
+                                fontSize = 15.sp,
+                                color = RaisanBlack
+                            )
+                        }
+                    }
+                }
+
+                item{
+                    if(loginViewModel.checkAdmin()){
+                        Box(modifier = Modifier
+                            .fillMaxWidth()){
+                            Text(text = "tipo: ${souvenir.tipo}",
                                 fontFamily = KiwiMaru,
                                 fontSize = 15.sp,
                                 color = RaisanBlack
