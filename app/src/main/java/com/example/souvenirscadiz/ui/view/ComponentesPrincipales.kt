@@ -94,7 +94,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable {
-                            if(selectedItem!="Principal"){
+                            if (selectedItem != "Principal") {
                                 souvenirsViewModel.setSelectedItem("Principal")
                                 navController.navigate("Principal")
                             }
@@ -114,7 +114,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable {
-                            if(selectedItem!="Favoritos"){
+                            if (selectedItem != "Favoritos") {
                                 souvenirsViewModel.setSelectedItem("Favoritos")
                                 navController.navigate("Favoritos")
                             }
@@ -134,7 +134,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                     modifier = Modifier
                         .padding(vertical = 2.dp)
                         .clickable {
-                            if(selectedItem!="Perfil"){
+                            if (selectedItem != "Perfil") {
                                 if (loginViewModel.getCurrentUser() != null) {
                                     navController.navigate("Perfil")
                                 } else {
@@ -246,7 +246,8 @@ fun Buscador(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
         placeholder = {
             Text(
                 text = "Search",
-                color = if (isSystemInDarkTheme()) Silver else RaisanBlack
+                color = if (isSystemInDarkTheme()) White else RaisanBlack,
+                fontFamily = KiwiMaru
             )
         },
         leadingIcon = {

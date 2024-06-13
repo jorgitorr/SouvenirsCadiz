@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
+import com.example.souvenirscadiz.ui.theme.RaisanBlack
 import com.example.souvenirscadiz.ui.theme.Silver
 
 
@@ -43,7 +44,6 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                 HeaderAdmin(navController, souvenirsViewModel) //tipo de header del administrador de la BDD
             }else{
                Header(navController, souvenirsViewModel)
-
             }
         },
         bottomBar = {
@@ -52,7 +52,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
             }else{
                 Footer(navController, souvenirsViewModel, loginViewModel)
             }
-        }
+        }, containerColor = Silver
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -71,7 +71,8 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                             souvenirsViewModel.setSelectedItem("")
                         }
                         .padding(top = 18.dp, start = 5.dp)
-                        .size(30.dp)
+                        .size(30.dp),
+                    tint = RaisanBlack
                 )
             }
             SouvenirsList(navController, souvenirsViewModel, loginViewModel, cloudStorageManager)//lista de souvenirs

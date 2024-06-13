@@ -33,13 +33,12 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SouvenirsViewModel @Inject constructor():ViewModel(){
+    //cosas buscador
     val query = MutableStateFlow("")
     val active = MutableStateFlow(false)
     val selectedItem = MutableStateFlow("Principal")
 
     private val imageRepository = CloudStorageManager()
-
-
 
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs

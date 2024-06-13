@@ -49,6 +49,7 @@ import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
 import com.example.souvenirscadiz.ui.theme.RaisanBlack
+import com.example.souvenirscadiz.ui.theme.Redwood
 import com.example.souvenirscadiz.ui.theme.Silver
 import com.example.souvenirscadiz.ui.theme.White
 import com.example.souvenirscadiz.ui.theme.seed
@@ -73,7 +74,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
 
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize()) {
+            modifier = Modifier.fillMaxSize().background(White)) {
 
             Box(contentAlignment = Alignment.TopEnd){
                 SubcomposeAsyncImage(model = ImageRequest.Builder(LocalContext.current)
@@ -82,7 +83,7 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                     loading = {
                         CircularProgressIndicator(
                             modifier = Modifier.width(20.dp),
-                            color = MaterialTheme.colorScheme.secondary,
+                            color = Redwood,
                             trackColor = MaterialTheme.colorScheme.surfaceVariant,
                         )
                     },
