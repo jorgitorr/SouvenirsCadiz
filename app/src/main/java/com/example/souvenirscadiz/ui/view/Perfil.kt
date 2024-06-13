@@ -259,7 +259,8 @@ fun InicioSesion(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginVi
 
 
         if(loginViewModel.checkAdmin()){ //si es Admin
-            navController.navigate("PrincipalAdmin")//se dirige a una pantalla esclusiva para el admin
+            //aqui tenia PrincipalAdmin
+            navController.navigate("Principal")//se dirige a una pantalla esclusiva para el admin
         }
 
         TargetPage(navController, souvenirsViewModel)

@@ -216,7 +216,7 @@ fun SouvenirsListPedidos(navController: NavController, souvenirsViewModel: Souve
     val souvenirsPedidos by souvenirsViewModel.souvenirPedidos.collectAsState()
 
     if(souvenirsPedidos.isEmpty()){
-        Text(text = "No hay ningún pedido",
+        Text(text = "Ningún usuario ha realizado un pedido",
             fontFamily = KiwiMaru)
     }else{
         LazyColumn{

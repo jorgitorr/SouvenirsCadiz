@@ -470,6 +470,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     }.addOnFailureListener{
                         Log.d("Save error","Error al guardar pedido")
                     }
+
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Pedido")
             }
@@ -690,6 +691,16 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     fun vaciarSouvenirsCarrito(){
         _souvenirCarrito.value = emptyList()
     }
+
+
+    /**
+     * Vaciar souvenirs pedido
+     *
+     */
+    fun vaciarSouvenirsPedido(){
+        _souvenirPedidos.value = emptyList()
+    }
+
 
     /**
      * Vaciar souvenirs fav

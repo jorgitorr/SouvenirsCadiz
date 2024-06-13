@@ -188,6 +188,7 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
     val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.pedido_sound)
+    soundEffect.setVolume(0.5f, 0.5f)
 
     //si no hay souvenirs en el carrito
     if(souvenirCarrito.isNotEmpty()){
