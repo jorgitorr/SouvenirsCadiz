@@ -82,7 +82,10 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                     imageVector = Icons.Default.FilterList,
                     contentDescription = "Filtrar",
                     modifier = Modifier
-                        .clickable { navController.navigate("Filtro") }
+                        .clickable {
+                            navController.navigate("Filtro")
+                            souvenirsViewModel.setSelectedItem("")
+                        }
                         .padding(top = 18.dp, start = 5.dp)
                         .size(30.dp)
                 )
@@ -93,134 +96,6 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     }
 }
 
-/**
- * Filtro
- *
- * @param souvenirsViewModel
- * @param loginViewModel
- * @param navController
- */
-@Composable
-fun Filtro(
-    souvenirsViewModel: SouvenirsViewModel,
-    loginViewModel: LoginViewModel,
-    navController: NavController
-) {
-    Scaffold(
-        topBar = {
-            if (loginViewModel.checkAdmin()) {
-                HeaderAdmin(navController, souvenirsViewModel)
-            } else {
-                Header(navController, souvenirsViewModel)
-            }
-        },
-        bottomBar = {
-            if (loginViewModel.checkAdmin()) {
-                FooterAdmin(navController, souvenirsViewModel, loginViewModel)
-            } else {
-                Footer(navController, souvenirsViewModel, loginViewModel)
-            }
-        },
-        containerColor = Silver
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .background(Silver),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            var sliderPosition by remember { mutableFloatStateOf(0f) }
-            var tipoElegido by remember { mutableStateOf<String?>(null) }
-            val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
-
-
-            LazyColumn(
-                modifier = Modifier
-                    .background(Silver)
-                    .fillMaxSize()
-                    .padding(20.dp)
-            ) {
-                item {
-                    Text(
-                        text = "TIPO DE SOUVENIR",
-                        fontFamily = KiwiMaru,
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
-                }
-                item {
-                    MenuTiposSouvenir(souvenirsViewModel, onTipoSelected = { tipo ->
-                        tipoElegido = tipo
-                    })
-                    
-                    Spacer(modifier = Modifier.padding(top = 50.dp))
-                }
-                item {
-                    Text(
-                        text = "PRECIO MÍNIMO",
-                        fontFamily = KiwiMaru,
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
-                }
-                item {
-                    Column {
-                        Slider(
-                            value = sliderPosition,
-                            onValueChange = { sliderPosition = it },
-                            valueRange = 0f..5.99f
-                        )
-                        Text(text = "$sliderPosition €")
-                    }
-                }
-                item {
-                    Spacer(modifier = Modifier.padding(top = 50.dp))
-                    Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.BottomEnd
-                ){
-                    Button(
-                        onClick = {
-                            val tipoFiltrado = when (tipoElegido) {
-                                Tipo.LLAVERO.valor -> "LLAVERO"
-                                Tipo.IMAN.valor -> "IMAN"
-                                Tipo.ABRIDOR.valor -> "ABRIDOR"
-                                Tipo.PINS.valor -> "PINS"
-                                Tipo.CUCHARILLA.valor -> "CUCHARILLA"
-                                Tipo.CORTAUNIAS.valor -> "CORTAUNIAS"
-                                Tipo.ADHESIVO.valor -> "ADHESIVO"
-                                Tipo.ESPEJO.valor -> "ESPEJO"
-                                Tipo.PASTILLERO.valor -> "PASTILLERO"
-                                Tipo.SALVAMANTELES.valor -> "SALVAMANTELES"
-                                Tipo.POSA.valor -> "POSA"
-                                Tipo.SET.valor -> "SET"
-                                Tipo.PARCHE.valor -> "PARCHE"
-                                Tipo.CUBRE_MASCARILLA.valor -> "CUBRE_MASCARILLA"
-                                Tipo.PLATO.valor -> "PLATO"
-                                Tipo.BOLA.valor -> "BOLA"
-                                Tipo.FIGURA.valor -> "FIGURA"
-                                Tipo.CAMPANA.valor -> "CAMPANA"
-                                Tipo.DEDAL.valor -> "DEDAL"
-                                Tipo.ABANICO.valor -> "ABANICO"
-                                Tipo.ESTUCHE.valor -> "ESTUCHE"
-                                Tipo.PISAPAPELES.valor -> "PISAPAPELES"
-                                else -> tipoElegido?.uppercase()
-                            }
-                            val filteredSouvenirs = souvenirs.filter { souvenir ->
-                                (tipoFiltrado == null || souvenir.tipo == tipoFiltrado) && souvenir.precio.toFloat() >= sliderPosition
-                            }
-                            souvenirsViewModel.updateSouvenirs(filteredSouvenirs)
-                            navController.navigate("Principal")
-                        }
-                    ) {
-                        Text(text = "Filtrar")
-                    }
-                }
-
-                }
-            }
-        }
-    }
-}
 
 
 

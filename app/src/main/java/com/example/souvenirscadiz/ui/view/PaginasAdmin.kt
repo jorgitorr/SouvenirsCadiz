@@ -6,7 +6,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -27,7 +26,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -39,7 +37,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import coil.compose.SubcomposeAsyncImage
@@ -238,7 +235,9 @@ fun AnadirSouvenir(
                             souvenirsViewModel.saveSouvenir {
                                 Toast.makeText(context, "Souvenir guardado", Toast.LENGTH_SHORT).show()
                             }
-                            navController.navigate("PrincipalAdmin")
+                            navController.navigate("Principal")
+                            souvenirsViewModel.setSelectedItem("Principal")
+
                         }
                     }
                 },
@@ -272,11 +271,9 @@ fun ModificarSouvenir(
 
     val souvenir = souvenirsViewModel.getByReference(referencia)
     var nombre by souvenirsViewModel.nombre
-    var referenciaS by souvenirsViewModel.referencia
     var precio by souvenirsViewModel.precio
     var stock by souvenirsViewModel.stock
     val context = LocalContext.current
-
 
 
     Scaffold(
@@ -301,7 +298,8 @@ fun ModificarSouvenir(
                 value = nombre,
                 onValueChange = {
                     nombre = it
-                    souvenir.nombre = nombre},
+                    souvenir.nombre = nombre
+                },
                 label = { Text("Nombre actual: ${souvenir.nombre}", fontFamily = KiwiMaru) },
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
@@ -310,19 +308,11 @@ fun ModificarSouvenir(
 
 
             OutlinedTextField(
-                value = referencia,
-                onValueChange = { referenciaS = it },
-                label = { Text("Referencia actual: ${souvenir.referencia}", fontFamily = KiwiMaru) },
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .border(0.dp, Color.Gray, RoundedCornerShape(8.dp))
-            )
-
-
-            OutlinedTextField(
                 value = precio,
-                onValueChange = { precio = it },
+                onValueChange = {
+                    precio = it
+                    souvenir.precio = precio
+                },
                 label = { Text("Precio actual: ${souvenir.precio}", fontFamily = KiwiMaru) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
@@ -333,7 +323,10 @@ fun ModificarSouvenir(
 
             OutlinedTextField(
                 value = stock,
-                onValueChange = { stock = it },
+                onValueChange = {
+                    stock = it
+                    souvenir.stock = stock.toInt()
+                },
                 label = { Text("Stock actual: ${souvenir.stock}", fontFamily = KiwiMaru) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
@@ -342,15 +335,27 @@ fun ModificarSouvenir(
             )
 
             Button(onClick = {
+                val isNombreValid = nombre.trim().isNotEmpty() || souvenir.nombre.trim().isNotEmpty()
+                val isPrecioValid = precio.toFloatOrNull() != null || souvenir.precio.toFloatOrNull() != null
 
-                val isDuplicated = souvenirList.any { it.referencia == referencia && it.referencia != souvenir.referencia }
+                when {
+                    !isNombreValid -> {
+                        Toast.makeText(context, "El nombre no puede estar vacío o ser solo espacios", Toast.LENGTH_SHORT).show()
+                    }
+                    !isPrecioValid -> {
+                        Toast.makeText(context, "El precio debe ser un número válido", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        val isDuplicated = souvenirList.any { it.referencia == referencia && it.referencia != souvenir.referencia }
 
-                if (isDuplicated) {
-                    Toast.makeText(context, "Un souvenir con esta referencia ya existe", Toast.LENGTH_SHORT).show()
-                } else {
-                    souvenirsViewModel.modificaSouvenir(souvenir)
-                    navController.navigate("Principal")
-                    Toast.makeText(context, "Has modificado el souvenir", Toast.LENGTH_SHORT).show()
+                        if (isDuplicated) {
+                            Toast.makeText(context, "Un souvenir con esta referencia ya existe", Toast.LENGTH_SHORT).show()
+                        } else {
+                            souvenirsViewModel.modificaSouvenir(souvenir)
+                            navController.navigate("Principal")
+                            Toast.makeText(context, "Has modificado el souvenir", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
 
             }) {

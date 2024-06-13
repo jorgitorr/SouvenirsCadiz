@@ -180,14 +180,29 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
             for(s in souvenirsCollection){
                 val t = s.toObject(souvenir::class.java)
                 if(t.referencia == souvenir.referencia){
+                    firestore.collection("souvenirs").document(s.id).delete().await()
                     onSuccess()
-                    firestore.collection("souvenirs").document(s.id).delete()
                 }
             }
 
         } catch (e: Exception) {
             throw e
         }
+    }
+
+
+    /**
+     * Vaciar variables
+     * vacia las variables del souvenir que hemos introducido como admin
+     */
+    private fun vaciarVariables(){
+        nombre.value = ""
+        referencia.value = ""
+        precio.value = ""
+        stock.value = ""
+        tipo.value = ""
+        url.value = ""
+        selectedImageUri.value = null
     }
 
 
@@ -322,6 +337,8 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                         }.addOnFailureListener{
                             Log.d("Save error","Error al guardar")
                         }
+
+                    vaciarVariables()
                 }
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Souvenir")

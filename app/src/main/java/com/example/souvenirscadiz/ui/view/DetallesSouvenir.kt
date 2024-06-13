@@ -142,7 +142,7 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                             .fillMaxWidth()){
                             Text(text = "stock: ${souvenir.stock}",
                                 fontFamily = KiwiMaru,
-                                fontSize = 10.sp,
+                                fontSize = 15.sp,
                                 color = RaisanBlack
                             )
                         }
