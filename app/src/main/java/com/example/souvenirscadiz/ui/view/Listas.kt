@@ -154,6 +154,7 @@ fun SouvenirsListCarrito(navController: NavController, souvenirsViewModel: Souve
 
     if(souvenirSaved.isEmpty()){
         if(souvenirsViewModel.soundPlayedCarrito){
+            soundEffect.setVolume(0.2f, 0.2f);
             soundEffect.start()
             souvenirsViewModel.soundPlayedCarrito = false
         }
