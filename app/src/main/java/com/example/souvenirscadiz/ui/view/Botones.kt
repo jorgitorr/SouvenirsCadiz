@@ -188,20 +188,31 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
     val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.pedido_sound)
+    var cantidadSouvenirVacia by remember { mutableStateOf(false) }
     soundEffect.setVolume(0.5f, 0.5f)
 
     //si no hay souvenirs en el carrito
     if(souvenirCarrito.isNotEmpty()){
         Button(onClick = {
-            souvenirsViewModel.saveSouvenirInPedido{
+            cantidadSouvenirVacia = false
+            for(souvenir in souvenirCarrito){
+                if(souvenir.cantidad == ""){
+                    cantidadSouvenirVacia = true
+                }
+            }
+
+            if(!cantidadSouvenirVacia){
+                souvenirsViewModel.saveSouvenirInPedido{
+                    Toast.makeText(context,
+                        "Souvenirs Pedidos",
+                        Toast.LENGTH_SHORT).show()
+                }
+                soundEffect.start()
+            }else{
                 Toast.makeText(context,
-                    "Souvenirs Pedidos",
+                    "Falta la cantidad de un pedido",
                     Toast.LENGTH_SHORT).show()
             }
-            souvenirsViewModel.deleteSouvenirInCarritoFromUser()
-            souvenirsViewModel.vaciarSouvenirsCarrito()
-
-            soundEffect.start()
         },
 
             modifier = Modifier.fillMaxWidth(),

@@ -470,6 +470,10 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                         Log.d("Save error","Error al guardar pedido")
                     }
 
+
+                deleteSouvenirInCarritoFromUser()
+                vaciarSouvenirsCarrito()
+
             }catch (e:Exception){
                 Log.d("Error al guardar souvenir","Error al guardar Pedido")
             }

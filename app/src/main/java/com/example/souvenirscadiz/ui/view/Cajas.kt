@@ -237,10 +237,14 @@ fun CajaCarrito(
                             if(it.isNotEmpty()){
                                 cantidadSouvenir = it
                                 souvenirsViewModel.updateSouvenirCantidad(souvenir,it)
+                            }else{
+                                cantidadSouvenir = ""
+                                souvenirsViewModel.updateSouvenirCantidad(souvenir,cantidadSouvenir)
                             }
                         }else{
                             Toast.makeText(context,"Hay algún campo mal", Toast.LENGTH_SHORT).show()
-                        }},
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
@@ -356,7 +360,7 @@ fun CajaPedido(
                     )
 
                     Text(
-                        text = "precio: ${souvenir.precio}€",
+                        text = "precio: ${souvenir.precio.toFloat() * souvenir.cantidad.toFloat()}€",
                         fontSize = 15.sp,
                         fontFamily = KiwiMaru,
                         color = RaisanBlack,
@@ -487,7 +491,7 @@ fun CajaHistorial(
                         )
 
                         Text(
-                            text = "precio: ${souvenir.precio}€",
+                            text = "precio: ${souvenir.precio.toFloat() * souvenir.cantidad.toFloat()}€",
                             fontSize = 15.sp,
                             fontFamily = KiwiMaru,
                             color = RaisanBlack,
