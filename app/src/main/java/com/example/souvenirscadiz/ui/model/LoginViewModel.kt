@@ -1,12 +1,12 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.souvenirscadiz.ui.model
 
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,23 +35,12 @@ import kotlin.coroutines.cancellation.CancellationException
  *
  * @constructor Create empty Login view model
  */
+@Suppress("DEPRECATION")
 @HiltViewModel
 class LoginViewModel @Inject constructor(): ViewModel(){
     /**
-     * @param query
-     * @param active
-     * @param auth autorización para acceder a la base de datos
-     * @param firestore proporciona acceso a los servicios de firebase
-     * @param showAlert booleano que muestra el DialogAlert cuando está true y lo oculta en false
-     * @param email email del usuario
-     * @param password contraseña del usuario
-     * @param username nombre del usuario
-     * @param _users
-     * @param users
+     * Query
      */
-
-    val query = MutableStateFlow("")
-    val active = MutableStateFlow(false)
 
     private val auth: FirebaseAuth by lazy { Firebase.auth } // es mejor está forma de inicializar ya que es de manera diferida
     private val firestore = Firebase.firestore
@@ -70,7 +59,6 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     var selectedImageUri  = mutableStateOf<Uri?>(null)
 
     private val _users = MutableStateFlow<List<User>>(emptyList())
-    val users = _users
 
     private val _userState = MutableStateFlow<User?>(null)
     val userState: StateFlow<User?> get() = _userState
@@ -207,7 +195,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
      * @return
      */
 
-    private fun String.isValidEmail(): Boolean {
+    private fun isValidEmail(): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
@@ -217,7 +205,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     }
 
     fun validateEmail():Boolean {
-        return email.isValidEmail()
+        return isValidEmail()
     }
 
 
@@ -249,13 +237,6 @@ class LoginViewModel @Inject constructor(): ViewModel(){
 
     }
 
-    /**
-     * Close alert
-     *
-     */
-    fun closeAlert(){
-        showAlert = false
-    }
 
     /**
      * Change email
@@ -338,7 +319,7 @@ class LoginViewModel @Inject constructor(): ViewModel(){
      *
      */
 
-    fun fetchUsers(){
+    private fun fetchUsers(){
         viewModelScope.launch {
             firestore.collection("Users")
                 .addSnapshotListener{querySnapshot, error->
@@ -392,53 +373,6 @@ class LoginViewModel @Inject constructor(): ViewModel(){
     fun checkAdmin():Boolean{
         esAdmin = auth.currentUser?.email == EMAIL_ADMIN
         return esAdmin
-    }
-
-
-    /**
-     * Set query
-     *
-     * @param newQuery
-     */
-    fun setQuery(newQuery: String) {
-        query.value = newQuery
-    }
-
-    /**
-     * Set active
-     *
-     * @param newActive
-     */
-    fun setActive(newActive: Boolean) {
-        active.value = newActive
-    }
-
-    /**
-     * Delete user
-     *
-     * @param userState
-     * @param delete
-     * @receiver
-     */
-    fun deleteUser(userState: User, delete:()->Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                firestore.collection("Users")
-                    .whereEqualTo("userId",userState.userId)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        for (document in documents) {
-                            document.reference.delete()
-                            Log.d("Delete Success", "Se eliminó el usuario")
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("Delete Error", "Error al eliminar usuario: $exception")
-                    }
-            } catch (e: Exception) {
-                Log.d("Error al eliminar usuario", "Error al eliminar usuario")
-            }
-        }
     }
 
 

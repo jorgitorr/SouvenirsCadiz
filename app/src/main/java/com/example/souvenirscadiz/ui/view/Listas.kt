@@ -42,11 +42,21 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
     val souvenirsFiltrados by souvenirsViewModel.souvenirsFiltrados.collectAsState()
     val tipoElegido by souvenirsViewModel.tipoElegido
     val sliderPosition by souvenirsViewModel.sliderPosition
+    val query by souvenirsViewModel.query.collectAsState()
 
-    val filteredSouvenirs = souvenirs.filter { souvenir ->
-        souvenir.tipo.equals(tipoElegido.toString(), ignoreCase = true) && souvenir.precio.toFloat() >= sliderPosition
+    if(query.isNotEmpty()){
+        val filteredSouvenirs = if (query.isNotEmpty()) {
+            souvenirs.filter { it.nombre.contains(query, ignoreCase = true) }
+        } else {
+            souvenirs
+        }
+        souvenirsViewModel.updateSouvenirs(filteredSouvenirs)
+    }else{
+        val filteredSouvenirs = souvenirs.filter { souvenir ->
+            souvenir.tipo.equals(tipoElegido.toString(), ignoreCase = true) && souvenir.precio.toFloat() >= sliderPosition
+        }
+        souvenirsViewModel.updateSouvenirs(filteredSouvenirs)
     }
-    souvenirsViewModel.updateSouvenirs(filteredSouvenirs)
 
     if(souvenirsFiltrados.isEmpty()){
         LazyColumn{

@@ -231,7 +231,7 @@ fun Buscador(souvenirsViewModel: SouvenirsViewModel, navController: NavControlle
 
     // Actualiza los souvenirs filtrados en el ViewModel si es necesario
     LaunchedEffect(filteredSouvenirs) {
-        souvenirsViewModel.souvenirsFiltrados(filteredSouvenirs)
+        souvenirsViewModel.updateSouvenirs(filteredSouvenirs)
     }
 
     SearchBar(

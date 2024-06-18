@@ -303,11 +303,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }
 
 
-    fun souvenirsFiltrados(souvenirsList: List<Souvenir>){
-        _souvenirsFiltrados.value = souvenirsList
-    }
-
-
     /**
      * Save souvenir
      *
