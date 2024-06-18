@@ -43,7 +43,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     private val _souvenirs = MutableStateFlow<List<Souvenir>>(emptyList())
     val souvenirs = _souvenirs
 
-
     private val _souvenirsFiltrados = MutableStateFlow<List<Souvenir>>(emptyList())
     var souvenirsFiltrados = _souvenirsFiltrados
 
@@ -700,16 +699,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
         _souvenirCarrito.value = emptyList()
     }
 
-
-    /**
-     * Vaciar souvenirs pedido
-     *
-     */
-    fun vaciarSouvenirsPedido(){
-        _souvenirPedidos.value = emptyList()
-    }
-
-
     /**
      * Vaciar souvenirs fav
      *
@@ -826,8 +815,13 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     }*/
 
     fun updateSouvenirs(filteredSouvenirs: List<Souvenir>) {
-        //_souvenirsFiltrados.value = _souvenirs.value
         _souvenirsFiltrados.value = filteredSouvenirs
+    }
+
+    fun vaciarSouvenirsFiltrados(){
+        tipoElegido.value = ""
+        0F.also { sliderPosition.floatValue = it }
+        _souvenirsFiltrados.value = emptyList()
     }
 
 }

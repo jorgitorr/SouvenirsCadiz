@@ -89,7 +89,6 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                 )
             }
             SouvenirsList(navController, souvenirsViewModel, loginViewModel, cloudStorageManager)//lista de souvenirs
-
         }
     }
 }

@@ -2,7 +2,6 @@ package com.example.souvenirscadiz.ui.view
 
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -98,6 +97,7 @@ fun Footer(navController: NavController, souvenirsViewModel: SouvenirsViewModel,
                                 souvenirsViewModel.setSelectedItem("Principal")
                                 navController.navigate("Principal")
                             }
+                            souvenirsViewModel.vaciarSouvenirsFiltrados()
                         }
                 )
                 Text("Home")
@@ -356,7 +356,6 @@ fun Filtro(
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            val souvenirs by souvenirsViewModel.souvenirs.collectAsState()
             var tipoElegido by souvenirsViewModel.tipoElegido
             var sliderPosition by souvenirsViewModel.sliderPosition
 
@@ -406,12 +405,6 @@ fun Filtro(
                     ){
                         Button(
                             onClick = {
-                                Log.d("tipoElegido",tipoElegido.toString())
-                                val filteredSouvenirs = souvenirs.filter { souvenir ->
-                                    souvenir.tipo.equals(tipoElegido.toString(), ignoreCase = true) && souvenir.precio.toFloat() >= sliderPosition
-                                }
-
-                                souvenirsViewModel.updateSouvenirs(filteredSouvenirs)
                                 souvenirsViewModel.setSelectedItem("Principal")
                                 navController.navigate("Principal")
                             }

@@ -21,6 +21,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.souvenirscadiz.R
+import com.example.souvenirscadiz.data.model.Tipo
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
@@ -40,6 +41,13 @@ import com.example.souvenirscadiz.ui.theme.Silver
 fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, cloudStorageManager: CloudStorageManager) {
     val souvenirs by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
     val souvenirsFiltrados by souvenirsViewModel.souvenirsFiltrados.collectAsState()
+    val tipoElegido by souvenirsViewModel.tipoElegido
+    val sliderPosition by souvenirsViewModel.sliderPosition
+
+    val filteredSouvenirs = souvenirs.filter { souvenir ->
+        souvenir.tipo.equals(tipoElegido.toString(), ignoreCase = true) && souvenir.precio.toFloat() >= sliderPosition
+    }
+    souvenirsViewModel.updateSouvenirs(filteredSouvenirs)
 
     if(souvenirsFiltrados.isEmpty()){
         LazyColumn{
