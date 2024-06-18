@@ -1,5 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
+import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.souvenirscadiz.data.util.CloudStorageManager
@@ -36,6 +39,15 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
     LaunchedEffect(Unit){
         souvenirsViewModel.fetchSouvenirsFav() //devuelve los souvenirs guardados en fav
         souvenirsViewModel.fetchSouvenirsCarrito() //devuelve los souvenirs guardados en carritos
+    }
+
+    val context = LocalContext.current
+
+    // Manejo del botón de retroceso
+    BackHandler {
+        if (context is Activity) {
+            context.finish()
+        }
     }
 
     Scaffold(
@@ -60,6 +72,7 @@ fun Principal(souvenirsViewModel: SouvenirsViewModel, navController: NavControll
                 .background(Silver),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+
             Row(modifier = Modifier.fillMaxWidth()){
                 Buscador(souvenirsViewModel, navController)
                 Icon(

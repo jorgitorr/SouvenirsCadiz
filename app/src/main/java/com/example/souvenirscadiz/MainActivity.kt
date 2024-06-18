@@ -16,10 +16,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.souvenirscadiz.data.util.CloudStorageManager
-import com.example.souvenirscadiz.data.util.Constant.Companion.EMAIL_ADMIN
 import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.notificacion.CarritoNotification
 import com.example.souvenirscadiz.notificacion.CarritoNotification.Companion.NOTIFICATION_ID
@@ -94,25 +96,32 @@ class MainActivity : ComponentActivity() {
      */
     @Composable
     @SuppressLint("ScheduleExactAlarm")
-    private fun PedidosNotification() {
+    fun PedidosNotification() {
         val souvenirsPedidos by souvenirsViewModel.souvenirPedidos.collectAsState()
+        var emailPedido by remember { mutableStateOf(false) }
 
-        if(souvenirsPedidos.isNotEmpty() && loginViewModel.email == EMAIL_ADMIN){
+        for(souvenir in souvenirsPedidos){
+            if(souvenir.emailUser == loginViewModel.email){
+                emailPedido = true
+            }
+        }
+
+        if(emailPedido){
             val intent = Intent(applicationContext, PedidosNotification::class.java)
             val pendingIntent = PendingIntent.getBroadcast(
                 applicationContext,
                 NOTIFICATION_ID,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager.setExact(
                 AlarmManager.RTC_WAKEUP,
-                Calendar.getInstance().timeInMillis + 15000,
+                Calendar.getInstance().timeInMillis + 100,
                 pendingIntent,
             )
         }
+
     }
 
 }

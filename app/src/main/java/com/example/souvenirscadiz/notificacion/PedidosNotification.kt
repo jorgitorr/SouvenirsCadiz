@@ -44,10 +44,10 @@ class PedidosNotification: BroadcastReceiver() {
         val notification = NotificationCompat.Builder(context, MainActivity.MY_CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_delete)
             .setContentTitle("SOUVENIRS CADIZ")
-            .setContentText("Tienes souvenirs pendientes por aceptar")
+            .setContentText("Le llegaran los souvenirs muy pronto")
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("Tiene souvenirs pedidos por clientes")
+                    .bigText("Le llegaran los souvenirs muy pronto")
             )
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

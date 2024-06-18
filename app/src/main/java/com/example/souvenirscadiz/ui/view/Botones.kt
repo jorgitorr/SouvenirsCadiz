@@ -35,6 +35,7 @@ import androidx.navigation.NavController
 import com.example.souvenirscadiz.R
 import com.example.souvenirscadiz.data.model.Souvenir
 import com.example.souvenirscadiz.data.util.CloudStorageManager
+import com.example.souvenirscadiz.notificacion.PedidosNotification
 import com.example.souvenirscadiz.ui.model.LoginViewModel
 import com.example.souvenirscadiz.ui.model.SouvenirsViewModel
 import com.example.souvenirscadiz.ui.theme.KiwiMaru
@@ -55,7 +56,7 @@ fun FavoriteButton(
 ) {
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.like_sound)
-    var isFavorite by remember { mutableStateOf(souvenir.favorito) }
+    var isFavorite by remember { mutableStateOf(souvenir.favorito) } //necesito esta variable para poder verlo en tiempo real
 
     IconToggleButton(
         checked = isFavorite,
@@ -103,7 +104,7 @@ fun ShopingCartButton(
     souvenirsViewModel: SouvenirsViewModel
 ) {
     val context = LocalContext.current
-    var isCarrito by remember { mutableStateOf(souvenir.carrito) }
+    var isCarrito by remember { mutableStateOf(souvenir.carrito) } //necesito esta variable para poder verlo en tiempo real
 
     IconToggleButton(
         checked = isCarrito,
@@ -186,9 +187,9 @@ fun EliminarButton(souvenirsViewModel: SouvenirsViewModel, souvenir: Souvenir) {
 @Composable
 fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, navController: NavController){
     val souvenirCarrito by souvenirsViewModel.souvenirCarrito.collectAsState()
+    var cantidadSouvenirVacia by souvenirsViewModel.cantidadSouvenirVacia
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.pedido_sound)
-    var cantidadSouvenirVacia by remember { mutableStateOf(false) }
     soundEffect.setVolume(0.5f, 0.5f)
 
     //si no hay souvenirs en el carrito
@@ -208,6 +209,7 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
                         Toast.LENGTH_SHORT).show()
                 }
                 soundEffect.start()
+                PedidosNotification()
             }else{
                 Toast.makeText(context,
                     "Falta la cantidad de un pedido",
@@ -251,6 +253,9 @@ fun ButtonPedirOrMsg(souvenirsViewModel: SouvenirsViewModel, loginViewModel: Log
         }
     }
 }
+
+
+
 
 /**
  * Modify button

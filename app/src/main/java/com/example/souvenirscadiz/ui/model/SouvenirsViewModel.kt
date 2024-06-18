@@ -87,6 +87,11 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     var tipoElegido = mutableStateOf<String?>(null)
 
 
+    var cantidadSouvenirVacia = mutableStateOf(false)
+
+
+
+
 
 
     init {
@@ -718,7 +723,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
      * Delete souvenir in carrito from user
      *
      */
-    fun deleteSouvenirInCarritoFromUser () {
+    private fun deleteSouvenirInCarritoFromUser () {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 firestore.collection("Carrito")
