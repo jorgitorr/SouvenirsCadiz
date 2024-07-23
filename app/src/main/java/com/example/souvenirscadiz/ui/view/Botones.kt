@@ -52,7 +52,8 @@ import com.example.souvenirscadiz.ui.theme.Redwood
 @Composable
 fun FavoriteButton(
     souvenir: Souvenir,
-    souvenirsViewModel: SouvenirsViewModel
+    souvenirsViewModel: SouvenirsViewModel,
+    loginViewModel: LoginViewModel
 ) {
     val context = LocalContext.current
     val soundEffect = MediaPlayer.create(context, R.raw.like_sound)
@@ -61,24 +62,28 @@ fun FavoriteButton(
     IconToggleButton(
         checked = isFavorite,
         onCheckedChange = {
-            isFavorite = !isFavorite
-            souvenir.favorito = isFavorite
-            if (isFavorite) {
-                souvenirsViewModel.saveSouvenirInFav({
-                    Toast
-                        .makeText(context, "Souvenir guardado en favoritos", Toast.LENGTH_SHORT)
-                        .show()
-                }, souvenir)
-            } else {
-                souvenirsViewModel.deleteSouvenirInFav({
-                    Toast
-                        .makeText(context, "Souvenir eliminado de favoritos", Toast.LENGTH_SHORT)
-                        .show()
-                }, souvenir)
+            if(loginViewModel.getCurrentUser()==null){
+                Toast.makeText(context,"No has iniciado sesión", Toast.LENGTH_SHORT).show()
+            }else{
+                isFavorite = !isFavorite
+                souvenir.favorito = isFavorite
+                if (isFavorite) {
+                    souvenirsViewModel.saveSouvenirInFav({
+                        Toast
+                            .makeText(context, "Souvenir guardado en favoritos", Toast.LENGTH_SHORT)
+                            .show()
+                    }, souvenir)
+                } else {
+                    souvenirsViewModel.deleteSouvenirInFav({
+                        Toast
+                            .makeText(context, "Souvenir eliminado de favoritos", Toast.LENGTH_SHORT)
+                            .show()
+                    }, souvenir)
+                }
+                // efecto de sonido
+                soundEffect.start()
+                souvenirsViewModel.fetchSouvenirsFav()
             }
-            // efecto de sonido
-            soundEffect.start()
-            souvenirsViewModel.fetchSouvenirsFav()
         }
     ) {
         Icon(
@@ -101,7 +106,8 @@ fun FavoriteButton(
 @Composable
 fun ShopingCartButton(
     souvenir: Souvenir,
-    souvenirsViewModel: SouvenirsViewModel
+    souvenirsViewModel: SouvenirsViewModel,
+    loginViewModel: LoginViewModel
 ) {
     val context = LocalContext.current
     var isCarrito by remember { mutableStateOf(souvenir.carrito) } //necesito esta variable para poder verlo en tiempo real
@@ -109,26 +115,30 @@ fun ShopingCartButton(
     IconToggleButton(
         checked = isCarrito,
         onCheckedChange = {
-            isCarrito = !isCarrito
-            souvenir.carrito = isCarrito
-            if (isCarrito) {
-                souvenirsViewModel.saveSouvenirInCarrito({
-                    Toast.makeText(
-                        context,
-                        "Souvenir guardado en carrito",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }, souvenir)
-            } else {
-                souvenirsViewModel.deleteSouvenirInCarrito({
-                    Toast.makeText(
-                        context,
-                        "Souvenir eliminado de carrito",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }, souvenir)
+            if(loginViewModel.getCurrentUser()==null){
+                Toast.makeText(context,"No has iniciado sesión", Toast.LENGTH_SHORT).show()
+            }else{
+                isCarrito = !isCarrito
+                souvenir.carrito = isCarrito
+                if (isCarrito) {
+                    souvenirsViewModel.saveSouvenirInCarrito({
+                        Toast.makeText(
+                            context,
+                            "Souvenir guardado en carrito",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }, souvenir)
+                } else {
+                    souvenirsViewModel.deleteSouvenirInCarrito({
+                        Toast.makeText(
+                            context,
+                            "Souvenir eliminado de carrito",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }, souvenir)
+                }
+                souvenirsViewModel.fetchSouvenirsCarrito()
             }
-            souvenirsViewModel.fetchSouvenirsCarrito()
         },
         modifier = Modifier.padding(top = 280.dp, end = 340.dp) // Posiciona el icono
     ) {

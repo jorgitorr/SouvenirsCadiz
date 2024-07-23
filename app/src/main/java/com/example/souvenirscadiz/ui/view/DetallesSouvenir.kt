@@ -86,8 +86,8 @@ fun SouvenirDetail(navController: NavController, souvenirsViewModel: SouvenirsVi
                 )
 
                 if(!loginViewModel.checkAdmin()){
-                    FavoriteButton(souvenir, souvenirsViewModel)
-                    ShopingCartButton(souvenir, souvenirsViewModel)
+                    FavoriteButton(souvenir, souvenirsViewModel, loginViewModel)
+                    ShopingCartButton(souvenir, souvenirsViewModel, loginViewModel)
                 }else{
                     ModifyButton(souvenir, navController)
                 }

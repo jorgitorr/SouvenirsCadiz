@@ -12,7 +12,7 @@ enum class Tipo (val valor:String){
     IMAN("IMAN"),
     ABRIDOR("ABRIDOR"),
     PINS("PINS"),
-    CUCHARILLA("CUCHARILLAR"),
+    CUCHARILLA("CUCHARILLA"),
     CORTAUNIAS("CORTAUNIAS"),
     ADHESIVO("ADHESIVO"),
     ESPEJO("ESPEJO"),

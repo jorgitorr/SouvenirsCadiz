@@ -66,6 +66,8 @@ import com.example.souvenirscadiz.ui.theme.seed
 @Composable
 fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel,
          loginViewModel: LoginViewModel, cloudStorageManager:CloudStorageManager){
+    val context = LocalContext.current
+
     Box(modifier = Modifier
         .fillMaxWidth()
         .background(color = Silver, shape = RoundedCornerShape(5.dp))
@@ -98,8 +100,8 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
                 )
 
                 if(!loginViewModel.checkAdmin()){
-                    FavoriteButton(souvenir, souvenirsViewModel)
-                    ShopingCartButton(souvenir, souvenirsViewModel)
+                    FavoriteButton(souvenir, souvenirsViewModel, loginViewModel)
+                    ShopingCartButton(souvenir, souvenirsViewModel, loginViewModel)
                 }else{
                     ModifyButton(souvenir, navController)
                     EliminarButton(souvenir, souvenirsViewModel, cloudStorageManager)
