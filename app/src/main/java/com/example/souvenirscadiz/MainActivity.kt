@@ -20,7 +20,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import coil.Coil
+import coil.ImageLoader
+import coil.memory.MemoryCache
+import coil.request.CachePolicy
 import com.example.souvenirscadiz.data.util.CloudStorageManager
 import com.example.souvenirscadiz.navigation.NavManager
 import com.example.souvenirscadiz.notificacion.CarritoNotification
@@ -46,6 +51,14 @@ class MainActivity : ComponentActivity() {
         val screenSplash = installSplashScreen()
         super.onCreate(savedInstanceState)
         screenSplash.setKeepOnScreenCondition{false}
+
+
+        val imageLoader = ImageLoader.Builder(this)
+            .crossfade(true)
+            .crossfade(500)
+            .diskCachePolicy(CachePolicy.ENABLED) // Enable disk caching
+            .build()
+        Coil.setImageLoader(imageLoader)
 
         setContent {
             SouvenirsCadizTheme {

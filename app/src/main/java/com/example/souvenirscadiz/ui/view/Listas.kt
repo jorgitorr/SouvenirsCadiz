@@ -37,7 +37,8 @@ import com.example.souvenirscadiz.ui.theme.Silver
  * @param loginViewModel
  */
 @Composable
-fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel, cloudStorageManager: CloudStorageManager) {
+fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsViewModel, loginViewModel: LoginViewModel,
+                  cloudStorageManager: CloudStorageManager) {
     val souvenirs by souvenirsViewModel.souvenirs.collectAsState() // todos los souvenirs
     val souvenirsFiltrados by souvenirsViewModel.souvenirsFiltrados.collectAsState()
     val tipoElegido by souvenirsViewModel.tipoElegido
@@ -58,19 +59,12 @@ fun SouvenirsList(navController: NavController, souvenirsViewModel: SouvenirsVie
         souvenirsViewModel.updateSouvenirs(filteredSouvenirs)
     }
 
-    if(souvenirsFiltrados.isEmpty()){
-        LazyColumn{
-            items(souvenirs) { souvenir ->
-                souvenirsViewModel.checkSouvenirIsSaved(souvenir)
-                Caja(navController, souvenir, souvenirsViewModel, loginViewModel, cloudStorageManager)
-            }
-        }
-    }else{
-        LazyColumn{
-            items(souvenirsFiltrados) { souvenir ->
-                souvenirsViewModel.checkSouvenirIsSaved(souvenir)
-                Caja(navController, souvenir, souvenirsViewModel, loginViewModel, cloudStorageManager)
-            }
+    val souvenirsList = souvenirsFiltrados.ifEmpty { souvenirs }
+
+    LazyColumn {
+        items(souvenirsList) { souvenir ->
+            souvenirsViewModel.checkSouvenirIsSaved(souvenir)
+            Caja(navController, souvenir, souvenirsViewModel, loginViewModel, cloudStorageManager)
         }
     }
 }

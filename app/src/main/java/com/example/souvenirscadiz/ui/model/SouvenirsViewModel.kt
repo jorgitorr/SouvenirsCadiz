@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -84,8 +85,6 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
     //filtro
     var sliderPosition = mutableFloatStateOf(0.0F)
     var tipoElegido = mutableStateOf<String?>(null)
-
-
     var cantidadSouvenirVacia = mutableStateOf(false)
 
 
@@ -133,6 +132,7 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                     }
                     souvenirsList.sortBy { it.url } //ordena por url
                     fetchImgSouvenirs(souvenirsList)
+                    //fetchImgSouvenirsIncrementally(souvenirsList)
                     _souvenirs.value = souvenirsList
                 }
         }
@@ -253,6 +253,33 @@ class SouvenirsViewModel @Inject constructor():ViewModel(){
                 _souvenirs.value = updatedSouvenirsList
             } else {
                 Log.d("Error", "Number of URLs is less than the number of souvenirs")
+            }
+        }
+    }
+
+
+    private fun fetchImgSouvenirsIncrementally(souvenirsList: List<Souvenir>, startIndex: Int = 0, batchSize: Int = 5) {
+        viewModelScope.launch {
+            try {
+                val urls = withContext(Dispatchers.IO) {
+                    imageRepository.getSouvenirsImages()
+                }
+
+                val updatedSouvenirsList = souvenirsList.mapIndexed { index, souvenir ->
+                    if (index in startIndex until startIndex + batchSize) {
+                        souvenir.copy(url = urls.getOrNull(index) ?: "")
+                    } else {
+                        souvenir
+                    }
+                }
+
+                _souvenirs.value = updatedSouvenirsList
+
+                if (startIndex + batchSize < souvenirsList.size) {
+                    fetchImgSouvenirsIncrementally(souvenirsList, startIndex + batchSize, batchSize)
+                }
+            } catch (e: Exception) {
+                Log.d("Error", "Failed to fetch image URLs: ${e.message}")
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.example.souvenirscadiz.ui.view
 
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -63,10 +64,10 @@ import com.example.souvenirscadiz.ui.theme.seed
  * @param souvenirsViewModel
  * @param loginViewModel
  */
+@SuppressLint("PrivateResource")
 @Composable
 fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: SouvenirsViewModel,
          loginViewModel: LoginViewModel, cloudStorageManager:CloudStorageManager){
-    val context = LocalContext.current
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -76,11 +77,16 @@ fun Caja(navController: NavController, souvenir: Souvenir, souvenirsViewModel: S
 
         Column(horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize().background(White)) {
+            modifier = Modifier
+                .fillMaxSize()
+                .background(White)) {
 
             Box(contentAlignment = Alignment.TopEnd){
-                SubcomposeAsyncImage(model = ImageRequest.Builder(LocalContext.current)
+                SubcomposeAsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
                     .data(souvenir.url)
+                    .crossfade(true)
+                    .crossfade(500)
                     .build(),
                     loading = {
                         CircularProgressIndicator(

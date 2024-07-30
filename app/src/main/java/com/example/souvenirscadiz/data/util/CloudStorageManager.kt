@@ -8,6 +8,10 @@ import com.google.firebase.storage.ListResult
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.tasks.await
 
 class CloudStorageManager {
     private val storage = Firebase.storage
@@ -27,16 +31,14 @@ class CloudStorageManager {
      * @return
      */
 
-    suspend fun getSouvenirsImages():List<String>{
-        val imageUrls = mutableListOf<String>()
+    suspend fun getSouvenirsImages(): List<String> = coroutineScope {
         val listResult: ListResult = getSouvenirImagesReference().listAll().await()
 
-        for(item in listResult.items){
-            val url = item.downloadUrl.await().toString()
-            imageUrls.add(url)
-        }
-
-        return imageUrls
+        listResult.items.map { item ->
+            async {
+                item.downloadUrl.await().toString()
+            }
+        }.awaitAll()
     }
 
 
